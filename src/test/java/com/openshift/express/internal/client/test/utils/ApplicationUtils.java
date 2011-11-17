@@ -31,13 +31,22 @@ public class ApplicationUtils {
 	}
 	
 	public static void silentlyDestroyAS7Application(String name, User user, IOpenShiftService service) {
+		silentlyDestroyApplication(name, ICartridge.JBOSSAS_7, user, service);
+	}
+
+	public static void silentlyDestroyJenkinsApplication(String name, User user, IOpenShiftService service) {
+		silentlyDestroyApplication(name, ICartridge.JENKINS_14, user, service);
+	}
+
+	public static void silentlyDestroyApplication(String name, ICartridge cartridge, User user, IOpenShiftService service) {
 		try {
 			if (name == null) {
 				return;
 			}
-			service.destroyApplication(name, ICartridge.JBOSSAS_7, user);
+			service.destroyApplication(name, cartridge, user);
 		} catch (OpenShiftException e) {
 			e.printStackTrace();
 		}
 	}
+
 }

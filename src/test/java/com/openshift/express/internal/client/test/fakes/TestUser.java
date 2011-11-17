@@ -35,19 +35,13 @@ public class TestUser extends User {
 	public static final String RHLOGIN_USER_WITHOUT_DOMAIN = "adietish+unittests_nodomain@redhat.com";
 	public static final String PASSWORD_USER_WITHOUT_DOMAIN = "1q2w3e";
 
-	public static final String RHLOGIN = "adietish+unittests@redhat.com";
-	public static final String PASSWORD = "1q2w3e";
-
-//	public static final String RHLOGIN = "redhatqe@xam.dk";
-//	public static final String PASSWORD = "pluto123";
-
 	public TestUser() throws OpenShiftException, IOException {
-		super(RHLOGIN, PASSWORD,ID, 
+		super(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"),ID, 
 				new UserConfiguration(new SystemConfiguration(new DefaultConfiguration())).getLibraServer());
 	}
 
 	public TestUser(String password) throws OpenShiftException, IOException {
-		super(RHLOGIN, password, ID, 
+		super(System.getProperty("RHLOGIN"), password, ID, 
 				new UserConfiguration(new SystemConfiguration(new DefaultConfiguration())).getLibraServer());
 	}
 

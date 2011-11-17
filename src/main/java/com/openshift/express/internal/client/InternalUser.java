@@ -197,6 +197,23 @@ public class InternalUser implements IUser {
 		}
 		return matchingApplication;
 	}
+	
+	@Override
+	public List<IApplication> getApplicationsByCartridge(ICartridge cartridge) throws OpenShiftException {
+		List<IApplication> matchingApplications = new ArrayList<IApplication>();
+		for (IApplication application : getApplications()) {
+			if (cartridge.equals(application.getCartridge())) {
+				matchingApplications.add(application);
+			}
+		}
+		return matchingApplications;
+	}
+	
+	@Override
+	public boolean hasApplication(ICartridge cartridge) throws OpenShiftException {
+		return getApplicationsByCartridge(cartridge).size() > 0;
+	}
+
 
 	public void add(IApplication application) {
 		applications.add(application);

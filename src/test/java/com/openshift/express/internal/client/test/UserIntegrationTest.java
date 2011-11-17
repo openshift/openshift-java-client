@@ -18,7 +18,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -54,7 +56,7 @@ public class UserIntegrationTest {
 			DatatypeConfigurationException, IOException {
 		this.user = new TestUser();
 		this.invalidUser = new TestUser("bogusPassword");
-		this.badUrlUser = new TestUser(TestUser.RHLOGIN, TestUser.PASSWORD,
+		this.badUrlUser = new TestUser(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"),
 				"http://www.redhat.com");
 		this.userWithoutDomain = new TestUser(
 				TestUser.RHLOGIN_USER_WITHOUT_DOMAIN,
@@ -167,4 +169,36 @@ public class UserIntegrationTest {
 							new UserConfiguration(new SystemConfiguration(new DefaultConfiguration())).getLibraServer()));
 		}
 	}
+	
+	@Test
+    public void canGetApplicationByCartridge()
+                    throws OpenShiftException, DatatypeConfigurationException, IOException {
+            int currentAs7Apps = user.getApplicationsByCartridge(ICartridge.JBOSSAS_7).size();
+            List<IApplication> toRemove = new ArrayList<IApplication>();
+            try {
+                    IApplication application1 = user.createApplication(
+                                    ApplicationUtils.createRandomApplicationName()
+                                    ,ICartridge.JBOSSAS_7);
+                    toRemove.add(application1);
+                    IApplication application2 = user.createApplication(
+                                    ApplicationUtils.createRandomApplicationName()
+                                    ,ICartridge.JENKINS_14);
+                    toRemove.add(application2);
+
+                    List<IApplication> applicationsFound =
+                                    user.getApplicationsByCartridge(ICartridge.JBOSSAS_7);
+                    assertNotNull(applicationsFound);
+                    assertEquals(currentAs7Apps + 1, applicationsFound.size());
+            } finally {
+                    OpenShiftService service = new OpenShiftService(TestUser.ID,
+                                    new UserConfiguration(new SystemConfiguration(new DefaultConfiguration())).getLibraServer());
+                    for (IApplication application : toRemove) {
+                            ApplicationUtils.silentlyDestroyApplication(
+                                            application.getName(),
+                                            application.getCartridge(),
+                                            user, service);
+                    }
+            }
+    }
+
 }

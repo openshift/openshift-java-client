@@ -45,7 +45,7 @@ public class ApplicationIntegrationTest {
 
 	private User user;
 	private User invalidUser;
-
+	
 	@Before
 	public void setUp() throws OpenShiftException, IOException {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
@@ -68,6 +68,9 @@ public class ApplicationIntegrationTest {
 			assertNotNull(application);
 			assertEquals(applicationName, application.getName());
 			assertEquals(cartridge, application.getCartridge());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			ApplicationUtils.silentlyDestroyAS7Application(applicationName, user, service);
 		}

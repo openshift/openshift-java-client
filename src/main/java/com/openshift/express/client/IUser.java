@@ -48,6 +48,10 @@ public interface IUser {
 	public List<IEmbeddableCartridge> getEmbeddableCartridges() throws OpenShiftException;
 
 	public ICartridge getCartridgeByName(String name) throws OpenShiftException;
+	
+	public List<IApplication> getApplicationsByCartridge(ICartridge cartridge) throws OpenShiftException;
+	
+	public boolean hasApplication(ICartridge cartridge) throws OpenShiftException;
 
 	public IApplication createApplication(String name, ICartridge cartridge) throws OpenShiftException;
 

@@ -29,7 +29,7 @@ public class DefaultConfiguration extends AbstractOpenshiftConfiguration {
 
 	protected void initProperties() throws FileNotFoundException, IOException {
 		Properties properties = new Properties();
-		properties.put(KEY_LIBRA_SERVER, LIBRA_SERVER);
+	    properties.put(KEY_LIBRA_SERVER, LIBRA_SERVER);
 		initProperties(properties);
 	}
 }

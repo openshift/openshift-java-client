@@ -52,20 +52,32 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 	}
 
 	protected Properties getProperties(File file, Properties defaultProperties) throws FileNotFoundException, IOException {
+		Properties properties = null;
+		
 		if (file == null
 				|| !file.canRead()) {
-			return new Properties(defaultProperties);
+			properties = new Properties(defaultProperties);
+			
+			if (System.getProperty("libra_server") != null)
+				properties.put(KEY_LIBRA_SERVER, System.getProperty("libra_server"));
+			return properties;
 		}
 		
 		FileReader reader = null;
 		try {
-			Properties properties = new Properties(defaultProperties);
+			properties = new Properties(defaultProperties);
 			reader = new FileReader(file);
 			properties.load(reader);
+			
+			if (System.getProperty("libra_server") != null)
+				properties.put(KEY_LIBRA_SERVER, System.getProperty("libra_server"));
+			
 			return properties;
 		} finally {
 			StreamUtils.close(reader);
 		}
+		
+		
 	}
 		
 	public File getFile() {

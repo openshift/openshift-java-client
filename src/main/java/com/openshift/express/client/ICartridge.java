@@ -16,6 +16,7 @@ package com.openshift.express.client;
 public interface ICartridge {
 
 	public static final ICartridge JBOSSAS_7 = new Cartridge("jbossas-7.0");
+	public static final ICartridge JENKINS_14 = new Cartridge("jenkins-1.4");
 
 	public abstract String getName();
 

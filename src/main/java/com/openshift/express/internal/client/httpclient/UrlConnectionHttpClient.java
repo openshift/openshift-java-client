@@ -13,6 +13,8 @@ package com.openshift.express.internal.client.httpclient;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.text.MessageFormat;
 
@@ -99,6 +101,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		connection.setRequestProperty(PROPERTY_CONTENT_TYPE, "application/x-www-form-urlencoded");
 		connection.setInstanceFollowRedirects(true);
 		connection.setRequestProperty(USER_AGENT, userAgent);
+		
 		return connection;
 	}
 }
