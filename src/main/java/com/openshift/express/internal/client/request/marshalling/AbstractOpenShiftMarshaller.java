@@ -20,7 +20,6 @@ import com.openshift.express.internal.client.request.IOpenShiftRequest;
  */
 public abstract class AbstractOpenShiftMarshaller<REQUEST extends IOpenShiftRequest> implements IOpenShiftMarshaller<REQUEST> {
 
-	@Override
 	public String marshall(REQUEST object) {
 		StringBuilder builder = new StringBuilder();
 		append(builder);

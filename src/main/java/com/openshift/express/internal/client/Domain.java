@@ -33,17 +33,14 @@ public class Domain extends UserInfoAware implements IDomain {
 		this.service = service;
 	}
 
-	@Override
 	public String getNamespace() {
 		return namespace;
 	}
-
-	@Override
+	
 	public String getRhcDomain() throws OpenShiftException {
 		return getUserInfo().getRhcDomain();
 	}
 
-	@Override
 	public void setNamespace(String namespace) throws OpenShiftException {
 		InternalUser user = getUser();
 		IDomain domain = service.changeDomain(namespace, user.getSshKey(), user);

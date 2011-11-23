@@ -24,7 +24,6 @@ public class Cartridge implements ICartridge {
 		this.name = name;
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}

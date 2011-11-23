@@ -95,17 +95,14 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 		}
 	}
 
-	@Override
 	public String getRhlogin() {
 		return properties.getProperty(KEY_RHLOGIN);
 	}
 	
-	@Override
 	public void setRhlogin(String rhlogin) {
 		properties.put(KEY_RHLOGIN, rhlogin);
 	}
 	
-	@Override
 	public String getLibraServer() {
 		return appendScheme(removeSingleQuotes(properties.getProperty(KEY_LIBRA_SERVER)));
 	}
@@ -131,12 +128,10 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 		}
 	}
 
-	@Override
 	public void setLibraServer(String libraServer) {
 		properties.put(KEY_LIBRA_SERVER, libraServer);
 	}
 	
-	@Override
 	public Properties getProperties() {
 		return properties;
 	}

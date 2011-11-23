@@ -53,42 +53,34 @@ public class Application extends UserInfoAware implements IApplication {
 		return name;
 	}
 
-	@Override
 	public String getUUID() throws OpenShiftException {
 		return getApplicationInfo().getUuid();
 	}
 
-	@Override
 	public ICartridge getCartridge() {
 		return cartridge;
 	}
 
-	@Override
 	public Date getCreationTime() throws OpenShiftException {
 		return getApplicationInfo().getCreationTime();
 	}
 
-	@Override
 	public void destroy() throws OpenShiftException {
 		service.destroyApplication(name, cartridge, getUser());
 	}
 
-	@Override
 	public void start() throws OpenShiftException {
 		service.startApplication(name, cartridge, getUser());
 	}
 
-	@Override
 	public void restart() throws OpenShiftException {
 		service.restartApplication(name, cartridge, getUser());
 	}
 
-	@Override
 	public void stop() throws OpenShiftException {
 		service.stopApplication(name, cartridge, getUser());
 	}
 
-	@Override
 	public ApplicationLogReader getLogReader() throws OpenShiftException {
 		if (logReader == null) {
 			this.logReader = new ApplicationLogReader(this, getUser(), service);
@@ -96,7 +88,6 @@ public class Application extends UserInfoAware implements IApplication {
 		return logReader;
 	}
 
-	@Override
 	public String getGitUri() throws OpenShiftException {
 		IDomain domain = getUser().getDomain();
 		if (domain == null) {
@@ -106,7 +97,6 @@ public class Application extends UserInfoAware implements IApplication {
 				.format(GIT_URI_PATTERN, getUUID(), getName(), domain.getNamespace(), domain.getRhcDomain());
 	}
 
-	@Override
 	public String getApplicationUrl() throws OpenShiftException {
 		IDomain domain = getUser().getDomain();
 		if (domain == null) {
@@ -115,7 +105,6 @@ public class Application extends UserInfoAware implements IApplication {
 		return MessageFormat.format(APPLICATION_URL_PATTERN, name, domain.getNamespace(), domain.getRhcDomain());
 	}
 
-	@Override
 	public void setEmbbedCartridge(IEmbeddableCartridge embeddedCartridge) {
 		this.embeddedCartridge = embeddedCartridge;
 	}

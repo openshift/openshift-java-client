@@ -30,7 +30,6 @@ public class LogReaderRunnable implements Runnable {
 		this.timeout = timeout;
 	}
 
-	@Override
 	public void run() {
 		try {
 			for (int data = -1; (data = logReader.read()) != -1;) {

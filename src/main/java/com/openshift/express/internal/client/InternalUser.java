@@ -77,7 +77,6 @@ public class InternalUser implements IUser {
 		this.service = service;
 	}
 
-	@Override
 	public boolean isValid() throws OpenShiftException {
 		try {
 			return service.isValid(this);
@@ -86,14 +85,12 @@ public class InternalUser implements IUser {
 		}
 	}
 
-	@Override
 	public IDomain createDomain(String name, ISSHPublicKey key) throws OpenShiftException {
 		setSshKey(key);
 		this.domain = getService().createDomain(name, key, this);
 		return domain;
 	}
 
-	@Override
 	public IDomain getDomain() throws OpenShiftException {
 		if (domain == null) {
 			try {
@@ -117,7 +114,6 @@ public class InternalUser implements IUser {
 		this.sshKey = key;
 	}
 
-	@Override
 	public ISSHPublicKey getSshKey() throws OpenShiftException {
 		if (sshKey == null) {
 			this.sshKey = getUserInfo().getSshPublicKey();
@@ -125,22 +121,18 @@ public class InternalUser implements IUser {
 		return sshKey;
 	}
 
-	@Override
 	public String getRhlogin() {
 		return rhlogin;
 	}
 
-	@Override
 	public String getPassword() {
 		return password;
 	}
 
-	@Override
 	public String getUUID() throws OpenShiftException {
 		return getUserInfo().getUuid();
 	}
 
-	@Override
 	public List<ICartridge> getCartridges() throws OpenShiftException {
 		if (cartridges == null) {
 			this.cartridges = service.getCartridges(this);
@@ -148,7 +140,6 @@ public class InternalUser implements IUser {
 		return Collections.unmodifiableList(cartridges);
 	}
 
-	@Override
 	public List<IEmbeddableCartridge> getEmbeddableCartridges() throws OpenShiftException {
 		if (embeddableCartridges == null) {
 			this.embeddableCartridges = service.getEmbeddableCartridges(this);
@@ -156,7 +147,6 @@ public class InternalUser implements IUser {
 		return embeddableCartridges;
 	}
 
-	@Override
 	public ICartridge getCartridgeByName(String name) throws OpenShiftException {
 		ICartridge matchingCartridge = null;
 		for(ICartridge cartridge : getCartridges()) {
@@ -168,14 +158,12 @@ public class InternalUser implements IUser {
 		return matchingCartridge;
 	}
 	
-	@Override
 	public IApplication createApplication(String name, ICartridge cartridge) throws OpenShiftException {
 		IApplication application = service.createApplication(name, cartridge, this);
 		add(application);
 		return application;
 	}
 
-	@Override
 	public Collection<IApplication> getApplications() throws OpenShiftException {
 		if (getUserInfo().getApplicationInfos().size() > applications.size()) {
 			update(getUserInfo().getApplicationInfos());
@@ -183,7 +171,6 @@ public class InternalUser implements IUser {
 		return applications;
 	}
 
-	@Override
 	public IApplication getApplicationByName(String name) throws OpenShiftException {
 		return getApplicationByName(name, getApplications());
 	}
@@ -198,7 +185,6 @@ public class InternalUser implements IUser {
 		return matchingApplication;
 	}
 	
-	@Override
 	public List<IApplication> getApplicationsByCartridge(ICartridge cartridge) throws OpenShiftException {
 		List<IApplication> matchingApplications = new ArrayList<IApplication>();
 		for (IApplication application : getApplications()) {
@@ -209,7 +195,6 @@ public class InternalUser implements IUser {
 		return matchingApplications;
 	}
 	
-	@Override
 	public boolean hasApplication(ICartridge cartridge) throws OpenShiftException {
 		return getApplicationsByCartridge(cartridge).size() > 0;
 	}
@@ -239,7 +224,6 @@ public class InternalUser implements IUser {
 		return userInfo;
 	}
 
-	@Override
 	public void refresh() throws OpenShiftException {
 		this.domain = null;
 		this.sshKey = null;

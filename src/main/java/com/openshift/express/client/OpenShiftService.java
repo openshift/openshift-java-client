@@ -62,22 +62,18 @@ public class OpenShiftService implements IOpenShiftService {
 		this.baseUrl = baseUrl;
 	}
 
-	@Override
 	public String getServiceUrl() {
 		return baseUrl + SERVICE_PATH;
 	}
 
-	@Override
 	public String getPlatformUrl() {
 		return baseUrl;
 	}
 
-	@Override
 	public boolean isValid(InternalUser user) throws OpenShiftException {
 		return getUserInfo(user) != null;
 	}
 
-	@Override
 	public UserInfo getUserInfo(InternalUser user) throws OpenShiftException {
 		UserInfoRequest request = new UserInfoRequest(user.getRhlogin(), true);
 		String url = request.getUrlString(getServiceUrl());
@@ -103,7 +99,6 @@ public class OpenShiftService implements IOpenShiftService {
 		}
 	}
 
-	@Override
 	public List<IEmbeddableCartridge> getEmbeddableCartridges(InternalUser user) throws OpenShiftException {
 		ListCartridgesRequest listCartridgesRequest = new ListCartridgesRequest(
 				ListCartridgesRequest.CartridgeType.EMBEDDED, user.getRhlogin(), true);
@@ -132,7 +127,6 @@ public class OpenShiftService implements IOpenShiftService {
 		}
 	}
 
-	@Override
 	public List<ICartridge> getCartridges(InternalUser user) throws OpenShiftException {
 		ListCartridgesRequest listCartridgesRequest = new ListCartridgesRequest(
 				ListCartridgesRequest.CartridgeType.STANDALONE, user.getRhlogin(), true);
@@ -159,12 +153,10 @@ public class OpenShiftService implements IOpenShiftService {
 		}
 	}
 
-	@Override
 	public IDomain createDomain(String name, ISSHPublicKey sshKey, InternalUser user) throws OpenShiftException {
 		return requestDomainAction(new CreateDomainRequest(name, sshKey, user.getRhlogin(), true), user);
 	}
 
-	@Override
 	public IDomain changeDomain(String newName, ISSHPublicKey sshKey, InternalUser user) throws OpenShiftException {
 		return requestDomainAction(new ChangeDomainRequest(newName, sshKey, user.getRhlogin(), true), user);
 	}
@@ -193,7 +185,6 @@ public class OpenShiftService implements IOpenShiftService {
 		}
 	}
 
-	@Override
 	public IApplication createApplication(String name, ICartridge cartridge, InternalUser user)
 			throws OpenShiftException {
 		IApplication application = requestApplicationAction(new ApplicationRequest(name, cartridge,
@@ -202,7 +193,6 @@ public class OpenShiftService implements IOpenShiftService {
 		return application;
 	}
 
-	@Override
 	public void destroyApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
 		IApplication application = requestApplicationAction(new ApplicationRequest(name, cartridge,
 				ApplicationAction.DECONFIGURE,
@@ -210,27 +200,23 @@ public class OpenShiftService implements IOpenShiftService {
 		user.remove(application);
 	}
 
-	@Override
 	public IApplication startApplication(String name, ICartridge cartridge, InternalUser user)
 			throws OpenShiftException {
 		return requestApplicationAction(new ApplicationRequest(name, cartridge, ApplicationAction.START,
 				user.getRhlogin(), true), user);
 	}
 
-	@Override
 	public IApplication restartApplication(String name, ICartridge cartridge, InternalUser user)
 			throws OpenShiftException {
 		return requestApplicationAction(new ApplicationRequest(name, cartridge, ApplicationAction.RESTART,
 				user.getRhlogin(), true), user);
 	}
 
-	@Override
 	public IApplication stopApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
 		return requestApplicationAction(new ApplicationRequest(name, cartridge, ApplicationAction.STOP,
 				user.getRhlogin(), true), user);
 	}
 
-	@Override
 	public String getStatus(String applicationName, ICartridge cartridge, InternalUser user) throws OpenShiftException {
 		ApplicationRequest applicationRequest =
 				new ApplicationRequest(applicationName, cartridge, ApplicationAction.STATUS, user.getRhlogin(), true);
@@ -289,7 +275,6 @@ public class OpenShiftService implements IOpenShiftService {
 		}
 	}
 
-	@Override
 	public IApplication addEmbeddableCartridge(IApplication application, IEmbeddableCartridge cartridge,
 			InternalUser user)
 			throws OpenShiftException {
