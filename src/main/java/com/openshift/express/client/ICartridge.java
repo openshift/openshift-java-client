@@ -17,6 +17,10 @@ public interface ICartridge {
 
 	public static final ICartridge JBOSSAS_7 = new Cartridge("jbossas-7.0");
 	public static final ICartridge JENKINS_14 = new Cartridge("jenkins-1.4");
+	public static final ICartridge PERL_51 = new Cartridge("perl-5.10");
+	public static final ICartridge WSGI_32 = new Cartridge("wsgi-3.2");
+	public static final ICartridge RACK_11 = new Cartridge("rack-1.0");
+	public static final ICartridge PHP_53 = new Cartridge("php-5.3");
 
 	public abstract String getName();
 

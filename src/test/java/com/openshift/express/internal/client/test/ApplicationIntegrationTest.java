@@ -75,6 +75,26 @@ public class ApplicationIntegrationTest {
 			ApplicationUtils.silentlyDestroyAS7Application(applicationName, user, service);
 		}
 	}
+	
+	@Test
+	public void canCreatePHPApplication() throws Exception {
+		String applicationName = ApplicationUtils.createRandomApplicationName();
+		ICartridge cartridge = null;
+		try {
+			cartridge = ICartridge.PHP_53;
+			IApplication application = service.createApplication(applicationName, cartridge, user);
+			assertNotNull(application);
+			assertEquals(applicationName, application.getName());
+			assertEquals(cartridge, application.getCartridge());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			//service.destroyApplication(applicationName, cartridge, invalidUser);
+			//ApplicationUtils.silentlyDestroyAS7Application(applicationName, user, service);
+		}
+	}
+
 
 	@Test
 	public void canDestroyApplication() throws Exception {

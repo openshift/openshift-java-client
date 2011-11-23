@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry kind="var" path="M2_REPO/org/jboss/jboss-dmr/1.0.0.Final/jboss-dmr-1.0.0.Final.jar" sourcepath="M2_REPO/org/jboss/jboss-dmr/1.0.0.Final/jboss-dmr-1.0.0.Final-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar" sourcepath="M2_REPO/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/junit/junit/4.8.2/junit-4.8.2.jar" sourcepath="M2_REPO/junit/junit/4.8.2/junit-4.8.2-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
