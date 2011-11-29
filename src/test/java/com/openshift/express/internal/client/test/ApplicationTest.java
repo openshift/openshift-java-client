@@ -69,7 +69,7 @@ public class ApplicationTest {
 				new ApplicationRequest(
 						"test-application", ICartridge.JBOSSAS_7, ApplicationAction.CONFIGURE,
 						ApplicationResponseFake.RHLOGIN, true));
-		String effectiveRequest = new OpenShiftEnvelopeFactory(ApplicationResponseFake.PASSWORD,
+		String effectiveRequest = new OpenShiftEnvelopeFactory(ApplicationResponseFake.PASSWORD, null, null,
 				createApplicationRequest).createString();
 
 		assertEquals(expectedRequestString, effectiveRequest);
@@ -94,7 +94,7 @@ public class ApplicationTest {
 				new ApplicationRequest(
 						"test-application", ICartridge.JBOSSAS_7, ApplicationAction.DECONFIGURE,
 						ApplicationResponseFake.RHLOGIN, true));
-		String effectiveRequest = new OpenShiftEnvelopeFactory(ApplicationResponseFake.PASSWORD,
+		String effectiveRequest = new OpenShiftEnvelopeFactory(ApplicationResponseFake.PASSWORD, null, null, 
 				createApplicationRequest).createString();
 
 		assertEquals(expectedRequestString, effectiveRequest);

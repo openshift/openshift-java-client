@@ -51,7 +51,7 @@ public class DomainTest {
 		CreateDomainRequest request = new CreateDomainRequest("myDomain", sshKey, RHLOGIN, true);
 		String requestString =
 				new OpenShiftEnvelopeFactory(
-						PASSWORD,
+						PASSWORD, null, null, 
 						new DomainRequestJsonMarshaller().marshall(request))
 						.createString();
 		assertEquals(expectedRequestString, requestString);
@@ -81,7 +81,7 @@ public class DomainTest {
 		ChangeDomainRequest request = new ChangeDomainRequest("myDomain", sshKey, RHLOGIN, true);
 		String requestString =
 				new OpenShiftEnvelopeFactory(
-						PASSWORD,
+						PASSWORD, null, null, 
 						new DomainRequestJsonMarshaller().marshall(request))
 						.createString();
 		assertEquals(expectedRequestString, requestString);

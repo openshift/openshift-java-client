@@ -48,7 +48,7 @@ public class UserInfoTest {
 		String userInfoRequest = new UserInfoRequestJsonMarshaller().marshall(
 				new UserInfoRequest(UserInfoResponseFake.RHLOGIN, true));
 		String effectiveRequest =
-				new OpenShiftEnvelopeFactory(UserInfoResponseFake.PASSWORD, userInfoRequest).createString();
+				new OpenShiftEnvelopeFactory(UserInfoResponseFake.PASSWORD, null, null, userInfoRequest).createString();
 
 		assertEquals(expectedRequestString, effectiveRequest);
 	}

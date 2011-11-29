@@ -44,7 +44,7 @@ public class CartridgeTest {
 
 		String listCartridgeRequest = new ListCartridgesRequestJsonMarshaller().marshall(
 				new ListCartridgesRequest(USERNAME, true));
-		String effectiveRequest = new OpenShiftEnvelopeFactory(PASSWORD, listCartridgeRequest).createString();
+		String effectiveRequest = new OpenShiftEnvelopeFactory(PASSWORD, null, null, listCartridgeRequest).createString();
 
 		assertEquals(expectedRequestString, effectiveRequest);
 	}
