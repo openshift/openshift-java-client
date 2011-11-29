@@ -39,10 +39,12 @@ public class UrlConnectionHttpClient implements IHttpClient {
 
 	private URL url;
 	private String userAgent;
-
-	public UrlConnectionHttpClient(String userAgent, URL url) {
+	private boolean ignoreCertCheck;
+	
+	public UrlConnectionHttpClient(String userAgent, URL url, boolean ignoreCertCheck) {
 		this.userAgent = userAgent;
 		this.url = url;
+		this.ignoreCertCheck = ignoreCertCheck;
 	}
 	
 	public String post(String data) throws HttpClientException {
@@ -101,27 +103,29 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 
 	private HttpURLConnection createConnection(String userAgent, URL url) throws IOException {
-		try {
-            TrustManager easyTrustManager = new X509TrustManager() {
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-
-                public void checkServerTrusted(X509Certificate[] chain,
-                        String authType) throws CertificateException {
-                }
-
-                public void checkClientTrusted(X509Certificate[] chain,
-                        String authType) throws CertificateException {
-                }
-            };
-            SSLContext ctx = SSLContext.getInstance("TLS");
-            ctx.init(new KeyManager[0], new TrustManager[] { easyTrustManager }, new SecureRandom());
-            SSLContext.setDefault(ctx);
-        }
-        catch (Exception e) {
-            throw new IOException(e);
-        }
+		if (ignoreCertCheck) {
+			try {
+	            TrustManager easyTrustManager = new X509TrustManager() {
+	                public X509Certificate[] getAcceptedIssuers() {
+	                    return null;
+	                }
+	
+	                public void checkServerTrusted(X509Certificate[] chain,
+	                        String authType) throws CertificateException {
+	                }
+	
+	                public void checkClientTrusted(X509Certificate[] chain,
+	                        String authType) throws CertificateException {
+	                }
+	            };
+	            SSLContext ctx = SSLContext.getInstance("TLS");
+	            ctx.init(new KeyManager[0], new TrustManager[] { easyTrustManager }, new SecureRandom());
+	            SSLContext.setDefault(ctx);
+	        }
+	        catch (Exception e) {
+	            throw new IOException(e);
+	        }
+		}
 		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setUseCaches(false);

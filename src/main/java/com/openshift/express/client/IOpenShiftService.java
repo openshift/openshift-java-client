@@ -244,7 +244,7 @@ public interface IOpenShiftService {
 	 * Returns all informations for the given user and its applications.
 	 * 
 	 * @param user
-	 *            the user account to use
+	 *            the user account to use           
 	 * @return all user informations (user related info and applications)
 	 * @throws OpenShiftException
 	 * 
@@ -253,4 +253,20 @@ public interface IOpenShiftService {
 	 * @see ApplicationInfo
 	 */
 	public UserInfo getUserInfo(InternalUser user) throws OpenShiftException;
+	
+	/**
+	 * Returns all informations for the given user and its applications.
+	 * 
+	 * @param user
+	 *            the user account to use  
+	 * @param ignoreCertCheck
+	 * 			  true if all CA certs are to be accepted                    
+	 * @return all user informations (user related info and applications)
+	 * @throws OpenShiftException
+	 * 
+	 * @see InternalUser
+	 * @see InternalUserInfo
+	 * @see ApplicationInfo
+	 */
+	public UserInfo getUserInfo(InternalUser user, boolean ignoreCertCheck) throws OpenShiftException;
 }

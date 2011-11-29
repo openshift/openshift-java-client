@@ -85,8 +85,12 @@ public class OpenShiftService implements IOpenShiftService {
 	public boolean isValid(InternalUser user) throws OpenShiftException {
 		return getUserInfo(user) != null;
 	}
-
+	
 	public UserInfo getUserInfo(InternalUser user) throws OpenShiftException {
+		return getUserInfo(user, false);
+	}
+
+	public UserInfo getUserInfo(InternalUser user, boolean ignoreCertCheck) throws OpenShiftException {
 		UserInfoRequest request = new UserInfoRequest(user.getRhlogin(), true);
 		String url = request.getUrlString(getServiceUrl());
 		try {
@@ -95,7 +99,7 @@ public class OpenShiftService implements IOpenShiftService {
 			String openShiftRequestString = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), requestString)
 					.createString();
 		
-			String responseString = createHttpClient(id, url).post(openShiftRequestString);
+			String responseString = createHttpClient(id, url, ignoreCertCheck).post(openShiftRequestString);
 			responseString = JsonSanitizer.sanitize(responseString);
 			OpenShiftResponse<UserInfo> response =
 					new UserInfoResponseUnmarshaller().unmarshall(responseString);
@@ -326,8 +330,12 @@ public class OpenShiftService implements IOpenShiftService {
 		}
 	}
 
-	private IHttpClient createHttpClient(String id, String url) throws MalformedURLException {
+	private IHttpClient createHttpClient(String id, String url, boolean ignoreCertCheck) throws MalformedURLException {
 		String userAgent = MessageFormat.format(USERAGENT_FORMAT, VERSION, id);
-		return new UrlConnectionHttpClient(userAgent, new URL(url));
+		return new UrlConnectionHttpClient(userAgent, new URL(url), ignoreCertCheck);
+	}
+	
+	private IHttpClient createHttpClient(String id, String url) throws MalformedURLException {
+		return createHttpClient(id, url, false);
 	}
 }
