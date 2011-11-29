@@ -16,10 +16,12 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.MessageFormat;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -99,15 +101,6 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 
 	private HttpURLConnection createConnection(String userAgent, URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setUseCaches(false);
-		connection.setDoInput(true);
-		connection.setAllowUserInteraction(false);
-		connection.setConnectTimeout(TIMEOUT);
-		connection.setRequestProperty(PROPERTY_CONTENT_TYPE, "application/x-www-form-urlencoded");
-		connection.setInstanceFollowRedirects(true);
-		connection.setRequestProperty(USER_AGENT, userAgent);
-		
 		try {
             TrustManager easyTrustManager = new X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {
@@ -123,12 +116,21 @@ public class UrlConnectionHttpClient implements IHttpClient {
                 }
             };
             SSLContext ctx = SSLContext.getInstance("TLS");
-            ctx.init(null, new TrustManager[] { easyTrustManager }, null);
+            ctx.init(new KeyManager[0], new TrustManager[] { easyTrustManager }, new SecureRandom());
             SSLContext.setDefault(ctx);
         }
         catch (Exception e) {
             throw new IOException(e);
         }
+		
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setUseCaches(false);
+		connection.setDoInput(true);
+		connection.setAllowUserInteraction(false);
+		connection.setConnectTimeout(TIMEOUT);
+		connection.setRequestProperty(PROPERTY_CONTENT_TYPE, "application/x-www-form-urlencoded");
+		connection.setInstanceFollowRedirects(true);
+		connection.setRequestProperty(USER_AGENT, userAgent);
 		
 		return connection;
 	}
