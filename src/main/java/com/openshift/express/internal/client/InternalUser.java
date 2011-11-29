@@ -40,6 +40,8 @@ public class InternalUser implements IUser {
 
 	private String rhlogin;
 	private String password;
+	private String authKey;
+	private String authIV;
 	private ISSHPublicKey sshKey;
 	private IDomain domain;
 	private UserInfo userInfo;
@@ -54,25 +56,32 @@ public class InternalUser implements IUser {
 	}
 
 	public InternalUser(IOpenShiftConfiguration configuration, String password, String id) {
-		this(configuration.getRhlogin(), password, (ISSHPublicKey) null, new OpenShiftService(id, configuration.getLibraServer()));
+		this(configuration.getRhlogin(), password, null, null, (ISSHPublicKey) null, new OpenShiftService(id, configuration.getLibraServer()));
 	}
 
 	public InternalUser(String rhlogin, String password, String id) throws OpenShiftException, IOException {
-		this(rhlogin, password, (ISSHPublicKey) null, new OpenShiftService(id, 
+		this(rhlogin, password, null, null, (ISSHPublicKey) null, new OpenShiftService(id, 
 				new SystemProperties(new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()))).getLibraServer()));
 	}
 
 	public InternalUser(String rhlogin, String password, String id, String url) {
-		this(rhlogin, password, (ISSHPublicKey) null, new OpenShiftService(id, url));
+		this(rhlogin, password, null, null, (ISSHPublicKey) null, new OpenShiftService(id, url));
 	}
 
 	public InternalUser(String rhlogin, String password, IOpenShiftService service) {
-		this(rhlogin, password, (ISSHPublicKey) null, service);
+		this(rhlogin, password, null, null, (ISSHPublicKey) null, service);
+	}
+	
+	public InternalUser(String rhlogin, String authKey, String authIV, IOpenShiftService service) {
+		this(rhlogin, null, authKey, authIV, (ISSHPublicKey) null, service);
 	}
 
-	public InternalUser(String rhlogin, String password, ISSHPublicKey sshKey, IOpenShiftService service) {
+
+	public InternalUser(String rhlogin, String password, String authKey, String authIV, ISSHPublicKey sshKey, IOpenShiftService service) {
 		this.rhlogin = rhlogin;
 		this.password = password;
+		this.authKey = authKey;
+		this.authIV = authIV;
 		this.sshKey = sshKey;
 		this.service = service;
 	}
@@ -127,6 +136,14 @@ public class InternalUser implements IUser {
 
 	public String getPassword() {
 		return password;
+	}
+	
+	public String getAuthKey() {
+		return authKey;
+	}
+	
+	public String getAuthIV() {
+		return authIV;
 	}
 
 	public String getUUID() throws OpenShiftException {

@@ -43,7 +43,9 @@ public class UserConfiguration extends AbstractOpenshiftConfiguration {
 
 	protected File doGetFile() {
 		String userHome = System.getProperty(PROPERTY_USERHOME);
+		
 		File configurationFile = new File(userHome + File.separatorChar + CONFIGURATION_FOLDER, CONFIGURATION_FILE);
+	
 		return configurationFile;
 	}
 }

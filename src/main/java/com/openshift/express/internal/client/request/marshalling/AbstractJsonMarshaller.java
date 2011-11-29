@@ -23,8 +23,10 @@ public abstract class AbstractJsonMarshaller<REQUEST extends AbstractOpenShiftRe
 
 	public String marshall(REQUEST request) throws OpenShiftException {
 		ModelNode node = new ModelNode();
-		setStringProperty(IOpenShiftJsonConstants.PROPERTY_RHLOGIN, request.getRhLogin(), node);
+		if (request.getRhLogin() != null && request.getRhLogin().length() > 0)
+			setStringProperty(IOpenShiftJsonConstants.PROPERTY_RHLOGIN, request.getRhLogin(), node);
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_DEBUG, String.valueOf(request.isDebug()), node);
+		
 		setJsonDataProperties(node, request);
 		return node.toJSONString(true);
 	}

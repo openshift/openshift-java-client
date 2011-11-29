@@ -50,7 +50,19 @@ import com.openshift.express.internal.client.response.unmarshalling.UserInfoResp
  * @author André Dietisheim
  */
 public class OpenShiftService implements IOpenShiftService {
+	
+	static {
+	    javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
+	    new javax.net.ssl.HostnameVerifier(){
 
+	        public boolean verify(String hostname,
+	                javax.net.ssl.SSLSession sslSession) {
+	 
+	        	return true;
+	        }
+	    });
+	}
+	
 	// TODO extract to properties file
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
 
@@ -79,8 +91,10 @@ public class OpenShiftService implements IOpenShiftService {
 		String url = request.getUrlString(getServiceUrl());
 		try {
 			String requestString = new UserInfoRequestJsonMarshaller().marshall(request);
-			String openShiftRequestString = new OpenShiftEnvelopeFactory(user.getPassword(), requestString)
+			
+			String openShiftRequestString = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), requestString)
 					.createString();
+		
 			String responseString = createHttpClient(id, url).post(openShiftRequestString);
 			responseString = JsonSanitizer.sanitize(responseString);
 			OpenShiftResponse<UserInfo> response =
@@ -90,7 +104,7 @@ public class OpenShiftService implements IOpenShiftService {
 			throw new OpenShiftEndpointException(
 					url, e, "Could not get user info for user \"{0}\" at \"{1}\"", user.getRhlogin(), url);
 		} catch (UnauthorizedException e) {
-			throw new InvalidCredentialsOpenShiftException(url, e);
+			throw new InvalidCredentialsOpenShiftException(url + " for '" + user.getRhlogin() + "'", e);
 		} catch (NotFoundException e) {
 			throw new NotFoundOpenShiftException(url, e);
 		} catch (HttpClientException e) {
@@ -107,7 +121,7 @@ public class OpenShiftService implements IOpenShiftService {
 			String listCartridgesRequestString =
 					new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
 			String request =
-					new OpenShiftEnvelopeFactory(user.getPassword(), listCartridgesRequestString).createString();
+					new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), listCartridgesRequestString).createString();
 			String listCatridgesReponse = createHttpClient(id, url).post(request);
 			listCatridgesReponse = JsonSanitizer.sanitize(listCatridgesReponse);
 			OpenShiftResponse<List<IEmbeddableCartridge>> response =
@@ -135,7 +149,7 @@ public class OpenShiftService implements IOpenShiftService {
 			String listCartridgesRequestString =
 					new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
 			String request =
-					new OpenShiftEnvelopeFactory(user.getPassword(), listCartridgesRequestString).createString();
+					new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), listCartridgesRequestString).createString();
 			String listCatridgesReponse = createHttpClient(id, url).post(request);
 			listCatridgesReponse = JsonSanitizer.sanitize(listCatridgesReponse);
 			OpenShiftResponse<List<ICartridge>> response =
@@ -166,7 +180,7 @@ public class OpenShiftService implements IOpenShiftService {
 		try {
 			String requestString =
 					new OpenShiftEnvelopeFactory(
-							user.getPassword(),
+							user.getPassword(), user.getAuthKey(), user.getAuthIV(),
 							new DomainRequestJsonMarshaller().marshall(request))
 							.createString();
 			String responseString = createHttpClient(id, url).post(requestString);
@@ -224,7 +238,7 @@ public class OpenShiftService implements IOpenShiftService {
 		try {
 			String applicationRequestString =
 					new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
-			String request = new OpenShiftEnvelopeFactory(user.getPassword(), applicationRequestString).createString();
+			String request = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), applicationRequestString).createString();
 			String response = createHttpClient(id, url).post(request);
 
 			response = JsonSanitizer.sanitize(response);
@@ -252,7 +266,7 @@ public class OpenShiftService implements IOpenShiftService {
 		try {
 			String applicationRequestString =
 					new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
-			String request = new OpenShiftEnvelopeFactory(user.getPassword(), applicationRequestString).createString();
+			String request = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), applicationRequestString).createString();
 			String response = createHttpClient(id, url).post(request);
 
 			response = JsonSanitizer.sanitize(response);
@@ -289,7 +303,7 @@ public class OpenShiftService implements IOpenShiftService {
 		String url = embedRequest.getUrlString(getServiceUrl());
 		try {
 			String embedRequestString = new EmbedRequestJsonMarshaller().marshall(embedRequest);
-			String request = new OpenShiftEnvelopeFactory(user.getPassword(), embedRequestString).createString();
+			String request = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), embedRequestString).createString();
 
 			String response = createHttpClient(id, url).post(request);
 			response = JsonSanitizer.sanitize(response);

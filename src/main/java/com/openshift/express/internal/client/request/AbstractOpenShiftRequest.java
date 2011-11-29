@@ -31,7 +31,7 @@ public abstract class AbstractOpenShiftRequest implements IOpenShiftRequest {
 		this.rhlogin = username;
 		this.debug = debug;
 	}
-
+	
 	public String getRhLogin() {
 		return rhlogin;
 	}

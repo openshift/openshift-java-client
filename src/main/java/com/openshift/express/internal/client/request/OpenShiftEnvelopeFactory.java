@@ -26,21 +26,35 @@ public class OpenShiftEnvelopeFactory implements IOpenShiftRequestFactory {
 	private static final char EQ = '=';
 	private static final String PROPERTY_PASSWORD = "password";
 	private static final String PROPERTY_JSON_DATA = "json_data";
+	private static final String PROPERTY_AUTHKEY = "broker_auth_key";
+	private static final String PROPERTY_AUTHIV = "broker_auth_iv";
+	
 	private static final String DATA_ENCODING = "UTF-8";
 	private static final char AMP = '&';
 
 	private String[] payloads;
 	private String password;
+	private String authKey;
+	private String authIV;
 
-	public OpenShiftEnvelopeFactory(String password, String... payloads) {
+	public OpenShiftEnvelopeFactory(String password, String authKey, String authIV, String... payloads) {
 		this.password = password;
+		this.authKey = authKey;
+		this.authIV = authIV;
 		this.payloads = payloads;
 	}
-
+	
 	public String createString() throws OpenShiftException {
 		try {
 			StringBuilder builder = new StringBuilder();
-			appendPassword(builder);
+			if (authKey != null) {
+				appendProperty(PROPERTY_AUTHKEY, authKey, builder);
+				builder.append(AMP);
+				appendProperty(PROPERTY_AUTHIV, authIV, builder);
+			} else {
+				appendProperty(PROPERTY_PASSWORD, password, builder);
+			}
+			
 			builder.append(AMP);
 			appendPayload(builder);
 			return builder.toString();
@@ -49,10 +63,10 @@ public class OpenShiftEnvelopeFactory implements IOpenShiftRequestFactory {
 		}
 	}
 
-	private void appendPassword(StringBuilder builder) throws UnsupportedEncodingException {
-		builder.append(PROPERTY_PASSWORD)
+	private void appendProperty(String prop, String value, StringBuilder builder) throws UnsupportedEncodingException {
+		builder.append(prop)
 				.append(EQ)
-				.append(URLEncoder.encode(password, DATA_ENCODING));
+				.append(URLEncoder.encode(value, DATA_ENCODING));
 	}
 
 	private void appendPayload(StringBuilder builder) throws UnsupportedEncodingException {
