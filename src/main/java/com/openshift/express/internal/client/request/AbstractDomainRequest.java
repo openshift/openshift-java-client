@@ -39,7 +39,6 @@ public abstract class AbstractDomainRequest extends AbstractOpenShiftRequest {
 		return sshKey;
 	}
 
-	@Override
 	public String getResourcePath() {
 		return "domain";
 	}

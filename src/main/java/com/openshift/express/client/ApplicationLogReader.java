@@ -40,7 +40,6 @@ public class ApplicationLogReader extends Reader {
 		this.service = service;
 	}
 
-	@Override
 	public int read(char[] cbuf, int off, int len) throws IOException {
 		int charactersRead = -1;
 		try {
@@ -95,7 +94,6 @@ public class ApplicationLogReader extends Reader {
 				&& otherStatus.equals(thisStatus);
 	}
 
-	@Override
 	public void close() throws IOException {
 		if (logReader != null) {
 			logReader.close();

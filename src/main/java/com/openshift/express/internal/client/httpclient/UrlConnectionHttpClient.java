@@ -24,13 +24,16 @@ import java.text.MessageFormat;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import com.openshift.express.client.IHttpClient;
 import com.openshift.express.internal.client.utils.StreamUtils;
+
 
 /**
  * @author André Dietisheim
@@ -131,8 +134,9 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 	}
 
 	private HttpURLConnection createConnection(String userAgent, URL url) throws IOException {
-		if (ignoreCertCheck) {
-			try {
+		try {
+			if (ignoreCertCheck) {
+				
 	            TrustManager easyTrustManager = new X509TrustManager() {
 	                public X509Certificate[] getAcceptedIssuers() {
 	                    return null;
@@ -146,14 +150,16 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 	                        String authType) throws CertificateException {
 	                }
 	            };
+	            
 	            SSLContext ctx = SSLContext.getInstance("TLS");
 	            ctx.init(new KeyManager[0], new TrustManager[] { easyTrustManager }, new SecureRandom());
 	            SSLContext.setDefault(ctx);
-	        }
-	        catch (Exception e) {
-	            throw new IOException(e);
-	        }
+	        
+			} 
 		}
+        catch (Exception e) {
+            throw new IOException(e);
+        }
 		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setUseCaches(false);

@@ -50,7 +50,6 @@ public class ConfigurationTest {
 	public void canReadUsername() throws OpenShiftException, IOException {
 		UserConfigurationFake userConfiguration = new UserConfigurationFake() {
 
-			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME).append('\n');
 			}
@@ -63,7 +62,6 @@ public class ConfigurationTest {
 	public void canStoreUsername() throws OpenShiftException, IOException {
 		UserConfigurationFake userConfiguration = new UserConfigurationFake() {
 
-			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME).append('\n');
 			}
@@ -85,7 +83,6 @@ public class ConfigurationTest {
 	public void canStoreAndReadUsername() throws OpenShiftException, IOException {
 		UserConfigurationFake userConfiguration = new UserConfigurationFake() {
 
-			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME).append('\n');
 			}
@@ -97,7 +94,6 @@ public class ConfigurationTest {
 		assertNotNull(userConfigurationFile);
 		UserConfigurationFake userConfiguration2 = new UserConfigurationFake() {
 
-			@Override
 			protected File doGetFile() {
 				return userConfigurationFile;
 			}
@@ -109,7 +105,6 @@ public class ConfigurationTest {
 	public void canReadUsernameIfItsInSystemConfigurationOnly() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
-			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -123,7 +118,6 @@ public class ConfigurationTest {
 	public void usernameInUserconfigOverridesUsernameInSystemconfig() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
-			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -131,7 +125,6 @@ public class ConfigurationTest {
 		};
 		UserConfigurationFake userConfiguration = new UserConfigurationFake(systemConfiguration) {
 
-			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME2).append('\n');
 			}
@@ -144,7 +137,6 @@ public class ConfigurationTest {
 	public void quotedLibraServerIsReturnedWithoutQuotes() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
-			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -158,7 +150,6 @@ public class ConfigurationTest {
 	public void nonQuotedLibraServerIsReturnedAsIs() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
-			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -178,7 +169,6 @@ public class ConfigurationTest {
 	public void libraserverInSystemPropsOverridesUsernameInSystemconfig() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
-			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -186,7 +176,6 @@ public class ConfigurationTest {
 		};
 		UserConfigurationFake userConfiguration = new UserConfigurationFake(systemConfiguration) {
 
-			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME2).append('\n');
 			}
@@ -202,7 +191,6 @@ public class ConfigurationTest {
 	public void systemPropsDefaultToUserconfig() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
-			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -210,7 +198,6 @@ public class ConfigurationTest {
 		};
 		UserConfigurationFake userConfiguration = new UserConfigurationFake(systemConfiguration) {
 
-			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME2).append('\n');
 			}

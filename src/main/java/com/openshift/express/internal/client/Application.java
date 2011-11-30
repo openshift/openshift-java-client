@@ -204,7 +204,6 @@ public class Application extends UserInfoAware implements IApplication {
 		return service.waitForApplication(this, timeout);
 	}
 	
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -212,7 +211,6 @@ public class Application extends UserInfoAware implements IApplication {
 		return result;
 	}
 
-	@Override
 	public boolean equals(Object object) {
 		if (this == object)
 			return true;
@@ -229,7 +227,6 @@ public class Application extends UserInfoAware implements IApplication {
 		return true;
 	}
 
-	@Override
 	public String toString() {
 		return name;
 	}

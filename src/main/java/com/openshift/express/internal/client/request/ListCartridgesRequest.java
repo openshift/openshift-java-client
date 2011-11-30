@@ -43,7 +43,6 @@ public class ListCartridgesRequest extends AbstractOpenShiftRequest {
 		return cartridgeType;
 	}
 	
-	@Override
 	protected String getResourcePath() {
 		return "cartlist";
 	}

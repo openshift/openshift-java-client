@@ -307,7 +307,32 @@ public interface IOpenShiftService {
 	 */
 	public boolean waitForApplication(IApplication application, long timeout) throws OpenShiftException;
 	
-	
+	/**
+	 * Sets flag for accepting self-signed SSL certificates
+	 * 
+	 * @param ignoreCertCheck
+	 */
 	public void setIgnoreCertCheck(boolean ignoreCertCheck);
+	
+	/**
+	 * Sets flag for using an HTTP proxy
+	 * 
+	 * @param proxySet
+	 */
+	public void setProxySet(boolean proxySet);
+	
+	/**
+	 * Sets the HTTP proxy hostname
+	 * 
+	 * @param proxyHost
+	 */
+	public void setProxyHost(String proxyHost);
+	
+	/**
+	 * Sets the HTTP proxy port
+	 * 
+	 * @param proxyPort
+	 */
+	public void setProxyPort(String proxyPort);
 	
 }

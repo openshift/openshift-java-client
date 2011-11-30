@@ -167,7 +167,6 @@ public class ApplicationTest {
 	public void canReadFromApplicationLogReader() throws IOException {
 
 		OpenShiftService service = new NoopOpenShiftServiceFake() {
-			@Override
 			public String getStatus(String applicationName, ICartridge cartridge, IUser user)
 					throws OpenShiftException {
 				return ApplicationResponseFake.tail;
@@ -219,7 +218,6 @@ public class ApplicationTest {
 
 	private OpenShiftService createUserInfoService() {
 		OpenShiftService userInfoService = new NoopOpenShiftServiceFake() {
-			@Override
 			public UserInfo getUserInfo(IUser user) throws OpenShiftException {
 				ApplicationInfo applicationInfo = new ApplicationInfo(
 						ApplicationResponseFake.APPLICATION_NAME,

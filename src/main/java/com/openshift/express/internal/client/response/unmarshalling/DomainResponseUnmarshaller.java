@@ -33,7 +33,6 @@ public class DomainResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnm
 		this.service = service;
 	}
 
-	@Override
 	protected IDomain createOpenShiftObject(final ModelNode node) {
 		return new Domain(domainName, user, service);
 	}

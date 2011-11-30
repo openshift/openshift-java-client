@@ -30,7 +30,6 @@ public class CreateDomainRequest extends AbstractDomainRequest {
 		return false;
 	}
 	
-	@Override
 	public String getOperation() {
 		return "create domain " + getName();
 	}

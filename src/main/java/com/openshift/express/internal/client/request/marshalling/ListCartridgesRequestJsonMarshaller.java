@@ -19,7 +19,6 @@ import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
  */
 public class ListCartridgesRequestJsonMarshaller extends AbstractJsonMarshaller<ListCartridgesRequest> {
 
-	@Override
 	protected void setJsonDataProperties(ModelNode node, ListCartridgesRequest request) {
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_CART_TYPE, request.getCartType().toString(), node);
 	}

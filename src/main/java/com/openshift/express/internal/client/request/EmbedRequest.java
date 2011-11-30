@@ -44,7 +44,6 @@ public class EmbedRequest extends AbstractOpenShiftRequest {
 		return cartridge;
 	}
 
-	@Override
 	public String getResourcePath() {
 		return "embed_cartridge";
 	}

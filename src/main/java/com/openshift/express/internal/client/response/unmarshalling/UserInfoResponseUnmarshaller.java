@@ -35,7 +35,6 @@ public class UserInfoResponseUnmarshaller extends AbstractOpenShiftJsonResponseU
 
 	private static final Pattern URL_REGEX = Pattern.compile(".*URL: (.+)"); 
 	
-	@Override
 	protected UserInfo createOpenShiftObject(ModelNode node) throws DatatypeConfigurationException {
 		ModelNode dataNode = node.get(IOpenShiftJsonConstants.PROPERTY_DATA);
 		if (!isSet(dataNode)) {

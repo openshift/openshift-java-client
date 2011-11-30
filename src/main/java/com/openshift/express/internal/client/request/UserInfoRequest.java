@@ -23,7 +23,6 @@ public class UserInfoRequest extends AbstractOpenShiftRequest {
 		super(username, debug);
 	}
 
-	@Override
 	protected String getResourcePath() {
 		return "userinfo";
 	}

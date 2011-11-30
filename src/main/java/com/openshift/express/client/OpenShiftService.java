@@ -72,6 +72,21 @@ public class OpenShiftService implements IOpenShiftService {
 	public void setIgnoreCertCheck(boolean ignoreCertCheck) {
 		this.ignoreCertCheck = ignoreCertCheck;
 	}
+	
+	public void setProxySet(boolean proxySet) {
+		if (proxySet)
+			System.setProperty("proxySet", "true");
+		else
+			System.setProperty("proxySet", "false");
+	}
+	
+	public void setProxyHost(String proxyHost) {
+		System.setProperty("proxyHost", proxyHost);
+	}
+	
+	public void setProxyPort(String proxyPort) {
+		System.setProperty("proxyPort", proxyPort);
+	}
 
 	public String getServiceUrl() {
 		return baseUrl + SERVICE_PATH;

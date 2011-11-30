@@ -20,7 +20,6 @@ import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
  */
 public class EmbedRequestJsonMarshaller extends AbstractJsonMarshaller<EmbedRequest> {
 
-	@Override
 	protected void setJsonDataProperties(ModelNode node, EmbedRequest request) {
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_CARTRIDGE, getCartridgeName(request.getEmbeddableCartridge()), node);
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_ACTION, request.getAction().getCommand(), node);

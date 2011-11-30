@@ -31,7 +31,6 @@ public class ChangeDomainRequest extends AbstractDomainRequest {
 		return true;
 	}
 
-	@Override
 	public String getOperation() {
 		return "change domain to " + getName();
 	}

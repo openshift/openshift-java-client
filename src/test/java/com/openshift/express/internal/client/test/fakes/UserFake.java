@@ -26,7 +26,6 @@ public class UserFake extends InternalUser {
 		super(rhlogin, password, service);
 	}
 
-	@Override
 	public void add(IApplication application) {
 		super.add(application);
 	}

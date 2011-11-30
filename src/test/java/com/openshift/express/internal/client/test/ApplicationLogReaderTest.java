@@ -73,7 +73,6 @@ public class ApplicationLogReaderTest {
 	public void setUp() {
 		this.statusService = new NoopOpenShiftServiceFake() {
 
-			@Override
 			public String getStatus(String applicationName, ICartridge cartridge, IUser user)
 					throws OpenShiftException {
 				return status;
@@ -116,7 +115,6 @@ public class ApplicationLogReaderTest {
 			super("fakeApplication", ICartridge.JBOSSAS_7, null, service);
 		}
 
-		@Override
 		public synchronized void restart() throws OpenShiftException {
 			status = LOG_CONTINUATION;
 			this.notifyAll();

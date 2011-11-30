@@ -21,7 +21,6 @@ import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
  */
 public class ApplicationRequestJsonMarshaller extends AbstractJsonMarshaller<ApplicationRequest> {
 
-	@Override
 	protected void setJsonDataProperties(ModelNode node, ApplicationRequest request) {
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_CARTRIDGE, getCartridgeName(request.getCartridge()), node);
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_ACTION, getActionName(request.getAction()), node);

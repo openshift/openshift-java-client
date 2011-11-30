@@ -31,12 +31,10 @@ public class SystemProperties extends AbstractOpenshiftConfiguration {
 		this.parentConfiguration = parentConfiguration;
 	}
 
-	@Override
 	public String getLibraServer() {
 		return appendScheme(removeSingleQuotes(getSystemPropertyOrParent(KEY_LIBRA_SERVER)));
 	}
 
-	@Override
 	public String getRhlogin() {
 		return getSystemPropertyOrParent(KEY_RHLOGIN);
 	}

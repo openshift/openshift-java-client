@@ -32,52 +32,42 @@ public class NoopOpenShiftServiceFake extends OpenShiftService  {
 		super(null, null);
 	}
 
-	@Override
 	public UserInfo getUserInfo(IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public List<ICartridge> getCartridges(IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Application createApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public void destroyApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public IApplication startApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public IApplication restartApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public IApplication stopApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public String getStatus(String applicationName, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public IDomain changeDomain(String domainName, ISSHPublicKey sshKey, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public IDomain createDomain(String name, ISSHPublicKey keyPair, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}

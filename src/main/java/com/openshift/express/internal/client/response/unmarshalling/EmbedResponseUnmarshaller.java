@@ -28,7 +28,6 @@ public class EmbedResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnma
 		this.embeddedCartridge = embeddedCartridge;
 	}
 
-	@Override
 	protected IEmbeddableCartridge createOpenShiftObject(ModelNode node) throws OpenShiftException {
 		embeddedCartridge.setCreationLog(getString(IOpenShiftJsonConstants.PROPERTY_RESULT, node));
 		return embeddedCartridge;

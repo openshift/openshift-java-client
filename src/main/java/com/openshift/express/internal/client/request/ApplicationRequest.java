@@ -44,7 +44,6 @@ public class ApplicationRequest extends AbstractOpenShiftRequest {
 		return cartridge;
 	}
 
-	@Override
 	public String getResourcePath() {
 		return "cartridge";
 	}

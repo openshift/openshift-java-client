@@ -23,7 +23,6 @@ import com.openshift.express.internal.client.EmbeddableCartridge;
  */
 public class ListEmbeddableCartridgesResponseUnmarshaller extends AbstractListCartridgesResponseUnmarshaller<IEmbeddableCartridge> {
 
-	@Override
 	protected List<IEmbeddableCartridge> createOpenShiftObject(ModelNode responseNode) {
 		return createCartridgeList(responseNode, new ArrayList<IEmbeddableCartridge>());
 	}

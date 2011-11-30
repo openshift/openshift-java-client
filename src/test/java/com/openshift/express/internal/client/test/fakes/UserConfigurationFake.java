@@ -33,7 +33,6 @@ public class UserConfigurationFake extends UserConfiguration {
 		super(systemConfiguration);
 	}
 
-	@Override
 	protected File doGetFile() {
 		File file = createFile();
 		initFile(file);

@@ -37,7 +37,6 @@ public class ApplicationResponseUnmarshaller extends AbstractOpenShiftJsonRespon
 		this.service = service;
 	}
 
-	@Override
 	protected IApplication createOpenShiftObject(ModelNode node) {
 		String creationLog = getString(IOpenShiftJsonConstants.PROPERTY_RESULT, node);
 		return new Application(applicationName, creationLog, cartridge, user, service);

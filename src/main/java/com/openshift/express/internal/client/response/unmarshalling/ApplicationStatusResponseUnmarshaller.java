@@ -20,7 +20,6 @@ import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
  */
 public class ApplicationStatusResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnmarshaller<String> {
 
-	@Override
 	protected String createOpenShiftObject(ModelNode responseNode) {
 		ModelNode resultNode = responseNode.get(IOpenShiftJsonConstants.PROPERTY_RESULT);
 		return resultNode.asString();
