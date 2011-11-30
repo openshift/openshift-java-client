@@ -11,31 +11,35 @@
 package com.openshift.express.internal.client.response.unmarshalling;
 
 import org.jboss.dmr.ModelNode;
+
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
+import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.internal.client.Application;
 import com.openshift.express.internal.client.InternalUser;
+import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
  * @author André Dietisheim
  */
 public class ApplicationResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnmarshaller<IApplication> {
 
-	protected InternalUser user;
-	protected String applicationName;
-	protected ICartridge cartridge;
-	protected OpenShiftService service;
+	protected final InternalUser user;
+	protected final String applicationName;
+	protected final ICartridge cartridge;
+	protected final OpenShiftService service;
 
-	public ApplicationResponseUnmarshaller(String applicationName, ICartridge cartridge, InternalUser user, OpenShiftService service) {
+	public ApplicationResponseUnmarshaller(final String applicationName, final ICartridge cartridge, final IUser user, final OpenShiftService service) {
 		this.applicationName = applicationName;
 		this.cartridge = cartridge;
-		this.user = user;
+		this.user = (InternalUser) user;
 		this.service = service;
 	}
 
 	@Override
 	protected IApplication createOpenShiftObject(ModelNode node) {
-		return new Application(applicationName, cartridge, user, service);
+		String creationLog = getString(IOpenShiftJsonConstants.PROPERTY_RESULT, node);
+		return new Application(applicationName, creationLog, cartridge, user, service);
 	}
 }

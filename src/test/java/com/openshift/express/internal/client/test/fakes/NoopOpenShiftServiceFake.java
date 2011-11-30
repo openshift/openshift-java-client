@@ -16,6 +16,7 @@ import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;
 import com.openshift.express.client.ISSHPublicKey;
+import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.internal.client.Application;
@@ -32,52 +33,53 @@ public class NoopOpenShiftServiceFake extends OpenShiftService  {
 	}
 
 	@Override
-	public UserInfo getUserInfo(InternalUser user) throws OpenShiftException {
+	public UserInfo getUserInfo(IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public List<ICartridge> getCartridges(InternalUser user) throws OpenShiftException {
+	public List<ICartridge> getCartridges(IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Application createApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
+	public Application createApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void destroyApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
+	public void destroyApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public IApplication startApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
+	public IApplication startApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public IApplication restartApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
+	public IApplication restartApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public IApplication stopApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
+	public IApplication stopApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public String getStatus(String applicationName, ICartridge cartridge, InternalUser user) throws OpenShiftException {
+	public String getStatus(String applicationName, ICartridge cartridge, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public IDomain changeDomain(String domainName, ISSHPublicKey sshKey, InternalUser user) throws OpenShiftException {
+	public IDomain changeDomain(String domainName, ISSHPublicKey sshKey, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public IDomain createDomain(String name, ISSHPublicKey keyPair, InternalUser user) throws OpenShiftException {
+	public IDomain createDomain(String name, ISSHPublicKey keyPair, IUser user) throws OpenShiftException {
 		throw new UnsupportedOperationException();
 	}
 }
+

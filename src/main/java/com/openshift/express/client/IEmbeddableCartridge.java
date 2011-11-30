@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.openshift.express.client;
 
+import com.openshift.express.internal.client.EmbeddableCartridge;
+
 /**
  * @author André Dietisheim
  */
@@ -20,6 +22,11 @@ public interface IEmbeddableCartridge {
 	public static final IEmbeddableCartridge JENKINS_14 = new EmbeddableCartridge("jenkins-client-1.4");
 	public static final IEmbeddableCartridge METRICS_01 = new EmbeddableCartridge("metrics-0.1");
 
-	public abstract String getName();
+	public String getName();
 
+	public String getUrl() throws OpenShiftException;
+	
+	public String getCreationLog();
+	
+	public void setCreationLog(String creationLog);
 }

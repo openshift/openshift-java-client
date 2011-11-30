@@ -10,11 +10,14 @@
  ******************************************************************************/
 package com.openshift.express.internal.client.test;
 
+import static com.openshift.express.internal.client.test.utils.EmbeddableCartridgeAsserts.assertThatContainsCartridge;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
@@ -37,6 +40,7 @@ import org.junit.Test;
  */
 public class EmbedIntegrationTest {
 
+	private static final int WAIT_FOR_APPLICATION = 10 * 1024;
 	private IOpenShiftService service;
 	private User user;
 	private IApplication application;
@@ -46,21 +50,82 @@ public class EmbedIntegrationTest {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		this.service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 		this.user = new TestUser();
-		this.application = service.createApplication(ApplicationUtils.createRandomApplicationName(), ICartridge.JBOSSAS_7, user);
+		this.application = service.createApplication(ApplicationUtils.createRandomApplicationName(),
+				ICartridge.JBOSSAS_7, user);
 	}
 
 	@After
 	public void tearDown() {
 		ApplicationUtils.silentlyDestroyAS7Application(application.getName(), user, service);
 	}
-	
+
 	@Test
 	public void canEmbedMySQL() throws Exception {
-		assertNull(application.getEmbeddedCartridge());
-		IEmbeddableCartridge mysqlCartridge = IEmbeddableCartridge.MYSQL_51;
-		IApplication returnedApplication = service.addEmbeddableCartridge(application, mysqlCartridge , user);
-		assertNotNull(returnedApplication);
-		assertEquals(application.getName(), returnedApplication.getName());
-		assertEquals(mysqlCartridge, returnedApplication.getEmbeddedCartridge());
+		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.MYSQL_51, user);
+	}
+	
+	@Test
+	public void embeddedMySQLShowsUpInEmbeddedCartridges() throws Exception {
+		application.addEmbbedCartridge(IEmbeddableCartridge.MYSQL_51);
+		assertThatContainsCartridge(IEmbeddableCartridge.MYSQL_51.getName(), application.getEmbeddedCartridges());
+	}
+
+	@Test
+	public void canEmbedPhpMyAdmin() throws Exception {
+		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.MYSQL_51, user);
+		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.PHPMYADMIN_34, user);
+	}
+
+	@Test
+	public void canEmbedJenkins() throws Exception {
+		ApplicationUtils.silentlyDestroyAnyJenkinsApplication(user);
+		String jenkinsAppName = "jenkins";
+		try {
+			IApplication jenkins = service.createApplication(jenkinsAppName, ICartridge.JENKINS_14, user);
+			assertTrue(service.waitForApplication(jenkins, WAIT_FOR_APPLICATION));
+			service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.JENKINS_14, user);
+		} finally {
+			ApplicationUtils.silentlyDestroyJenkinsApplication(jenkinsAppName, user, service);
+		}
+	}
+	
+	@Test
+	public void embeddedCartridgeHasUrl() throws OpenShiftException {
+		String applicationName = ApplicationUtils.createRandomApplicationName();
+		try {
+			IApplication application = user.createApplication(applicationName, ICartridge.JBOSSAS_7);
+			application.addEmbbedCartridge(IEmbeddableCartridge.MYSQL_51);
+			IEmbeddableCartridge embeddedCartridge = application.getEmbeddedCartridge(IEmbeddableCartridge.MYSQL_51.getName());
+			assertNotNull(embeddedCartridge);
+			assertNotNull(embeddedCartridge.getUrl());
+		} finally {
+			ApplicationUtils.silentlyDestroyAS7Application(applicationName, user, service);
+		}
+	}
+
+	@Test
+	public void loadWithOtherUserReportsIdenticalResults() throws Exception {
+		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.MYSQL_51, user);
+		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.PHPMYADMIN_34, user);
+
+		User newUser = new TestUser();
+		IApplication reloadedApplication = newUser.getApplicationByName(application.getName());
+		assertNotNull(reloadedApplication);
+		List<IEmbeddableCartridge> embeddedCartridges = reloadedApplication.getEmbeddedCartridges();
+		assertNotNull(embeddedCartridges);
+		assertEquals(2, embeddedCartridges.size());
+		assertThatContainsCartridge(IEmbeddableCartridge.MYSQL_51.getName(), embeddedCartridges);
+		assertThatContainsCartridge(IEmbeddableCartridge.PHPMYADMIN_34.getName(), embeddedCartridges);
+	}
+	
+	@Test
+	public void canRemoveEmbeddedCartridge() throws Exception {
+		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.MYSQL_51, user);
+		service.removeEmbeddedCartridge(application.getName(), IEmbeddableCartridge.MYSQL_51, user);
+	}
+
+	@Test(expected=OpenShiftException.class)
+	public void cannotRemoveEmbeddedCartridgeThatWasNotAdded() throws Exception {
+		service.removeEmbeddedCartridge(application.getName(), IEmbeddableCartridge.MYSQL_51, user);
 	}
 }

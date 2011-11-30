@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package com.openshift.express.internal.client.request;
 
+
 import com.openshift.express.client.ISSHPublicKey;
 
 
@@ -31,7 +32,7 @@ public class ChangeDomainRequest extends AbstractDomainRequest {
 	}
 
 	@Override
-	public String toHumanReadable() {
+	public String getOperation() {
 		return "change domain to " + getName();
 	}
 }

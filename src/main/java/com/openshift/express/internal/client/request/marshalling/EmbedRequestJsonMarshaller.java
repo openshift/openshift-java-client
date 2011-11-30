@@ -12,8 +12,8 @@ package com.openshift.express.internal.client.request.marshalling;
 
 import org.jboss.dmr.ModelNode;
 import com.openshift.express.client.IEmbeddableCartridge;
-import com.openshift.express.internal.client.IOpenShiftJsonConstants;
 import com.openshift.express.internal.client.request.EmbedRequest;
+import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
  * @author André Dietisheim

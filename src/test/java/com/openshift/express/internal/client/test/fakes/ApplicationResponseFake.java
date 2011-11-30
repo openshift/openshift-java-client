@@ -11,9 +11,11 @@
 package com.openshift.express.internal.client.test.fakes;
 
 import java.util.Date;
+import java.util.List;
 
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IEmbeddableCartridge;
+import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 
 /**
  * @author André Dietisheim
@@ -29,10 +31,11 @@ public class ApplicationResponseFake {
 	public static final String NAMESPACE = "1315839296868";
 
 	public static final String APPLICATION_NAME = "1316010645406";
+	public static final String APPLICATION_CREATION_LOG = "Successfully created application: " + APPLICATION_NAME;
 	public static final ICartridge APPLICATION_CARTRIDGE = ICartridge.JBOSSAS_7;
 
 	public static final String APPLICATION_UUID = "0123456789abcdefg";
-	public static final IEmbeddableCartridge APPLICATION_EMBEDDED = null;
+	public static final List<EmbeddableCartridgeInfo> APPLICATION_EMBEDDED = null;
 	public static final Date APPLICATION_CREATIONTIME = new Date();
 	
 	public static final String appResponse =
@@ -44,11 +47,7 @@ public class ApplicationResponseFake {
 					+ "	},"
 					+ "	\"api\":\"1.1.1\","
 					+ "	\"api_c\":[\"placeholder\"],"
-					+ "	\"result\":\"Successfully created application: "
-
-					+ APPLICATION_NAME
-
-					+ "\","
+					+ "	\"result\":\"" + APPLICATION_CREATION_LOG + "\","
 					+ "	\"broker\":\"1.1.1\","
 					+ "	\"broker_c\":[\"namespace\","
 					+ "	\"rhlogin\","

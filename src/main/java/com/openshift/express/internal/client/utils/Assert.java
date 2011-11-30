@@ -33,4 +33,9 @@ public class Assert {
 		return value;
 	}
 	
+	public static void isTrue(boolean assertion) {
+		if (!assertion) {
+			throw new AssertionFailedException();
+		}
+	}
 }

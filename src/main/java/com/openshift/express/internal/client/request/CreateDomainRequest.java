@@ -31,7 +31,7 @@ public class CreateDomainRequest extends AbstractDomainRequest {
 	}
 	
 	@Override
-	public String toHumanReadable() {
+	public String getOperation() {
 		return "create domain " + getName();
 	}
 

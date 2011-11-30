@@ -17,7 +17,9 @@ import java.util.List;
 
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
+import com.openshift.express.internal.client.httpclient.BadRequestException;
 import com.openshift.express.internal.client.httpclient.HttpClientException;
+import com.openshift.express.internal.client.httpclient.InternalServerErrorException;
 import com.openshift.express.internal.client.httpclient.NotFoundException;
 import com.openshift.express.internal.client.httpclient.UnauthorizedException;
 import com.openshift.express.internal.client.httpclient.UrlConnectionHttpClient;
@@ -51,27 +53,24 @@ import com.openshift.express.internal.client.response.unmarshalling.UserInfoResp
  */
 public class OpenShiftService implements IOpenShiftService {
 	
-	static {
-	    javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
-	    new javax.net.ssl.HostnameVerifier(){
-
-	        public boolean verify(String hostname,
-	                javax.net.ssl.SSLSession sslSession) {
-	 
-	        	return true;
-	        }
-	    });
-	}
-	
 	// TODO extract to properties file
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
+	
+	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
+
+	private static final long APPLICATION_WAIT_DELAY = 2;
 
 	private String baseUrl;
 	private String id;
+	private boolean ignoreCertCheck;
 
 	public OpenShiftService(String id, String baseUrl) {
 		this.id = id;
 		this.baseUrl = baseUrl;
+	}
+	
+	public void setIgnoreCertCheck(boolean ignoreCertCheck) {
+		this.ignoreCertCheck = ignoreCertCheck;
 	}
 
 	public String getServiceUrl() {
@@ -82,260 +81,214 @@ public class OpenShiftService implements IOpenShiftService {
 		return baseUrl;
 	}
 
-	public boolean isValid(InternalUser user) throws OpenShiftException {
+	public boolean isValid(final IUser user) throws OpenShiftException {
 		return getUserInfo(user) != null;
 	}
-	
-	public UserInfo getUserInfo(InternalUser user) throws OpenShiftException {
-		return getUserInfo(user, false);
-	}
 
-	public UserInfo getUserInfo(InternalUser user, boolean ignoreCertCheck) throws OpenShiftException {
-		UserInfoRequest request = new UserInfoRequest(user.getRhlogin(), true);
-		String url = request.getUrlString(getServiceUrl());
-		try {
-			String requestString = new UserInfoRequestJsonMarshaller().marshall(request);
+	public UserInfo getUserInfo(final IUser user) throws OpenShiftException {
+		UserInfoRequest userInfoRequest = new UserInfoRequest(user.getRhlogin(), true);
+		String url = userInfoRequest.getUrlString(getServiceUrl());
 			
-			String openShiftRequestString = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), requestString)
-					.createString();
-		
-			String responseString = createHttpClient(id, url, ignoreCertCheck).post(openShiftRequestString);
-			responseString = JsonSanitizer.sanitize(responseString);
-			OpenShiftResponse<UserInfo> response =
-					new UserInfoResponseUnmarshaller().unmarshall(responseString);
-			return response.getOpenShiftObject();
-		} catch (MalformedURLException e) {
-			throw new OpenShiftEndpointException(
-					url, e, "Could not get user info for user \"{0}\" at \"{1}\"", user.getRhlogin(), url);
-		} catch (UnauthorizedException e) {
-			throw new InvalidCredentialsOpenShiftException(url + " for '" + user.getRhlogin() + "'", e);
-		} catch (NotFoundException e) {
-			throw new NotFoundOpenShiftException(url, e);
-		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(
-					url, e, "Could not get user info for user \"{0}\" at \"{1}\"", user.getRhlogin(), url);
-		}
+		String request = new UserInfoRequestJsonMarshaller().marshall(userInfoRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				"Could not get user info for user \"{0}\" at \"{1}\"");
+		OpenShiftResponse<UserInfo> userInfoResponse =
+				new UserInfoResponseUnmarshaller().unmarshall(response);
+		return userInfoResponse.getOpenShiftObject();
 	}
-
-	public List<IEmbeddableCartridge> getEmbeddableCartridges(InternalUser user) throws OpenShiftException {
+	
+	public List<IEmbeddableCartridge> getEmbeddableCartridges(final IUser user) throws OpenShiftException {
 		ListCartridgesRequest listCartridgesRequest = new ListCartridgesRequest(
 				ListCartridgesRequest.CartridgeType.EMBEDDED, user.getRhlogin(), true);
 		String url = listCartridgesRequest.getUrlString(getServiceUrl());
-		try {
-			String listCartridgesRequestString =
-					new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
-			String request =
-					new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), listCartridgesRequestString).createString();
-			String listCatridgesReponse = createHttpClient(id, url).post(request);
-			listCatridgesReponse = JsonSanitizer.sanitize(listCatridgesReponse);
-			OpenShiftResponse<List<IEmbeddableCartridge>> response =
-					new ListEmbeddableCartridgesResponseUnmarshaller().unmarshall(listCatridgesReponse);
-			return response.getOpenShiftObject();
-			/**
-			 * always allowed to list cartridges, even with invalid credentials
-			 */
-		} catch (MalformedURLException e) {
-			throw new OpenShiftEndpointException(url, e, "Could not list available embeddable cartridges at \"{0}\"",
-					url);
-		} catch (NotFoundException e) {
-			throw new NotFoundOpenShiftException(url, e);
-		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(url, e, "Could not list available embeddable cartridges at \"{0}\"",
-					url);
-		}
+		String request =
+				new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not list available embeddable cartridges at \"{0}\"", url));
+		OpenShiftResponse<List<IEmbeddableCartridge>> listCartridgesResponse =
+				new ListEmbeddableCartridgesResponseUnmarshaller().unmarshall(response);
+		return listCartridgesResponse.getOpenShiftObject();
 	}
 
-	public List<ICartridge> getCartridges(InternalUser user) throws OpenShiftException {
+	public List<ICartridge> getCartridges(final IUser user) throws OpenShiftException {
 		ListCartridgesRequest listCartridgesRequest = new ListCartridgesRequest(
 				ListCartridgesRequest.CartridgeType.STANDALONE, user.getRhlogin(), true);
 		String url = listCartridgesRequest.getUrlString(getServiceUrl());
-		try {
-			String listCartridgesRequestString =
-					new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
-			String request =
-					new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), listCartridgesRequestString).createString();
-			String listCatridgesReponse = createHttpClient(id, url).post(request);
-			listCatridgesReponse = JsonSanitizer.sanitize(listCatridgesReponse);
-			OpenShiftResponse<List<ICartridge>> response =
-					new ListCartridgesResponseUnmarshaller().unmarshall(listCatridgesReponse);
-			return response.getOpenShiftObject();
-			/**
-			 * always allowed to list cartridges, even with invalid credentials
-			 */
-		} catch (MalformedURLException e) {
-			throw new OpenShiftEndpointException(url, e, "Could not list available cartridges at \"{0}\"", url);
-		} catch (NotFoundException e) {
-			throw new NotFoundOpenShiftException(url, e);
-		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(url, e, "Could not list available cartridges at \"{0}\"", url);
-		}
+		String request =
+				new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not list embeddable cartridges at \"{0}\"", url));
+		OpenShiftResponse<List<ICartridge>> cartridgesResponse =
+				new ListCartridgesResponseUnmarshaller().unmarshall(response);
+		return cartridgesResponse.getOpenShiftObject();
 	}
 
-	public IDomain createDomain(String name, ISSHPublicKey sshKey, InternalUser user) throws OpenShiftException {
+
+	public IDomain createDomain(final String name, final ISSHPublicKey sshKey, final IUser user) throws OpenShiftException {
 		return requestDomainAction(new CreateDomainRequest(name, sshKey, user.getRhlogin(), true), user);
 	}
 
-	public IDomain changeDomain(String newName, ISSHPublicKey sshKey, InternalUser user) throws OpenShiftException {
+	public IDomain changeDomain(final String newName, final ISSHPublicKey sshKey, final IUser user) throws OpenShiftException {
 		return requestDomainAction(new ChangeDomainRequest(newName, sshKey, user.getRhlogin(), true), user);
 	}
 
-	protected IDomain requestDomainAction(AbstractDomainRequest request, InternalUser user) throws OpenShiftException {
-		String url = request.getUrlString(getServiceUrl());
-		try {
-			String requestString =
-					new OpenShiftEnvelopeFactory(
-							user.getPassword(), user.getAuthKey(), user.getAuthIV(),
-							new DomainRequestJsonMarshaller().marshall(request))
-							.createString();
-			String responseString = createHttpClient(id, url).post(requestString);
-			responseString = JsonSanitizer.sanitize(responseString);
-			OpenShiftResponse<IDomain> response =
-					new DomainResponseUnmarshaller(request.getName(), user, this).unmarshall(responseString);
-			return response.getOpenShiftObject();
-		} catch (MalformedURLException e) {
-			throw new OpenShiftEndpointException(url, e, "Could reach openshift platform at \"{0}\"", url);
-		} catch (UnauthorizedException e) {
-			throw new InvalidCredentialsOpenShiftException(url, e);
-		} catch (NotFoundException e) {
-			throw new NotFoundOpenShiftException(url, e);
-		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(url, e, "Could not {0}", request.toHumanReadable());
-		}
+	protected IDomain requestDomainAction(final AbstractDomainRequest domainRequest, final IUser user)
+			throws OpenShiftException {
+		String url = domainRequest.getUrlString(getServiceUrl());
+		String request = new DomainRequestJsonMarshaller().marshall(domainRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not {0}", domainRequest.getOperation()));
+		OpenShiftResponse<IDomain> domainResponse =
+				new DomainResponseUnmarshaller(domainRequest.getName(), user, this).unmarshall(response);
+		return domainResponse.getOpenShiftObject();
 	}
 
-	public IApplication createApplication(String name, ICartridge cartridge, InternalUser user)
+	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
-		IApplication application = requestApplicationAction(new ApplicationRequest(name, cartridge,
-				ApplicationAction.CONFIGURE,
-				user.getRhlogin(), true), user);
+		IApplication application = requestApplicationAction(
+				new ApplicationRequest(name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true),
+				user);
 		return application;
 	}
 
-	public void destroyApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
-		IApplication application = requestApplicationAction(new ApplicationRequest(name, cartridge,
-				ApplicationAction.DECONFIGURE,
-				user.getRhlogin(), true), user);
-		user.remove(application);
+	public void destroyApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {
+		requestApplicationAction(
+				new ApplicationRequest(name, cartridge, ApplicationAction.DECONFIGURE, user.getRhlogin(), true),
+				user);
 	}
 
-	public IApplication startApplication(String name, ICartridge cartridge, InternalUser user)
+	public IApplication startApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
-		return requestApplicationAction(new ApplicationRequest(name, cartridge, ApplicationAction.START,
-				user.getRhlogin(), true), user);
+		return requestApplicationAction(
+				new ApplicationRequest(name, cartridge, ApplicationAction.START, user.getRhlogin(), true),
+				user);
 	}
 
-	public IApplication restartApplication(String name, ICartridge cartridge, InternalUser user)
+
+	public IApplication restartApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
-		return requestApplicationAction(new ApplicationRequest(name, cartridge, ApplicationAction.RESTART,
-				user.getRhlogin(), true), user);
+		return requestApplicationAction(
+				new ApplicationRequest(name, cartridge, ApplicationAction.RESTART, user.getRhlogin(), true),
+				user);
 	}
 
-	public IApplication stopApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException {
-		return requestApplicationAction(new ApplicationRequest(name, cartridge, ApplicationAction.STOP,
-				user.getRhlogin(), true), user);
+	public IApplication stopApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {
+		return requestApplicationAction(
+				new ApplicationRequest(name, cartridge, ApplicationAction.STOP, user.getRhlogin(), true),
+				user);
 	}
 
-	public String getStatus(String applicationName, ICartridge cartridge, InternalUser user) throws OpenShiftException {
+	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user) throws OpenShiftException {
 		ApplicationRequest applicationRequest =
 				new ApplicationRequest(applicationName, cartridge, ApplicationAction.STATUS, user.getRhlogin(), true);
 		String url = applicationRequest.getUrlString(getServiceUrl());
-		try {
-			String applicationRequestString =
-					new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
-			String request = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), applicationRequestString).createString();
-			String response = createHttpClient(id, url).post(request);
-
-			response = JsonSanitizer.sanitize(response);
-			OpenShiftResponse<String> openshiftResponse =
-					new ApplicationStatusResponseUnmarshaller().unmarshall(response);
-			return openshiftResponse.getOpenShiftObject();
-		} catch (MalformedURLException e) {
-			throw new OpenShiftException(
-					e, "Could not {0} application \"{1}\" at \"{2}\": Invalid url \"{2}\"",
-					applicationRequest.getAction().getCommand(), applicationRequest.getName(), url);
-		} catch (UnauthorizedException e) {
-			throw new InvalidCredentialsOpenShiftException(url, e);
-		} catch (NotFoundException e) {
-			throw new NotFoundOpenShiftException(url, e);
-		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(
-					url, e, "Could not {0} application \"{1}\" at \"{2}\"",
-					applicationRequest.getAction().getCommand(), applicationRequest.getName(), url);
-		}
+		String request =
+				new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not {0} application \"{1}\" at \"{2}\"",
+						applicationRequest.getAction().getCommand(), applicationRequest.getName(), url));
+		OpenShiftResponse<String> openshiftResponse =
+				new ApplicationStatusResponseUnmarshaller().unmarshall(response);
+		return openshiftResponse.getOpenShiftObject();
 	}
 
-	protected IApplication requestApplicationAction(ApplicationRequest applicationRequest, InternalUser user)
+	protected IApplication requestApplicationAction(final ApplicationRequest applicationRequest, final IUser user)
 			throws OpenShiftException {
 		String url = applicationRequest.getUrlString(getServiceUrl());
+		String request = new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not {0} application \"{1}\" at \"{2}\"",
+						applicationRequest.getAction().getCommand(), applicationRequest.getName(), url));
+		OpenShiftResponse<IApplication> openshiftResponse =
+				new ApplicationResponseUnmarshaller(applicationRequest.getName(),
+						applicationRequest.getCartridge(), user, this).unmarshall(response);
+		return openshiftResponse.getOpenShiftObject();
+	}
+	
+	public boolean waitForApplication(final IApplication application, final long timeout) 
+			throws OpenShiftException {
 		try {
-			String applicationRequestString =
-					new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
-			String request = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), applicationRequestString).createString();
-			String response = createHttpClient(id, url).post(request);
-
-			response = JsonSanitizer.sanitize(response);
-			OpenShiftResponse<IApplication> openshiftResponse =
-					new ApplicationResponseUnmarshaller(applicationRequest.getName(),
-							applicationRequest.getCartridge(), user, this).unmarshall(response);
-			return openshiftResponse.getOpenShiftObject();
+			IHttpClient client = createHttpClient(id, application.getApplicationUrl(), false);
+			String response = null;
+			long startTime = System.currentTimeMillis();
+			while (response == null
+					&& System.currentTimeMillis() < startTime + timeout) {
+				try {
+					Thread.sleep(APPLICATION_WAIT_DELAY);
+					response = client.get();
+				} catch (InternalServerErrorException e) {
+					return true;
+				} catch (BadRequestException e) {
+					return true;
+				} catch (NotFoundException e) {
+					return true;
+				} catch (HttpClientException e) {
+					// not available yet
+				}
+			}
+		} catch (InterruptedException e) {
+			return false;
 		} catch (MalformedURLException e) {
-			throw new OpenShiftException(
-					e, "Could not {0} application \"{1}\" at \"{2}\": Invalid url \"{2}\"",
-					applicationRequest.getAction().getCommand(), applicationRequest.getName(), url);
-		} catch (UnauthorizedException e) {
-			throw new InvalidCredentialsOpenShiftException(url, e);
-		} catch (NotFoundException e) {
-			throw new NotFoundOpenShiftException(url, e);
-		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(
-					url, e, "Could not {0} application \"{1}\" at \"{2}\"",
-					applicationRequest.getAction().getCommand(), applicationRequest.getName(), url);
+			throw new OpenShiftException(e, MALFORMED_URL_EXCEPTION_MSG, application.getApplicationUrl());
 		}
+		return true;
 	}
 
-	public IApplication addEmbeddableCartridge(IApplication application, IEmbeddableCartridge cartridge,
-			InternalUser user)
-			throws OpenShiftException {
+	public IEmbeddableCartridge addEmbeddedCartridge(final String applicationName, final IEmbeddableCartridge cartridge,
+			IUser user) throws OpenShiftException {
 		return requestEmbedAction(
-				new EmbedRequest(application.getName(), cartridge, EmbedAction.ADD, user.getRhlogin(), true)
-				, application
+				new EmbedRequest(applicationName, cartridge, EmbedAction.ADD, user.getRhlogin(), true)
+				, user);
+	}
+	
+	public void removeEmbeddedCartridge(final String applicationName, final IEmbeddableCartridge cartridge,
+			final IUser user) throws OpenShiftException {
+		requestEmbedAction(
+				new EmbedRequest(applicationName, cartridge, EmbedAction.REMOVE, user.getRhlogin(), true)
 				, user);
 	}
 
-	protected IApplication requestEmbedAction(EmbedRequest embedRequest, IApplication application, InternalUser user)
+	protected IEmbeddableCartridge requestEmbedAction(final EmbedRequest embedRequest, final IUser user)
 			throws OpenShiftException {
 		String url = embedRequest.getUrlString(getServiceUrl());
+		String request = new EmbedRequestJsonMarshaller().marshall(embedRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not {0} application \"{1}\" at \"{2}\"",
+						embedRequest.getAction().getCommand(), embedRequest.getName(), url));
+		OpenShiftResponse<IEmbeddableCartridge> openshiftResponse =
+				new EmbedResponseUnmarshaller(embedRequest.getEmbeddableCartridge())
+						.unmarshall(response);
+		return openshiftResponse.getOpenShiftObject();
+	}
+	
+	private String sendRequest(final String request, final String url, final String password, final String authKey, final String authIV, final String errorMessage) throws OpenShiftException {
 		try {
-			String embedRequestString = new EmbedRequestJsonMarshaller().marshall(embedRequest);
-			String request = new OpenShiftEnvelopeFactory(user.getPassword(), user.getAuthKey(), user.getAuthIV(), embedRequestString).createString();
-
-			String response = createHttpClient(id, url).post(request);
-			response = JsonSanitizer.sanitize(response);
-			OpenShiftResponse<IApplication> openshiftResponse =
-					new EmbedResponseUnmarshaller(embedRequest.getEmbeddableCartridge(), application)
-							.unmarshall(response);
-			return openshiftResponse.getOpenShiftObject();
+			String requestMessage = new OpenShiftEnvelopeFactory(password, authKey, authIV, request).createString();
+			String response = createHttpClient(id, url).post(requestMessage);
+			return JsonSanitizer.sanitize(response);
 		} catch (MalformedURLException e) {
-			throw new OpenShiftException(
-					e, "Could not {0} application \"{1}\" at \"{2}\": Invalid url \"{2}\"",
-					embedRequest.getAction().getCommand(), embedRequest.getName(), url);
+			throw new OpenShiftException(e, errorMessage);
 		} catch (UnauthorizedException e) {
 			throw new InvalidCredentialsOpenShiftException(url, e);
 		} catch (NotFoundException e) {
 			throw new NotFoundOpenShiftException(url, e);
 		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(
-					url, e, "Could not {0} application \"{1}\" at \"{2}\"",
-					embedRequest.getAction().getCommand(), embedRequest.getName(), url);
+			throw new OpenShiftEndpointException(url, e, errorMessage);
+		}
+	}
+	
+	protected IHttpClient createHttpClient(final String id, final String url) throws MalformedURLException {
+		return createHttpClient(id, url, true);
+
+	}
+
+	private IHttpClient createHttpClient(String id, String url, final boolean verifyHostnames) throws MalformedURLException {
+		String userAgent = MessageFormat.format(USERAGENT_FORMAT, VERSION, id);
+		if (verifyHostnames) {
+			return new UrlConnectionHttpClient(userAgent, new URL(url), ignoreCertCheck);
+		} else {
+			return new UrlConnectionHttpClient(userAgent, new URL(url), ignoreCertCheck, UrlConnectionHttpClient.NOOP_HOSTNAMEVERIFIER);
 		}
 	}
 
-	private IHttpClient createHttpClient(String id, String url, boolean ignoreCertCheck) throws MalformedURLException {
-		String userAgent = MessageFormat.format(USERAGENT_FORMAT, VERSION, id);
-		return new UrlConnectionHttpClient(userAgent, new URL(url), ignoreCertCheck);
-	}
-	
-	private IHttpClient createHttpClient(String id, String url) throws MalformedURLException {
-		return createHttpClient(id, url, false);
-	}
 }

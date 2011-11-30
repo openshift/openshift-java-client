@@ -29,8 +29,10 @@ import com.openshift.express.internal.client.ApplicationInfo;
  */
 public class ApplicationInfoAsserts {
 
-	public static void assertThatContainsApplicationInfo(String applicationName, IEmbeddableCartridge embedded, String applicationUUID,
-			String cartridgeName, String creationTime, List<ApplicationInfo> applicationInfos) throws OpenShiftException {
+	public static void assertThatContainsApplicationInfo(String applicationName, List<IEmbeddableCartridge> embedded,
+			String applicationUUID,
+			String cartridgeName, String creationTime, List<ApplicationInfo> applicationInfos)
+			throws OpenShiftException {
 		ApplicationInfo applicationInfo = getApplicationInfo(applicationName, applicationInfos);
 		if (applicationInfo == null) {
 			fail(MessageFormat.format("Could not find application with name \"{0}\"", applicationName));
@@ -52,13 +54,13 @@ public class ApplicationInfoAsserts {
 		}
 		return matchingApplicationInfo;
 	}
-	
-	private static void assertApplicationInfo(IEmbeddableCartridge embedded, String uuid, String cartridgeName,
+
+	private static void assertApplicationInfo(List<IEmbeddableCartridge> embedded, String uuid, String cartridgeName,
 			String creationTime, ApplicationInfo applicationInfo) throws OpenShiftException {
-		assertEquals(embedded, applicationInfo.getEmbedded());
 		assertEquals(uuid, applicationInfo.getUuid());
 		assertNotNull(applicationInfo.getCartridge());
 		assertEquals(cartridgeName, applicationInfo.getCartridge().getName());
+		assertEmbeddedCartridges(embedded, applicationInfo);
 		try {
 			assertEquals(RFC822DateUtils.getDate(creationTime), applicationInfo.getCreationTime());
 		} catch (DatatypeConfigurationException e) {
@@ -66,4 +68,16 @@ public class ApplicationInfoAsserts {
 		}
 	}
 
+	private static void assertEmbeddedCartridges(List<IEmbeddableCartridge> cartridges, ApplicationInfo applicationInfo) {
+		if (cartridges == null) {
+			// null in cartridges is equivalent to empty list
+			if (applicationInfo.getEmbeddedCartridges() != null
+					&& applicationInfo.getEmbeddedCartridges().size() > 0) {
+				fail("expected: no embedded cartridges, actual: " + applicationInfo.getEmbeddedCartridges().size()
+						+ " cartridges found");
+			}
+		} else {
+			assertEquals(cartridges.size(), applicationInfo.getEmbeddedCartridges().size());
+		}
+	}
 }

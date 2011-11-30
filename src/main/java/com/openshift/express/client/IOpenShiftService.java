@@ -52,7 +52,7 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * @throws MalformedURLException
 	 */
-	public boolean isValid(InternalUser user) throws OpenShiftException;
+	public boolean isValid(IUser user) throws OpenShiftException;
 
 	/**
 	 * List all cartridges that are available on the OpenShift Express platform.
@@ -63,11 +63,21 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * @throws MalformedURLException
 	 * 
-	 * @see InternalUser
+	 * @see IUser
 	 */
-	public List<ICartridge> getCartridges(InternalUser user) throws OpenShiftException;
-
-	public List<IEmbeddableCartridge> getEmbeddableCartridges(InternalUser user) throws OpenShiftException;
+	public List<ICartridge> getCartridges(IUser user) throws OpenShiftException;
+	/**
+	 * Lists all cartridges that may be embedded into applications.
+	 * 
+	 * @param user
+	 *            the user to authenticate with
+	 * @return a list of embeddable cartridges
+	 * @throws OpenShiftException
+	 * 
+	 * @see #addEmbeddedCartridge(IApplication, IEmbeddableCartridge,
+	 *      IUser)
+	 */
+	public List<IEmbeddableCartridge> getEmbeddableCartridges(IUser user) throws OpenShiftException;
 
 	/**
 	 * Creates an application with the given name and cartridge for the given
@@ -83,10 +93,10 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 * @see IApplication
 	 */
-	public IApplication createApplication(String name, ICartridge cartridge, InternalUser user)
+	public IApplication createApplication(String name, ICartridge cartridge, IUser user)
 			throws OpenShiftException;
 
 	/**
@@ -102,9 +112,9 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 */
-	public void destroyApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException;
+	public void destroyApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException;
 
 	/**
 	 * Starts the application with the given name and cartridge for the given
@@ -121,10 +131,10 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 * @see IApplication
 	 */
-	public IApplication startApplication(String name, ICartridge cartridge, InternalUser user)
+	public IApplication startApplication(String name, ICartridge cartridge, IUser user)
 			throws OpenShiftException;
 
 	/**
@@ -141,10 +151,10 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 * @see IApplication
 	 */
-	public IApplication restartApplication(String name, ICartridge cartridge, InternalUser user)
+	public IApplication restartApplication(String name, ICartridge cartridge, IUser user)
 			throws OpenShiftException;
 
 	/**
@@ -162,10 +172,10 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 * @see IApplication
 	 */
-	public IApplication stopApplication(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException;
+	public IApplication stopApplication(String name, ICartridge cartridge, IUser user) throws OpenShiftException;
 
 	
 	/**
@@ -177,8 +187,40 @@ public interface IOpenShiftService {
 	 * @return
 	 * @throws OpenShiftException
 	 */
-	public IApplication addEmbeddableCartridge(IApplication application, IEmbeddableCartridge cartridge, InternalUser user)
+	
+	/**
+	 * Adds the given embeddable cartridge to the application with the name
+	 * using the given user.
+	 * 
+	 * @param applicationName
+	 *            the name of the application to add the embeddable cartridge to
+	 * @param cartridge
+	 *            the cartridge to embed
+	 * @param user
+	 *            the user that's used to authenticate to the service
+	 * @throws OpenShiftException
+	 *             the open shift exception
+	 * @see #getEmbeddableCartridges(IUser)
+	 */
+	public IEmbeddableCartridge addEmbeddedCartridge(String applicationName, IEmbeddableCartridge cartridge,
+			IUser user)
 			throws OpenShiftException;
+
+	/**
+	 * Removes the given embeddable cartridge from the application with the
+	 * given name using the given user.
+	 * 
+	 * @param applicationName the name of the application to remove the embedded cartridge
+	 *            from
+	 * @param cartridge the cartridge to remmove
+	 * @param user the user that's used to authenticate to the service
+	 * @throws OpenShiftException occurrs if the cartridge could not be removed
+	 * @see #getEmbeddableCartridges(IUser)
+	 */
+	public void removeEmbeddedCartridge(String applicationName, IEmbeddableCartridge cartridge,
+			IUser user) throws OpenShiftException;
+
+	
 	/**
 	 * Returns the log of the application with the given name and cartridge.
 	 * Returns the whole log if no new log entry was created since the last
@@ -194,9 +236,9 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 */
-	public String getStatus(String name, ICartridge cartridge, InternalUser user) throws OpenShiftException;
+	public String getStatus(String name, ICartridge cartridge, IUser user) throws OpenShiftException;
 
 	/**
 	 * Changes the current domain (namespace) to the given name.
@@ -211,12 +253,12 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 * @see SSHKeyPair
 	 * @see ISSHPublicKey
 	 * @see IDomain
 	 */
-	public IDomain changeDomain(String name, ISSHPublicKey sshKey, InternalUser user) throws OpenShiftException;
+	public IDomain changeDomain(String name, ISSHPublicKey sshKey, IUser user) throws OpenShiftException;
 
 	/**
 	 * Creates a domain (namespace) with the given name for the given user
@@ -233,40 +275,39 @@ public interface IOpenShiftService {
 	 * @throws OpenShiftException
 	 * 
 	 * @see ICartridge
-	 * @see InternalUser
+	 * @see IUser
 	 * @see SSHKeyPair
 	 * @see ISSHPublicKey
 	 * @see IDomain
 	 */
-	public IDomain createDomain(String name, ISSHPublicKey sshKey, InternalUser user) throws OpenShiftException;
+	public IDomain createDomain(String name, ISSHPublicKey sshKey, IUser user) throws OpenShiftException;
 
 	/**
 	 * Returns all informations for the given user and its applications.
 	 * 
 	 * @param user
-	 *            the user account to use           
+	 *            the user account to use
 	 * @return all user informations (user related info and applications)
 	 * @throws OpenShiftException
 	 * 
-	 * @see InternalUser
-	 * @see InternalUserInfo
+	 * @see IUser
+	 * @see IUserInfo
 	 * @see ApplicationInfo
 	 */
-	public UserInfo getUserInfo(InternalUser user) throws OpenShiftException;
+	public UserInfo getUserInfo(IUser user) throws OpenShiftException;
 	
 	/**
-	 * Returns all informations for the given user and its applications.
+	 * Waits for the given application to become accessible on it's public url. 
 	 * 
-	 * @param user
-	 *            the user account to use  
-	 * @param ignoreCertCheck
-	 * 			  true if all CA certs are to be accepted                    
-	 * @return all user informations (user related info and applications)
-	 * @throws OpenShiftException
+	 * @param applicationName
+	 * @throws OpenShiftException 
+	 * @throws MalformedURLException 
 	 * 
-	 * @see InternalUser
-	 * @see InternalUserInfo
-	 * @see ApplicationInfo
+	 * @see IApplication#getApplicationUrl()
 	 */
-	public UserInfo getUserInfo(InternalUser user, boolean ignoreCertCheck) throws OpenShiftException;
+	public boolean waitForApplication(IApplication application, long timeout) throws OpenShiftException;
+	
+	
+	public void setIgnoreCertCheck(boolean ignoreCertCheck);
+	
 }

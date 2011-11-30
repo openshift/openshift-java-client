@@ -8,30 +8,30 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package com.openshift.express.client;
+package com.openshift.express.internal.client;
 
 /**
- * A cartridge that is available on the openshift server. This class is no enum
- * since we dont know all available types and they may change at any time.
+ * A cartridge info that is reported by {@link ApplicationInfo#getEmbeddedCartridge(String)} and holds the data reported
+ * by the paas.
  * 
  * @author André Dietisheim
  */
-public class Cartridge implements ICartridge {
+public class EmbeddableCartridgeInfo {
 
 	private String name;
+	private String url;
 
-	public Cartridge(String name) {
+	public EmbeddableCartridgeInfo(String name, String url) {
 		this.name = name;
+		this.url = url;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public static ICartridge valueOf(String name) {
-		if (JBOSSAS_7.getName().equals(name)) {
-			return JBOSSAS_7;
-		}
-		return null;
+	public String getUrl() {
+		return url;
 	}
+
 }

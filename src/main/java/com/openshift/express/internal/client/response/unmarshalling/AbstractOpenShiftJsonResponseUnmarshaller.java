@@ -18,8 +18,8 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.utils.RFC822DateUtils;
-import com.openshift.express.internal.client.IOpenShiftJsonConstants;
 import com.openshift.express.internal.client.response.OpenShiftResponse;
+import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
  * @author André Dietisheim

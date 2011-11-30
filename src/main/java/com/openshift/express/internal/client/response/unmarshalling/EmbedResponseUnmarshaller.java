@@ -11,25 +11,26 @@
 package com.openshift.express.internal.client.response.unmarshalling;
 
 import org.jboss.dmr.ModelNode;
+
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.IEmbeddableCartridge;
+import com.openshift.express.client.OpenShiftException;
+import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
  * @author André Dietisheim
  */
-public class EmbedResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnmarshaller<IApplication> {
+public class EmbedResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnmarshaller<IEmbeddableCartridge> {
 
 	private IEmbeddableCartridge embeddedCartridge;
-	private IApplication application;
 	
-	public EmbedResponseUnmarshaller(IEmbeddableCartridge embeddedCartridge, IApplication application) {
+	public EmbedResponseUnmarshaller(IEmbeddableCartridge embeddedCartridge) {
 		this.embeddedCartridge = embeddedCartridge;
-		this.application = application;
 	}
 
 	@Override
-	protected IApplication createOpenShiftObject(ModelNode node) {
-		application.setEmbbedCartridge(embeddedCartridge);
-		return application;
+	protected IEmbeddableCartridge createOpenShiftObject(ModelNode node) throws OpenShiftException {
+		embeddedCartridge.setCreationLog(getString(IOpenShiftJsonConstants.PROPERTY_RESULT, node));
+		return embeddedCartridge;
 	}
 }

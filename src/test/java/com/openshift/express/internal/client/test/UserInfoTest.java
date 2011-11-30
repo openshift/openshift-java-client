@@ -15,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.List;
 
 import com.openshift.express.client.ISSHPublicKey;
@@ -72,14 +73,17 @@ public class UserInfoTest {
 		assertEquals(2, applicationInfos.size());
 		assertThatContainsApplicationInfo(
 				UserInfoResponseFake.APP1_NAME,
-				UserInfoResponseFake.APP1_EMBEDDED,
+				UserInfoResponseFake.toEmbeddableCartridges(UserInfoResponseFake.APP1_EMBEDDED),
 				UserInfoResponseFake.APP1_UUID,
 				UserInfoResponseFake.APP1_CARTRIDGE,
 				UserInfoResponseFake.APP1_CREATION_TIME,
 				applicationInfos);
 		assertThatContainsApplicationInfo(
 				UserInfoResponseFake.APP2_NAME,
-				UserInfoResponseFake.APP2_EMBEDDED,
+				Collections.singletonList(
+						UserInfoResponseFake.toEmbeddableCartridge(
+								UserInfoResponseFake.APP2_EMBEDDED_NAME,
+								UserInfoResponseFake.APP2_EMBEDDED_URL)),
 				UserInfoResponseFake.APP2_UUID,
 				UserInfoResponseFake.APP2_CARTRIDGE,
 				UserInfoResponseFake.APP2_CREATION_TIME,

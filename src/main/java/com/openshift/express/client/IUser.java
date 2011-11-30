@@ -21,6 +21,10 @@ public interface IUser {
 	public String getRhlogin();
 
 	public String getPassword();
+	
+	public String getAuthKey();
+	
+	public String getAuthIV();
 
 	public boolean isValid() throws OpenShiftException;
 

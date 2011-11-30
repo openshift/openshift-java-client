@@ -13,7 +13,8 @@ package com.openshift.express.internal.client.response.unmarshalling;
 import java.util.List;
 
 import org.jboss.dmr.ModelNode;
-import com.openshift.express.internal.client.IOpenShiftJsonConstants;
+
+import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
  * @author André Dietisheim

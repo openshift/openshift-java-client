@@ -20,13 +20,13 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	ApplicationIntegrationTest.class,
-	EmbedIntegrationTest.class,
-	ApplicationLogReaderIntegrationTest.class,
-	CartridgesIntegrationTest.class,
-	DomainIntegrationTest.class,
-	UserInfoIntegrationTest.class,
-	UserIntegrationTest.class
+	ApplicationIntegrationTest.class
+//	EmbedIntegrationTest.class,
+//	ApplicationLogReaderIntegrationTest.class,
+//	CartridgesIntegrationTest.class,
+//	DomainIntegrationTest.class,
+//	UserInfoIntegrationTest.class,
+//	UserIntegrationTest.class
 })
 
 
@@ -71,6 +71,8 @@ public class OpenShiftIntegrationTestSuite {
 			    	System.setProperty("proxySet", (String)props.get("proxySet"));
 			    if (props.get("proxiedHost") != null)
 			    	System.setProperty("proxiedHost", (String)props.get("proxiedHost"));
+			    if (props.get("ignoreCertCheck") != null)
+			    	System.setProperty("ignoreCertCheck", (String)props.get("ignoreCertCheck"));
 			    
 			    if (props.get("RHLOGIN") != null)
 			    	System.setProperty("RHLOGIN", (String)props.get("RHLOGIN"));

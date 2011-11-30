@@ -10,12 +10,12 @@
  ******************************************************************************/
 package com.openshift.express.internal.client.test.utils;
 
-import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.User;
+import com.openshift.express.internal.client.Cartridge;
 
 /**
  * @author André Dietisheim
@@ -29,7 +29,7 @@ public class ApplicationUtils {
 	public static IApplication createApplication(User user, IOpenShiftService service) throws OpenShiftException {
 		return service.createApplication(createRandomApplicationName(), Cartridge.JBOSSAS_7, user);
 	}
-	
+
 	public static void silentlyDestroyAS7Application(String name, User user, IOpenShiftService service) {
 		silentlyDestroyApplication(name, ICartridge.JBOSSAS_7, user, service);
 	}
@@ -38,7 +38,8 @@ public class ApplicationUtils {
 		silentlyDestroyApplication(name, ICartridge.JENKINS_14, user, service);
 	}
 
-	public static void silentlyDestroyApplication(String name, ICartridge cartridge, User user, IOpenShiftService service) {
+	public static void silentlyDestroyApplication(String name, ICartridge cartridge, User user,
+			IOpenShiftService service) {
 		try {
 			if (name == null) {
 				return;
@@ -49,4 +50,23 @@ public class ApplicationUtils {
 		}
 	}
 
+	public static void silentlyDestroyAnyJenkinsApplication(User user) {
+		try {
+			for (IApplication application : user.getApplicationsByCartridge(ICartridge.JENKINS_14)) {
+				application.destroy();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void silentlyDestroyAllApplications(User user) {
+		try {
+			for (IApplication application : user.getApplications()) {
+				application.destroy();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

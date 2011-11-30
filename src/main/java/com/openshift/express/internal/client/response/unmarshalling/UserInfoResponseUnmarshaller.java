@@ -13,23 +13,28 @@ package com.openshift.express.internal.client.response.unmarshalling;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.jboss.dmr.ModelNode;
-import com.openshift.express.client.Cartridge;
-import com.openshift.express.client.EmbeddableCartridge;
+
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.internal.client.ApplicationInfo;
-import com.openshift.express.internal.client.IOpenShiftJsonConstants;
+import com.openshift.express.internal.client.Cartridge;
+import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 import com.openshift.express.internal.client.UserInfo;
+import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
  * @author André Dietisheim
  */
 public class UserInfoResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnmarshaller<UserInfo> {
 
+	private static final Pattern URL_REGEX = Pattern.compile(".*URL: (.+)"); 
+	
 	@Override
 	protected UserInfo createOpenShiftObject(ModelNode node) throws DatatypeConfigurationException {
 		ModelNode dataNode = node.get(IOpenShiftJsonConstants.PROPERTY_DATA);
@@ -67,17 +72,36 @@ public class UserInfoResponseUnmarshaller extends AbstractOpenShiftJsonResponseU
 
 	private ApplicationInfo createApplicationInfo(String name, ModelNode appNode) throws DatatypeConfigurationException {
 		String uuid = getString(IOpenShiftJsonConstants.PROPERTY_UUID, appNode);
-		IEmbeddableCartridge embeddedCartridge = createEmbeddedCartridge(appNode);
-		ICartridge cartrdige = new Cartridge(getString(IOpenShiftJsonConstants.PROPERTY_FRAMEWORK, appNode));
+		List<EmbeddableCartridgeInfo> embeddedCartridges = createEmbeddedCartridges(appNode);
+		ICartridge cartidge = new Cartridge(getString(IOpenShiftJsonConstants.PROPERTY_FRAMEWORK, appNode));
 		Date creationTime = getDate(IOpenShiftJsonConstants.PROPERTY_CREATION_TIME, appNode);
-		return new ApplicationInfo(name, uuid, embeddedCartridge, cartrdige, creationTime);
+		return new ApplicationInfo(name, uuid, embeddedCartridges, cartidge, creationTime);
 	}
 
-	protected IEmbeddableCartridge createEmbeddedCartridge(ModelNode appNode) {
-		String name = getString(IOpenShiftJsonConstants.PROPERTY_EMBEDDED, appNode);
-		if (name == null) {
-			return null;
+	protected List<EmbeddableCartridgeInfo> createEmbeddedCartridges(ModelNode appNode) {
+		List<EmbeddableCartridgeInfo> cartridges = new ArrayList<EmbeddableCartridgeInfo>();
+		ModelNode embeddedCartridgesNode = appNode.get(IOpenShiftJsonConstants.PROPERTY_EMBEDDED);
+		if (!isSet(embeddedCartridgesNode)) {
+			return cartridges;
 		}
-		return new EmbeddableCartridge(name);
+		for (String name : embeddedCartridgesNode.keys()) {
+			cartridges.add(createEmbeddedCartridgeInfo(name, embeddedCartridgesNode.get(name)));
+		}
+		return cartridges;
+	}
+
+	private EmbeddableCartridgeInfo createEmbeddedCartridgeInfo(String name, ModelNode embeddedCartridgeNode) {
+		String infoPropertyValue = getString(IOpenShiftJsonConstants.PROPERTY_INFO, embeddedCartridgeNode);
+		return new EmbeddableCartridgeInfo(name, getUrl(infoPropertyValue));
+	}
+
+	private String getUrl(String infoPropertyValue) {
+		Matcher matcher = URL_REGEX.matcher(infoPropertyValue);
+		if (matcher.find()
+				&& matcher.groupCount() >= 1) {
+			return matcher.group(1);
+		} else {
+			return infoPropertyValue;
+		}
 	}
 }

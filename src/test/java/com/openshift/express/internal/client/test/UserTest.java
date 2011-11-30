@@ -14,51 +14,65 @@ import static com.openshift.express.internal.client.test.utils.ApplicationAssert
 import static com.openshift.express.internal.client.test.utils.CartridgeAsserts.assertThatContainsCartridge;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;
+import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.ISSHPublicKey;
+import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.utils.RFC822DateUtils;
 import com.openshift.express.internal.client.ApplicationInfo;
+import com.openshift.express.internal.client.Cartridge;
+import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.test.fakes.CartridgeResponseFake;
 import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
 import com.openshift.express.internal.client.test.fakes.UserInfoResponseFake;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * @author André Dietisheim
  */
 public class UserTest {
 
-	private OpenShiftService userInfoservice;
-	private InternalUser user;
+	private IOpenShiftService openshiftService;
+	private IUser user;
+	private UserInfo userInfo;
 
 	@Before
 	public void setUp() throws OpenShiftException, DatatypeConfigurationException {
-		UserInfo userInfo = createUserInfo();
-		this.userInfoservice = createUserInfoService(userInfo);
-		this.user = new InternalUser(UserInfoResponseFake.RHLOGIN, UserInfoResponseFake.PASSWORD, userInfoservice);
+		userInfo = createUserInfo();
+		this.openshiftService = mock(IOpenShiftService.class);
+		when(openshiftService.getUserInfo(any(IUser.class))).thenReturn(userInfo);
+		this.user = new InternalUser(UserInfoResponseFake.RHLOGIN, UserInfoResponseFake.PASSWORD, openshiftService);
 	}
 
 	@Test
 	public void canGetUserUUID() throws OpenShiftException {
 		assertEquals(UserInfoResponseFake.UUID, user.getUUID());
 	}
-	
+
 	@Test
 	public void canGetPublicKey() throws OpenShiftException {
 		ISSHPublicKey key = user.getSshKey();
@@ -76,28 +90,24 @@ public class UserTest {
 
 	@Test
 	public void canGetCartridges() throws OpenShiftException {
-		OpenShiftService cartridgeListService = new NoopOpenShiftServiceFake() {
-
-			@Override
-			public List<ICartridge> getCartridges(InternalUser user) throws OpenShiftException {
-				ArrayList<ICartridge> cartridges = new ArrayList<ICartridge>();
-				cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_JBOSSAS70));
-				cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_PERL5));
-				cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_PHP53));
-				cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_RACK11));
-				cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_WSGI32));
-				return cartridges;
-			}
-		};
-		InternalUser user = new InternalUser(UserInfoResponseFake.RHLOGIN, UserInfoResponseFake.PASSWORD, cartridgeListService);
-		Collection<ICartridge> cartridges = user.getCartridges();
-		assertNotNull(cartridges);
-		assertEquals(5, cartridges.size());
-		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_JBOSSAS70, cartridges);
-		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_PERL5, cartridges);
-		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_PHP53, cartridges);
-		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_RACK11, cartridges);
-		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_WSGI32, cartridges);
+		// pre-conditions
+		ArrayList<ICartridge> cartridges = new ArrayList<ICartridge>();
+		cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_JBOSSAS70));
+		cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_PERL5));
+		cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_PHP53));
+		cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_RACK11));
+		cartridges.add(new Cartridge(CartridgeResponseFake.CARTRIDGE_WSGI32));
+		when(openshiftService.getCartridges(user)).thenReturn(cartridges);
+		// operation
+		Collection<ICartridge> userCartridges = user.getCartridges();
+		// verifications
+		assertNotNull(userCartridges);
+		assertEquals(5, userCartridges.size());
+		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_JBOSSAS70, userCartridges);
+		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_PERL5, userCartridges);
+		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_PHP53, userCartridges);
+		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_RACK11, userCartridges);
+		assertThatContainsCartridge(CartridgeResponseFake.CARTRIDGE_WSGI32, userCartridges);
 	}
 
 	@Test
@@ -115,40 +125,62 @@ public class UserTest {
 				UserInfoResponseFake.APP2_NAME
 				, UserInfoResponseFake.APP2_UUID
 				, UserInfoResponseFake.APP2_CARTRIDGE
-				, UserInfoResponseFake.APP2_EMBEDDED
+				, Collections.singletonList(
+						UserInfoResponseFake.toEmbeddableCartridge(
+								UserInfoResponseFake.APP2_EMBEDDED_NAME,
+								UserInfoResponseFake.APP2_EMBEDDED_URL))
 				, UserInfoResponseFake.APP2_CREATION_TIME
 				, application);
 	}
 
+	@Test
+	public void shouldKeepApplicationsListInSync() throws OpenShiftException {
+		// pre-conditions
+		assertEquals(user.getApplications().size(), 2);
+		final IApplication application = user.getApplicationByName(UserInfoResponseFake.APP1_NAME);
+		assertNotNull(application);
+		Mockito.doAnswer(new Answer<Object>() {
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				for (Iterator<ApplicationInfo> iterator = userInfo.getApplicationInfos().iterator(); iterator.hasNext();) {
+					ApplicationInfo app = (ApplicationInfo) iterator.next();
+					if (app.getName().equals(application.getName())) {
+						iterator.remove();
+					}
+				}
+				userInfo.getApplicationInfos();
+				return null;
+			}
+		}).when(openshiftService).destroyApplication(application.getName(), application.getCartridge(), user);
+		// operation
+		application.destroy();
+		// verifications
+		assertEquals(user.getApplications().size(), 1);
+	}
+
 	private UserInfo createUserInfo() throws OpenShiftException, DatatypeConfigurationException {
-		ApplicationInfo[] applicationInfos = new ApplicationInfo[] {
+		List<ApplicationInfo> applicationInfos = new ArrayList<ApplicationInfo>();
+		applicationInfos.add(
 				new ApplicationInfo(UserInfoResponseFake.APP1_NAME
 						, UserInfoResponseFake.APP1_UUID
 						, UserInfoResponseFake.APP1_EMBEDDED
 						, Cartridge.valueOf(UserInfoResponseFake.APP1_CARTRIDGE)
-						, RFC822DateUtils.getDate(UserInfoResponseFake.APP1_CREATION_TIME))
-				, new ApplicationInfo(UserInfoResponseFake.APP2_NAME
+						, RFC822DateUtils.getDate(UserInfoResponseFake.APP1_CREATION_TIME)));
+		applicationInfos.add(
+						new ApplicationInfo(UserInfoResponseFake.APP2_NAME
 						, UserInfoResponseFake.APP2_UUID
-						, UserInfoResponseFake.APP2_EMBEDDED
+						, Collections.singletonList(
+								new EmbeddableCartridgeInfo(UserInfoResponseFake.APP2_EMBEDDED_NAME,
+										UserInfoResponseFake.APP2_EMBEDDED_URL))
 						, Cartridge.valueOf(UserInfoResponseFake.APP2_CARTRIDGE)
-						, RFC822DateUtils.getDate(UserInfoResponseFake.APP2_CREATION_TIME))
-		};
+						, RFC822DateUtils.getDate(UserInfoResponseFake.APP2_CREATION_TIME)));
+		
 		return new UserInfo(
 				UserInfoResponseFake.RHLOGIN
 				, UserInfoResponseFake.UUID
 				, UserInfoResponseFake.SSH_KEY
 				, UserInfoResponseFake.RHC_DOMAIN
 				, UserInfoResponseFake.NAMESPACE
-				, Arrays.asList(applicationInfos));
+				, applicationInfos);
 	}
 
-	private OpenShiftService createUserInfoService(final UserInfo userInfo) {
-		return new NoopOpenShiftServiceFake() {
-
-			@Override
-			public UserInfo getUserInfo(InternalUser user) throws OpenShiftException {
-				return userInfo;
-			}
-		};
-	}
 }

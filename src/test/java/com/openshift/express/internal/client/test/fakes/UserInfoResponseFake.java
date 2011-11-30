@@ -1,6 +1,11 @@
 package com.openshift.express.internal.client.test.fakes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.openshift.express.client.IEmbeddableCartridge;
+import com.openshift.express.internal.client.EmbeddableCartridge;
+import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 
 public class UserInfoResponseFake {
 
@@ -17,16 +22,17 @@ public class UserInfoResponseFake {
 					+ "vDY2KxowdFvpKj8i8IYNPlLoRA/7EzzyneS6iyw==";
 
 	public static final String APP1_NAME = "1315836963263";
-	public static final IEmbeddableCartridge APP1_EMBEDDED = null;
 	public static final String APP1_UUID = "810540bafc1c4b5e8cac830fb8ca786f";
 	public static final String APP1_CARTRIDGE = "jbossas-7.0";
 	public static final String APP1_CREATION_TIME = "2011-09-12T10:15:48-04:00";
+	public static final List<EmbeddableCartridgeInfo> APP1_EMBEDDED = null;
 
 	public static final String APP2_NAME = "1315903559289";
-	public static final IEmbeddableCartridge APP2_EMBEDDED = null;
 	public static final String APP2_UUID = "f5496311f43b42cd8fa5db5ecf83a352";
 	public static final String APP2_CARTRIDGE = "jbossas-7.0";
 	public static final String APP2_CREATION_TIME = "2011-09-13T04:45:44-04:00";
+	public static final String APP2_EMBEDDED_NAME = "mysql-5.1";
+	public static final String APP2_EMBEDDED_URL = "mysql://127.1.2.129:3306/";
 
 	public static final String RESPONSE =
 			"{"
@@ -54,7 +60,10 @@ public class UserInfoResponseFake {
 					+ "			},"
 					+ "			\\\"" + APP2_NAME + "\\\":"
 					+ "			{"
-					+ "				\\\"embedded\\\":" + APP2_EMBEDDED + ","
+					+ "				\\\"embedded\\\":"  
+					+ "             {\"" 
+					+                       APP2_EMBEDDED_NAME + "\" :  {\"info\" : \"Connection URL: " + APP2_EMBEDDED_URL + "/\"}"
+					+"              }" + ","
 					+ "				\\\"uuid\\\":\\\"" + APP2_UUID + "\\\","
 					+ "				\\\"framework\\\":\\\"" + APP2_CARTRIDGE + "\\\","
 					+ "				\\\"creation_time\\\":\\\"" + APP2_CREATION_TIME + "\\\""
@@ -80,4 +89,26 @@ public class UserInfoResponseFake {
 					+ "		],"
 					+ "	\"exit_code\":0"
 					+ "}";
+	
+	public static IEmbeddableCartridge toEmbeddableCartridge(String name, String url) {
+		return new EmbeddableCartridge(name, url);
+	}
+
+	public static List<IEmbeddableCartridge> toEmbeddableCartridges(IEmbeddableCartridge cartridge) {
+		List<IEmbeddableCartridge> list = new ArrayList<IEmbeddableCartridge>();
+		list.add(cartridge);
+		return list;
+	}
+
+	public static List<IEmbeddableCartridge> toEmbeddableCartridges(List<EmbeddableCartridgeInfo> cartridgeInfos) {
+		if (cartridgeInfos == null) {
+			return null;
+		}
+		List<IEmbeddableCartridge> list = new ArrayList<IEmbeddableCartridge>();
+		for (EmbeddableCartridgeInfo cartridgeInfo : cartridgeInfos) {
+			list.add(new EmbeddableCartridge(cartridgeInfo.getName(), cartridgeInfo.getUrl()));
+		}
+		return list;
+	}
+
 }

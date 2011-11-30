@@ -21,10 +21,12 @@ import java.util.concurrent.Executors;
 import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IOpenShiftService;
+import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.internal.client.Application;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,7 +74,7 @@ public class ApplicationLogReaderTest {
 		this.statusService = new NoopOpenShiftServiceFake() {
 
 			@Override
-			public String getStatus(String applicationName, ICartridge cartridge, InternalUser user)
+			public String getStatus(String applicationName, ICartridge cartridge, IUser user)
 					throws OpenShiftException {
 				return status;
 			}

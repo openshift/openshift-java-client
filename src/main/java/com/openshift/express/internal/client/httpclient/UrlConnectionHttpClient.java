@@ -21,8 +21,11 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.MessageFormat;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -34,18 +37,27 @@ import com.openshift.express.internal.client.utils.StreamUtils;
  */
 public class UrlConnectionHttpClient implements IHttpClient {
 
+public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVerifier();
+	
 	private static final String PROPERTY_CONTENT_TYPE = "Content-Type";
 	private static final int TIMEOUT = 10 * 1024;
 
 	private URL url;
 	private String userAgent;
+	private HostnameVerifier hostnameVerifier;
 	private boolean ignoreCertCheck;
 	
 	public UrlConnectionHttpClient(String userAgent, URL url, boolean ignoreCertCheck) {
+		this(userAgent, url, ignoreCertCheck, null);
+	}
+
+	public UrlConnectionHttpClient(String userAgent, URL url, boolean ignoreCertCheck, HostnameVerifier hostnameVerifier) {
 		this.userAgent = userAgent;
 		this.url = url;
 		this.ignoreCertCheck = ignoreCertCheck;
+		this.hostnameVerifier = hostnameVerifier;
 	}
+	
 	
 	public String post(String data) throws HttpClientException {
 		HttpURLConnection connection = null;
@@ -67,6 +79,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 
 	public String get() throws HttpClientException {
+		HostnameVerifier defaultHostnameVerifier = setHostnameVerifier();
 		HttpURLConnection connection = null;
 		try {
 			connection = createConnection(userAgent, url);
@@ -80,7 +93,22 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			if (connection != null) {
 				connection.disconnect();
 			}
+			restoreHostnameVerifier(defaultHostnameVerifier);			
 		}
+	}
+	
+	protected void restoreHostnameVerifier(HostnameVerifier hostnameVerifier) {
+		if (hostnameVerifier != null) {
+			HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+		}
+	}
+	
+	protected HostnameVerifier setHostnameVerifier() {
+		HostnameVerifier defaultHostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+		if (hostnameVerifier != null) {
+			HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+		}
+		return defaultHostnameVerifier;
 	}
 	
 	private HttpClientException createException(IOException ioe, HttpURLConnection connection) {
@@ -138,4 +166,11 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		
 		return connection;
 	}
+	
+	private static class NoopHostnameVerifier implements HostnameVerifier {
+		 
+        public boolean verify(String hostname, SSLSession sslSession) {
+            return true;
+        }
+    }
 }

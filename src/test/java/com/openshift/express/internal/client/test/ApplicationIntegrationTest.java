@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.openshift.express.internal.client.test;
 
-import static com.openshift.express.internal.client.test.utils.ApplicationAsserts.assertAppliactionUrl;
+import static com.openshift.express.internal.client.test.utils.ApplicationAsserts.assertApplicationUrl;
 import static com.openshift.express.internal.client.test.utils.ApplicationAsserts.assertGitUri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -49,9 +49,11 @@ public class ApplicationIntegrationTest {
 	@Before
 	public void setUp() throws OpenShiftException, IOException {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
-		this.service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
-		this.user = new TestUser();
-		this.invalidUser = new TestUser("bogusPassword");
+		service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+		service.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
+		
+		user = new TestUser();
+		invalidUser = new TestUser("bogusPassword");
 	}
 
 	@Test(expected = InvalidCredentialsOpenShiftException.class)
@@ -224,7 +226,7 @@ public class ApplicationIntegrationTest {
 			IApplication application = service.createApplication(applicationName, ICartridge.JBOSSAS_7, user);
 			String applicationUrl = application.getApplicationUrl();
 			assertNotNull(applicationUrl);
-			assertAppliactionUrl(applicationName, applicationUrl);
+			assertApplicationUrl(applicationName, applicationUrl);
 		} finally {
 			ApplicationUtils.silentlyDestroyAS7Application(applicationName, user, service);
 		}

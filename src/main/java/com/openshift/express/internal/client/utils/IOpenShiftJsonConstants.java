@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package com.openshift.express.internal.client;
+package com.openshift.express.internal.client.utils;
 
 /**
  * @author André Dietisheim
@@ -39,5 +39,7 @@ public class IOpenShiftJsonConstants {
 	public static final String PROPERTY_FRAMEWORK = "framework";
 	public static final String PROPERTY_CREATION_TIME = "creation_time";
 	public static final String PROPERTY_SSH_KEY = "ssh_key";
+	public static final String PROPERTY_INFO = "info";
 	
 }
+

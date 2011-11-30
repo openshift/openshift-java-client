@@ -11,6 +11,7 @@
 package com.openshift.express.internal.client;
 
 import java.util.Date;
+import java.util.List;
 
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IEmbeddableCartridge;
@@ -22,14 +23,14 @@ public class ApplicationInfo {
 
 	private String name;
 	private String uuid;
-	private IEmbeddableCartridge embeddedCartridge;
+	private List<EmbeddableCartridgeInfo> embeddedCartridges;
 	private ICartridge cartridge;
 	private Date creationTime;
 
-	public ApplicationInfo(String name, String uuid, IEmbeddableCartridge embeddedCartridge, ICartridge cartridge, Date creationTime) {
+	public ApplicationInfo(String name, String uuid, List<EmbeddableCartridgeInfo> embeddedCartridges, ICartridge cartridge, Date creationTime) {
 		this.name = name;
 		this.uuid = uuid;
-		this.embeddedCartridge = embeddedCartridge;
+		this.embeddedCartridges = embeddedCartridges;
 		this.cartridge = cartridge;
 		this.creationTime = creationTime;
 	}
@@ -38,10 +39,21 @@ public class ApplicationInfo {
 		return name;
 	}
 
-	public IEmbeddableCartridge getEmbedded() {
-		return embeddedCartridge;
+	public List<EmbeddableCartridgeInfo> getEmbeddedCartridges() {
+		return embeddedCartridges;
 	}
 
+	public EmbeddableCartridgeInfo getEmbeddedCartridge(String name) {
+		EmbeddableCartridgeInfo embeddableCartridge = null;
+		for(EmbeddableCartridgeInfo cartridge : embeddedCartridges) {
+			if (cartridge.getName().equals(name)) {
+				embeddableCartridge = cartridge;
+				break;
+			}
+		}
+		return embeddableCartridge;
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
