@@ -26,7 +26,8 @@ import org.junit.runners.Suite;
 	CartridgesIntegrationTest.class,
 	DomainIntegrationTest.class,
 	UserInfoIntegrationTest.class,
-	UserIntegrationTest.class
+	UserIntegrationTest.class,
+	CertTrustIntegrationTest.class
 })
 
 

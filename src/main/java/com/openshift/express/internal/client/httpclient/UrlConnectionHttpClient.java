@@ -16,6 +16,10 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -49,6 +53,7 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 	private String userAgent;
 	private HostnameVerifier hostnameVerifier;
 	private boolean ignoreCertCheck;
+	private static boolean switched = false;
 	
 	public UrlConnectionHttpClient(String userAgent, URL url, boolean ignoreCertCheck) {
 		this(userAgent, url, ignoreCertCheck, null);
@@ -136,28 +141,13 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 	private HttpURLConnection createConnection(String userAgent, URL url) throws IOException {
 		try {
 			if (ignoreCertCheck) {
-				
-	            TrustManager easyTrustManager = new X509TrustManager() {
-	                public X509Certificate[] getAcceptedIssuers() {
-	                    return null;
-	                }
-	
-	                public void checkServerTrusted(X509Certificate[] chain,
-	                        String authType) throws CertificateException {
-	                }
-	
-	                public void checkClientTrusted(X509Certificate[] chain,
-	                        String authType) throws CertificateException {
-	                }
-	            };
-	            
-	            SSLContext ctx = SSLContext.getInstance("TLS");
-	            ctx.init(new KeyManager[0], new TrustManager[] { easyTrustManager }, new SecureRandom());
-	            SSLContext.setDefault(ctx);
-	        
-			} 
+				setPermissiveTrustManager();
+			} else {
+//				setEnforcingTrustManager();
+			}
 		}
         catch (Exception e) {
+        	e.printStackTrace();
             throw new IOException(e);
         }
 		
@@ -169,8 +159,63 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 		connection.setRequestProperty(PROPERTY_CONTENT_TYPE, "application/x-www-form-urlencoded");
 		connection.setInstanceFollowRedirects(true);
 		connection.setRequestProperty(USER_AGENT, userAgent);
+		connection.setDefaultUseCaches(false);
 		
 		return connection;
+	}
+	
+	private void setPermissiveTrustManager() throws KeyManagementException, NoSuchAlgorithmException {
+		TrustManager easyTrustManager = new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain,
+                    String authType) throws CertificateException {
+            }
+
+            public void checkClientTrusted(X509Certificate[] chain,
+                    String authType) throws CertificateException {
+            }
+        };
+        
+        SSLContext sslCtx = null;
+        if (switched) {
+        	sslCtx = SSLContext.getDefault();
+        } else {
+        	sslCtx = SSLContext.getInstance("TLS");
+        	switched = true;
+        }
+       
+        sslCtx.init(new KeyManager[0], new TrustManager[] { easyTrustManager }, new SecureRandom());
+        SSLContext.setDefault(sslCtx);
+	}
+	
+	private void setEnforcingTrustManager() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException  {
+		TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
+        tmf.init((KeyStore)null);
+
+        TrustManager tms [] = tmf.getTrustManagers();
+
+        X509TrustManager pkixTrustManager = null;
+        for (int i = 0; i < tms.length; i++) {
+            if (tms[i] instanceof X509TrustManager) {
+                pkixTrustManager = (X509TrustManager) tms[i];
+                break;
+            }
+        }
+        
+        SSLContext sslCtx = null;
+        if (switched) {
+        	switched = false;
+        } else {
+        	sslCtx = SSLContext.getInstance("TLS");
+        	switched = true;
+        }
+        
+        sslCtx.init(new KeyManager[0], new TrustManager[] { pkixTrustManager }, new SecureRandom());
+        SSLContext.setDefault(sslCtx);
+		
 	}
 	
 	private static class NoopHostnameVerifier implements HostnameVerifier {

@@ -181,15 +181,19 @@ public class InternalUser implements IUser {
 		return application;
 	}
 
-	public Collection<IApplication> getApplications() throws OpenShiftException {
+	public List<IApplication> getApplications() throws OpenShiftException {
 		if (getUserInfo().getApplicationInfos().size() > applications.size()) {
 			update(getUserInfo().getApplicationInfos());
 		}
-		return applications;
+		return Collections.unmodifiableList(applications);
 	}
 
 	public IApplication getApplicationByName(String name) throws OpenShiftException {
 		return getApplicationByName(name, getApplications());
+	}
+
+	public boolean hasApplication(String name) throws OpenShiftException {
+		return getApplicationByName(name) != null;
 	}
 
 	private IApplication getApplicationByName(String name, Collection<IApplication> applications) {
@@ -201,7 +205,7 @@ public class InternalUser implements IUser {
 		}
 		return matchingApplication;
 	}
-	
+
 	public List<IApplication> getApplicationsByCartridge(ICartridge cartridge) throws OpenShiftException {
 		List<IApplication> matchingApplications = new ArrayList<IApplication>();
 		for (IApplication application : getApplications()) {
@@ -216,13 +220,13 @@ public class InternalUser implements IUser {
 		return getApplicationsByCartridge(cartridge).size() > 0;
 	}
 
-
-	public void add(IApplication application) {
+	protected void add(IApplication application) {
 		applications.add(application);
 	}
 
-	public void remove(IApplication application) {
+	protected void remove(IApplication application) {
 		applications.remove(application);
+		this.userInfo.removeApplicationInfo(application.getName());
 	}
 
 	public void setSshPublicKey(ISSHPublicKey key) {

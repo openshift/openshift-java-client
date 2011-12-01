@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package com.openshift.express.internal.client;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.openshift.express.client.SSHPublicKey;
@@ -54,6 +55,17 @@ public class UserInfo {
 
 	public List<ApplicationInfo> getApplicationInfos() {
 		return applicationInfos;
+	}
+
+	public void removeApplicationInfo(String name) {
+		for (Iterator<ApplicationInfo> iterator = applicationInfos.iterator(); iterator.hasNext();) {
+			ApplicationInfo appInfo = iterator.next();
+			if(appInfo.getName().equals(name)) {
+				iterator.remove();
+				break;
+			}
+			
+		}
 	}
 
 	public ApplicationInfo getApplicationInfoByName(String name) {

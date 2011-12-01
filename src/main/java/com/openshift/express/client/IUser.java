@@ -13,12 +13,13 @@ package com.openshift.express.client;
 import java.util.Collection;
 import java.util.List;
 
+
 /**
  * @author André Dietisheim
  */
 public interface IUser {
 
-	public String getRhlogin();
+	public String getRhlogin() throws OpenShiftException;
 
 	public String getPassword();
 	
@@ -52,16 +53,18 @@ public interface IUser {
 	public List<IEmbeddableCartridge> getEmbeddableCartridges() throws OpenShiftException;
 
 	public ICartridge getCartridgeByName(String name) throws OpenShiftException;
-	
-	public List<IApplication> getApplicationsByCartridge(ICartridge cartridge) throws OpenShiftException;
-	
-	public boolean hasApplication(ICartridge cartridge) throws OpenShiftException;
 
 	public IApplication createApplication(String name, ICartridge cartridge) throws OpenShiftException;
 
-	public Collection<IApplication> getApplications() throws OpenShiftException;
+	public List<IApplication> getApplications() throws OpenShiftException;
 
 	public IApplication getApplicationByName(String name) throws OpenShiftException;
+
+	public boolean hasApplication(String name) throws OpenShiftException;
+		
+	public List<IApplication> getApplicationsByCartridge(ICartridge cartridge) throws OpenShiftException;
+
+	public boolean hasApplication(ICartridge cartridge) throws OpenShiftException;
 
 	public void refresh() throws OpenShiftException;
 
