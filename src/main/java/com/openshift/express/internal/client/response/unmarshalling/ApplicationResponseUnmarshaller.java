@@ -17,7 +17,9 @@ import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.internal.client.Application;
+import com.openshift.express.internal.client.Cartridge;
 import com.openshift.express.internal.client.InternalUser;
+import com.openshift.express.internal.client.JBossASApplication;
 import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
@@ -39,6 +41,9 @@ public class ApplicationResponseUnmarshaller extends AbstractOpenShiftJsonRespon
 
 	protected IApplication createOpenShiftObject(ModelNode node) {
 		String creationLog = getString(IOpenShiftJsonConstants.PROPERTY_RESULT, node);
-		return new Application(applicationName, creationLog, cartridge, user, service);
+		if (cartridge == Cartridge.JBOSSAS_7)
+			return new JBossASApplication(applicationName, creationLog, cartridge, user, service);
+		else
+			return new Application(applicationName, creationLog, cartridge, user, service);
 	}
 }

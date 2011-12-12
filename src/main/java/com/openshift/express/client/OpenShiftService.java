@@ -10,11 +10,17 @@
  ******************************************************************************/
 package com.openshift.express.client;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Properties;
 
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.httpclient.BadRequestException;
@@ -30,6 +36,7 @@ import com.openshift.express.internal.client.request.ChangeDomainRequest;
 import com.openshift.express.internal.client.request.CreateDomainRequest;
 import com.openshift.express.internal.client.request.EmbedAction;
 import com.openshift.express.internal.client.request.EmbedRequest;
+import com.openshift.express.internal.client.request.JBossApplicationRequest;
 import com.openshift.express.internal.client.request.ListCartridgesRequest;
 import com.openshift.express.internal.client.request.OpenShiftEnvelopeFactory;
 import com.openshift.express.internal.client.request.UserInfoRequest;
@@ -192,6 +199,13 @@ public class OpenShiftService implements IOpenShiftService {
 				new ApplicationRequest(name, cartridge, ApplicationAction.STOP, user.getRhlogin(), true),
 				user);
 	}
+	
+	public IApplication threadDumpApplication(final String name, final ICartridge cartridge, final IUser user)
+			throws OpenShiftException {
+		return requestApplicationAction(
+				new JBossApplicationRequest(name, cartridge, ApplicationAction.THREADDUMP, user.getRhlogin(), true),
+				user);
+	}
 
 	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user) throws OpenShiftException {
 		ApplicationRequest applicationRequest =
@@ -206,6 +220,59 @@ public class OpenShiftService implements IOpenShiftService {
 				new ApplicationStatusResponseUnmarshaller().unmarshall(response);
 		return openshiftResponse.getOpenShiftObject();
 	}
+	
+	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile) throws OpenShiftException {
+		try {
+			JSch jsch = new JSch();
+			String host = this.getServiceUrl().replace("https://", "").replace("/broker", "");
+			System.out.println("!!!! getStatus " + host + " " + applicationName);
+			Session session = jsch.getSession("root", host, 22);
+			
+			jsch.setKnownHosts(System.getProperty("KNOWN_HOSTS"));
+			jsch.addIdentity(System.getProperty("IDENTITY"));
+			
+			Properties config = new Properties(); 
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+
+			session.connect();
+			
+			Channel channel = session.openChannel("exec");
+			((ChannelExec)channel).setErrStream(System.err);
+			InputStream in = channel.getInputStream();
+			
+			String command = "tail -1000  /var/lib/libra/" + applicationName + "-" + user.getDomain().getNamespace() + "/" + applicationName + "/jbossas-7.0/stdout.log";
+			System.out.print("!!!!!!! command " + command);
+			((ChannelExec)channel).setCommand(command);
+	
+			channel.connect();
+			
+			byte[] tmp = new byte[1024];
+			StringBuffer buff = new StringBuffer();
+			int read;
+			while ((read = in.read(tmp)) > 0){
+				buff.append(new String(tmp, 0, read-1));
+			}
+			return buff.toString();
+		} catch (Exception e){
+			e.printStackTrace();
+			throw new OpenShiftException(e, "Unable to reteive status log", applicationName);
+		}
+	}
+	
+/*	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile) throws OpenShiftException {
+		ApplicationRequest applicationRequest =
+				new ApplicationRequest(applicationName, cartridge, ApplicationAction.STATUS, user.getRhlogin(), true, logFile);
+		String url = applicationRequest.getUrlString(getServiceUrl());
+		String request =
+				new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
+		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not {0} application \"{1}\" at \"{2}\"",
+						applicationRequest.getAction().getCommand(), applicationRequest.getName(), url));
+		OpenShiftResponse<String> openshiftResponse =
+				new ApplicationStatusResponseUnmarshaller().unmarshall(response);
+		return openshiftResponse.getOpenShiftObject();
+	} */
 
 	protected IApplication requestApplicationAction(final ApplicationRequest applicationRequest, final IUser user)
 			throws OpenShiftException {

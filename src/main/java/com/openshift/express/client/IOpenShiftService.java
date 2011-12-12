@@ -179,14 +179,24 @@ public interface IOpenShiftService {
 
 	
 	/**
-	 * Adds the given embeddable cartridge to the given application with the given user
-	 *  
-	 * @param application the application to embed into
-	 * @param cartridge the cartridge to embed
-	 * @param user the user that's used to authenticate to the service
-	 * @return
+	 * Trigger a thread dump for the application with the given name and cartridge for the given
+	 * user account. 
+	 * 
+	 * @param name
+	 *            of the application that shall be started
+	 * @param cartridge
+	 *            the cartridge the application is running on
+	 * @param user
+	 *            the user account to use
+	 * @return the application 
 	 * @throws OpenShiftException
+	 * 
+	 * @see ICartridge
+	 * @see IUser
+	 * @see IApplication
 	 */
+	public IApplication threadDumpApplication(String name, ICartridge cartridge, IUser user)
+			throws OpenShiftException;
 	
 	/**
 	 * Adds the given embeddable cartridge to the application with the name
@@ -239,6 +249,28 @@ public interface IOpenShiftService {
 	 * @see IUser
 	 */
 	public String getStatus(String name, ICartridge cartridge, IUser user) throws OpenShiftException;
+	
+	/**
+	 * Returns the log of the application with the given name and cartridge.
+	 * Returns the whole log if no new log entry was created since the last
+	 * call. Returns the new entries otherwise.
+	 * 
+	 * @param name
+	 *            of the application that the log shall be returned of
+	 * @param cartridge
+	 *            the cartridge the application is running on
+	 * @param user
+	 *            the user account to use
+	 * @param logFile
+	 * 				the log file           
+	 * @return the log of the application
+	 * @throws OpenShiftException
+	 * 
+	 * @see ICartridge
+	 * @see IUser
+	 */
+	public String getStatus(String name, ICartridge cartridge, IUser user, String logFile) throws OpenShiftException;
+
 
 	/**
 	 * Changes the current domain (namespace) to the given name.

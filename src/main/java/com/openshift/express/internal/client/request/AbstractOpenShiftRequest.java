@@ -22,6 +22,7 @@ public abstract class AbstractOpenShiftRequest implements IOpenShiftRequest {
 
 	private String rhlogin;
 	private boolean debug;
+	private String[] optionals;
 
 	public AbstractOpenShiftRequest(String username) {
 		this(username, false);
@@ -32,12 +33,22 @@ public abstract class AbstractOpenShiftRequest implements IOpenShiftRequest {
 		this.debug = debug;
 	}
 	
+	public AbstractOpenShiftRequest(String username, boolean debug, String[] optionals) {
+		this.rhlogin = username;
+		this.debug = debug;
+		this.optionals = optionals;
+	}
+	
 	public String getRhLogin() {
 		return rhlogin;
 	}
 
 	public boolean isDebug() {
 		return debug;
+	}
+	
+	public String[] getOptionals() {
+		return optionals;
 	}
 	
 	public URL getUrl(String baseUrl) throws MalformedURLException {

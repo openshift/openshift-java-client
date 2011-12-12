@@ -20,14 +20,14 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	ApplicationIntegrationTest.class,
-	EmbedIntegrationTest.class,
-	ApplicationLogReaderIntegrationTest.class,
-	CartridgesIntegrationTest.class,
-	DomainIntegrationTest.class,
-	UserInfoIntegrationTest.class,
-	UserIntegrationTest.class,
-	CertTrustIntegrationTest.class
+	ApplicationIntegrationTest.class
+//	EmbedIntegrationTest.class,
+//	ApplicationLogReaderIntegrationTest.class,
+//	CartridgesIntegrationTest.class,
+//	DomainIntegrationTest.class,
+//	UserInfoIntegrationTest.class,
+//	UserIntegrationTest.class,
+//	CertTrustIntegrationTest.class
 })
 
 
@@ -79,6 +79,11 @@ public class OpenShiftIntegrationTestSuite {
 			    	System.setProperty("RHLOGIN", (String)props.get("RHLOGIN"));
 			    if (props.get("PASSWORD") != null)
 			    	System.setProperty("PASSWORD", (String)props.get("PASSWORD"));
+			    
+			    if (props.get("KNOWN_HOSTS") != null)
+			    	System.setProperty("KNOWN_HOSTS", (String)props.get("KNOWN_HOSTS"));
+			    if (props.get("IDENTITY") != null)
+			    	System.setProperty("IDENTITY", (String)props.get("IDENTITY"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

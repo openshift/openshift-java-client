@@ -24,9 +24,13 @@ public class ApplicationRequest extends AbstractOpenShiftRequest {
 	public ApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username) {
 		this(name, cartridge, action, username, false);
 	}
-
+	
 	public ApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username, boolean debug) {
-		super(username, debug);
+		this(name, cartridge, action, username, debug, (String[])null);
+	}
+	
+	public ApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username, boolean debug, String ... optionals) {
+		super(username, debug, optionals);
 		this.name = name;
 		this.cartridge = cartridge;
 		this.action = action;

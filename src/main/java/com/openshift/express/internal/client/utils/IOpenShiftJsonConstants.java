@@ -17,6 +17,7 @@ public class IOpenShiftJsonConstants {
 
 	public static final String PROPERTY_DEBUG = "debug";
 	public static final String PROPERTY_RHLOGIN = "rhlogin";
+	public static final String PROPERTY_OPTIONAL = "optional";
 
 	public static final String PROPERTY_CART_TYPE = "cart_type";
 

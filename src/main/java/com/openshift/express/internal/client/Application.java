@@ -13,6 +13,7 @@ package com.openshift.express.internal.client;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.openshift.express.client.ApplicationLogReader;
@@ -31,12 +32,13 @@ public class Application extends UserInfoAware implements IApplication {
 
 	private static final String GIT_URI_PATTERN = "ssh://{0}@{1}-{2}.{3}/~/git/{1}.git/";
 	private static final String APPLICATION_URL_PATTERN = "https://{0}-{1}.{2}/";
+	private static final String DEFAULT_LOGREADER = "defaultLogReader";
 
-	private String name;
-	private ICartridge cartridge;
+	protected String name;
+	protected ICartridge cartridge;
 	private List<IEmbeddableCartridge> embeddedCartridges;
-	private IOpenShiftService service;
-	private ApplicationLogReader logReader;
+	protected IOpenShiftService service;
+	private HashMap<String, ApplicationLogReader> logReaders = new HashMap<String, ApplicationLogReader>();
 	private ApplicationInfo applicationInfo;
 	private String creationLog;
 
@@ -108,8 +110,19 @@ public class Application extends UserInfoAware implements IApplication {
 	}
 
 	public ApplicationLogReader getLogReader() throws OpenShiftException {
-		if (logReader == null) {
-			this.logReader = new ApplicationLogReader(this, getUser(), service);
+		ApplicationLogReader logReader = null;
+		if (logReaders.get(DEFAULT_LOGREADER) == null) {
+			logReader = new ApplicationLogReader(this, getUser(), service);
+			logReaders.put(DEFAULT_LOGREADER, logReader);
+		}
+		return logReader;
+	}
+	
+	public ApplicationLogReader getLogReader(String logFile) throws OpenShiftException {
+		ApplicationLogReader logReader = null;
+		if (logReaders.get(logFile) == null) {
+			logReader = new ApplicationLogReader(this, getUser(), service, logFile);
+			logReaders.put(logFile, logReader);
 		}
 		return logReader;
 	}

@@ -33,11 +33,19 @@ public class ApplicationLogReader extends Reader {
 	private Application application;
 	private InternalUser user;
 	private String currentStatus;
+	private String logFile;
 
 	public ApplicationLogReader(Application application, InternalUser user, IOpenShiftService service) {
 		this.application = application;
 		this.user = user;
 		this.service = service;
+	}
+	
+	public ApplicationLogReader(Application application, InternalUser user, IOpenShiftService service, String logFile) {
+		this.application = application;
+		this.user = user;
+		this.service = service;
+		this.logFile = logFile;
 	}
 
 	public int read(char[] cbuf, int off, int len) throws IOException {
@@ -78,7 +86,10 @@ public class ApplicationLogReader extends Reader {
 	protected String requestStatus() throws InterruptedException, OpenShiftException {
 		String status = null;
 		while (status == null) {
-			status = service.getStatus(application.getName(), application.getCartridge(), user);
+			if (logFile != null)
+				status = service.getStatus(application.getName(), application.getCartridge(), user, logFile);
+			else
+				status = service.getStatus(application.getName(), application.getCartridge(), user);
 			if (isSameStatus(currentStatus, status)) {
 				Thread.sleep(STATUS_REQUEST_DELAY);
 				status = null;

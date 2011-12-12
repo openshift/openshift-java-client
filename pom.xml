@@ -17,7 +17,7 @@
 	<!-- Artifact Information -->
 	<groupId>com.openshift.express</groupId>
 	<artifactId>openshift-java-client</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>OpenShift Java Client</name>
 	<url>http://openshift.redhat.com</url>
@@ -60,12 +60,12 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>**/OpenShiftIntegrationTestSuite.java</exclude>
-						<!--exclude>**/OpenShiftTestSuite.java</exclude-->
+						<!--exclude>**/OpenShiftIntegrationTestSuite.java</exclude-->
+						<exclude>**/OpenShiftTestSuite.java</exclude>
 					</excludes>
 					<includes>
-						<include>**/OpenShiftTestSuite.java</include>
-						<!--include>**/OpenShiftIntegrationTestSuite.java</include-->
+						<!--include>**/OpenShiftTestSuite.java</include-->
+						<include>**/OpenShiftIntegrationTestSuite.java</include>
 					</includes>
 				</configuration>
 			</plugin>

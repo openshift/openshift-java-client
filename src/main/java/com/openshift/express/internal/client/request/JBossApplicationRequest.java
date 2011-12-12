@@ -10,22 +10,18 @@
  ******************************************************************************/ 
 package com.openshift.express.internal.client.request;
 
-public enum ApplicationAction {
-	CONFIGURE("configure"), 
-	DECONFIGURE("deconfigure"), 
-	START("start"), 
-	STOP("stop"), 
-	RESTART("restart"), 
-	STATUS("status"),
-	THREADDUMP("threaddump");
+import com.openshift.express.client.ICartridge;
 
-	private String command;
+/**
+ * @author William DeCoste
+ */
+public class JBossApplicationRequest extends ApplicationRequest {
 
-	ApplicationAction(String command) {
-		this.command = command;
+	public JBossApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username) {
+		super(name, cartridge, action, username, false);
 	}
-	
-	public String getCommand() {
-		return command;
+
+	public JBossApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username, boolean debug) {
+		super(name, cartridge, action, username, debug);
 	}
 }
