@@ -225,7 +225,7 @@ public class OpenShiftService implements IOpenShiftService {
 		try {
 			JSch jsch = new JSch();
 			String host = this.getServiceUrl().replace("https://", "").replace("/broker", "");
-			System.out.println("!!!! getStatus " + host + " " + applicationName);
+		
 			Session session = jsch.getSession("root", host, 22);
 			
 			jsch.setKnownHosts(System.getProperty("KNOWN_HOSTS"));
@@ -242,7 +242,7 @@ public class OpenShiftService implements IOpenShiftService {
 			InputStream in = channel.getInputStream();
 			
 			String command = "tail -" + numLines +  " /var/lib/libra/" + applicationName + "-" + user.getDomain().getNamespace() + "/" + applicationName + "/jbossas-7.0/" + logFile;
-			System.out.print("!!!!!!! command " + command);
+		
 			((ChannelExec)channel).setCommand(command);
 	
 			channel.connect();
