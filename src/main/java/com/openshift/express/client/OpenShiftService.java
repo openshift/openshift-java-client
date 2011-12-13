@@ -221,7 +221,7 @@ public class OpenShiftService implements IOpenShiftService {
 		return openshiftResponse.getOpenShiftObject();
 	}
 	
-	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile) throws OpenShiftException {
+	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile, final int numLines) throws OpenShiftException {
 		try {
 			JSch jsch = new JSch();
 			String host = this.getServiceUrl().replace("https://", "").replace("/broker", "");
@@ -241,7 +241,7 @@ public class OpenShiftService implements IOpenShiftService {
 			((ChannelExec)channel).setErrStream(System.err);
 			InputStream in = channel.getInputStream();
 			
-			String command = "tail -1000  /var/lib/libra/" + applicationName + "-" + user.getDomain().getNamespace() + "/" + applicationName + "/jbossas-7.0/stdout.log";
+			String command = "tail -" + numLines +  " /var/lib/libra/" + applicationName + "-" + user.getDomain().getNamespace() + "/" + applicationName + "/jbossas-7.0/" + logFile;
 			System.out.print("!!!!!!! command " + command);
 			((ChannelExec)channel).setCommand(command);
 	

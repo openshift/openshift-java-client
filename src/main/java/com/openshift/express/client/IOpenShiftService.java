@@ -269,7 +269,7 @@ public interface IOpenShiftService {
 	 * @see ICartridge
 	 * @see IUser
 	 */
-	public String getStatus(String name, ICartridge cartridge, IUser user, String logFile) throws OpenShiftException;
+	public String getStatus(String name, ICartridge cartridge, IUser user, String logFile, int numLines) throws OpenShiftException;
 
 
 	/**

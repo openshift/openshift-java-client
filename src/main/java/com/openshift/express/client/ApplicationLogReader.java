@@ -87,7 +87,7 @@ public class ApplicationLogReader extends Reader {
 		String status = null;
 		while (status == null) {
 			if (logFile != null)
-				status = service.getStatus(application.getName(), application.getCartridge(), user, logFile);
+				status = service.getStatus(application.getName(), application.getCartridge(), user, logFile, 100);
 			else
 				status = service.getStatus(application.getName(), application.getCartridge(), user);
 			if (isSameStatus(currentStatus, status)) {
@@ -98,7 +98,7 @@ public class ApplicationLogReader extends Reader {
 		}
 		this.currentStatus = status;
 		return status;
-	}
+	} 
 
 	private boolean isSameStatus(String thisStatus, String otherStatus) {
 		return otherStatus != null

@@ -292,7 +292,7 @@ public class ApplicationIntegrationTest {
 			
 			application.threadDump();
 			
-			String log = service.getStatus(applicationName, cartridge, user, "");
+			String log = service.getStatus(applicationName, cartridge, user, "stdout.log", 100);
 			
 			assertTrue("Failed to retrieve logged thread dump", log.contains("object space"));
 			
