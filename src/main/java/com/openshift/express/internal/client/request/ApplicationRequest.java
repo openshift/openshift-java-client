@@ -20,20 +20,22 @@ public class ApplicationRequest extends AbstractOpenShiftRequest {
 	private String name;
 	private ICartridge cartridge ;
 	private ApplicationAction action;
+	private String nodeProfile;
 
 	public ApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username) {
 		this(name, cartridge, action, username, false);
 	}
 	
 	public ApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username, boolean debug) {
-		this(name, cartridge, action, username, debug, (String[])null);
+		this(name, cartridge, action, username, debug, (String)null);
 	}
 	
-	public ApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username, boolean debug, String ... optionals) {
-		super(username, debug, optionals);
+	public ApplicationRequest(String name, ICartridge cartridge, ApplicationAction action, String username, boolean debug, String nodeProfile) {
+		super(username, debug);
 		this.name = name;
 		this.cartridge = cartridge;
 		this.action = action;
+		this.nodeProfile = nodeProfile;
 	}
 
 	public ApplicationAction getAction() {
@@ -46,6 +48,10 @@ public class ApplicationRequest extends AbstractOpenShiftRequest {
 
 	public ICartridge getCartridge() {
 		return cartridge;
+	}
+	
+	public String getNodeProfile() {
+		return nodeProfile;
 	}
 
 	public String getResourcePath() {

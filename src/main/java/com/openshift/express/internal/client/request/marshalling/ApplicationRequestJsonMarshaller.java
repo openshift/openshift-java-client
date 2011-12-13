@@ -25,13 +25,8 @@ public class ApplicationRequestJsonMarshaller extends AbstractJsonMarshaller<App
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_CARTRIDGE, getCartridgeName(request.getCartridge()), node);
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_ACTION, getActionName(request.getAction()), node);
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_APP_NAME, request.getName(), node);
-		
-//		if (request.getOptionals() != null){
-//			String[] optionals = request.getOptionals();
-//			for (int i = 0; i < optionals.length ; ++i) {
-//				setStringProperty(IOpenShiftJsonConstants.PROPERTY_OPTIONAL, optionals[i], node);
-//			}
-//		}
+		if (request.getNodeProfile() != null)
+			setStringProperty(IOpenShiftJsonConstants.PROPERTY_NODE_PROFILE, request.getNodeProfile(), node);
 		
 	}
 

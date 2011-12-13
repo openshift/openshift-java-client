@@ -172,6 +172,14 @@ public class OpenShiftService implements IOpenShiftService {
 				user);
 		return application;
 	}
+	
+	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user, final String size)
+			throws OpenShiftException {
+		IApplication application = requestApplicationAction(
+				new ApplicationRequest(name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true, size),
+				user);
+		return application;
+	}
 
 	public void destroyApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {
 		requestApplicationAction(

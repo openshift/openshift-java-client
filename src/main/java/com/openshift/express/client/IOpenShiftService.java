@@ -98,6 +98,29 @@ public interface IOpenShiftService {
 	 */
 	public IApplication createApplication(String name, ICartridge cartridge, IUser user)
 			throws OpenShiftException;
+	
+	/**
+	 * Creates an application with the given name and cartridge for the given
+	 * user.
+	 * 
+	 * @param name
+	 *            the application name
+	 * @param cartridge
+	 *            the cartridge to use
+	 * @param user
+	 *            the user account
+	 * @param nodeProfile
+	 *            Applications node profile (e.g. std, large)
+	 * @return the application that was created
+	 * @throws OpenShiftException
+	 * 
+	 * @see ICartridge
+	 * @see IUser
+	 * @see IApplication
+	 */
+	public IApplication createApplication(String name, ICartridge cartridge, IUser user, String nodeProfile)
+			throws OpenShiftException;
+
 
 	/**
 	 * Destroys the application with the given name and cartridge for the given

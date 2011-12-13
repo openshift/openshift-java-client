@@ -27,13 +27,6 @@ public abstract class AbstractJsonMarshaller<REQUEST extends AbstractOpenShiftRe
 			setStringProperty(IOpenShiftJsonConstants.PROPERTY_RHLOGIN, request.getRhLogin(), node);
 		setStringProperty(IOpenShiftJsonConstants.PROPERTY_DEBUG, String.valueOf(request.isDebug()), node);
 		
-		if (request.getOptionals() != null){
-			String[] optionals = request.getOptionals();
-			for (int i = 0; i < optionals.length ; ++i) {
-				setStringProperty(IOpenShiftJsonConstants.PROPERTY_OPTIONAL, optionals[i], node);
-			}
-		}
-		
 		setJsonDataProperties(node, request);
 		return node.toJSONString(true);
 	}
