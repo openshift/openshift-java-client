@@ -95,12 +95,6 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 		}
 	}
 	
-	protected void restoreHostnameVerifier(HostnameVerifier hostnameVerifier) {
-		if (hostnameVerifier != null) {
-			HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
-		}
-	}
-	
 	private HttpClientException createException(IOException ioe, HttpURLConnection connection) {
 		try {
 			int responseCode = connection.getResponseCode();
