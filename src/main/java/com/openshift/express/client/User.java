@@ -30,4 +30,12 @@ public class User extends InternalUser {
 	protected User(String rhlogin, String password, String id, String url) {
 		super(rhlogin, password, id, url);
 	}
+	
+	protected User(String rhlogin, String password, String id, String url, IOpenShiftService service) {
+		super(rhlogin, password, id, url, service);
+	}
+	
+	public User(String rhlogin, String password, String id, IOpenShiftService service) {
+		super(rhlogin, password, id, null, (ISSHPublicKey) null, service);
+	}
 }

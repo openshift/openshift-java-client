@@ -67,6 +67,10 @@ public class InternalUser implements IUser {
 	public InternalUser(String rhlogin, String password, String id, String url) {
 		this(rhlogin, password, null, null, (ISSHPublicKey) null, new OpenShiftService(id, url));
 	}
+	
+	public InternalUser(String rhlogin, String password, String id, String url, IOpenShiftService service) {
+		this(rhlogin, password, null, null, (ISSHPublicKey) null, service);
+	}
 
 	public InternalUser(String rhlogin, String password, IOpenShiftService service) {
 		this(rhlogin, password, null, null, (ISSHPublicKey) null, service);

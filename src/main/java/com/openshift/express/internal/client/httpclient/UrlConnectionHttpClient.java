@@ -13,12 +13,8 @@ package com.openshift.express.internal.client.httpclient;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.URL;
 import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -28,11 +24,10 @@ import java.text.MessageFormat;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import com.openshift.express.client.IHttpClient;
@@ -51,19 +46,16 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 
 	private URL url;
 	private String userAgent;
-	private HostnameVerifier hostnameVerifier;
-	private boolean ignoreCertCheck;
-	private static boolean switched = false;
+	private boolean doSSLChecks;
 	
-	public UrlConnectionHttpClient(String userAgent, URL url, boolean ignoreCertCheck) {
-		this(userAgent, url, ignoreCertCheck, null);
+	public UrlConnectionHttpClient(String userAgent, URL url) {
+		this(userAgent, url, false);
 	}
 
-	public UrlConnectionHttpClient(String userAgent, URL url, boolean ignoreCertCheck, HostnameVerifier hostnameVerifier) {
+	public UrlConnectionHttpClient(String userAgent, URL url, boolean verifyHostNames) {
 		this.userAgent = userAgent;
 		this.url = url;
-		this.ignoreCertCheck = ignoreCertCheck;
-		this.hostnameVerifier = hostnameVerifier;
+		this.doSSLChecks = verifyHostNames;
 	}
 	
 	
@@ -87,7 +79,6 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 	}
 
 	public String get() throws HttpClientException {
-		HostnameVerifier defaultHostnameVerifier = setHostnameVerifier();
 		HttpURLConnection connection = null;
 		try {
 			connection = createConnection(userAgent, url);
@@ -101,7 +92,6 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 			if (connection != null) {
 				connection.disconnect();
 			}
-			restoreHostnameVerifier(defaultHostnameVerifier);			
 		}
 	}
 	
@@ -109,14 +99,6 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 		if (hostnameVerifier != null) {
 			HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
 		}
-	}
-	
-	protected HostnameVerifier setHostnameVerifier() {
-		HostnameVerifier defaultHostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
-		if (hostnameVerifier != null) {
-			HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
-		}
-		return defaultHostnameVerifier;
 	}
 	
 	private HttpClientException createException(IOException ioe, HttpURLConnection connection) {
@@ -139,19 +121,13 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 	}
 
 	private HttpURLConnection createConnection(String userAgent, URL url) throws IOException {
-		try {
-			if (ignoreCertCheck) {
-				setPermissiveTrustManager();
-			} else {
-//				setEnforcingTrustManager();
-			}
-		}
-        catch (Exception e) {
-        	e.printStackTrace();
-            throw new IOException(e);
-        }
-		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		if (isHttps(url)
+				&& !doSSLChecks) {
+			HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
+			httpsConnection.setHostnameVerifier(new NoopHostnameVerifier());
+			setPermissiveSSLSocketFactory(httpsConnection);
+		}
 		connection.setUseCaches(false);
 		connection.setDoInput(true);
 		connection.setAllowUserInteraction(false);
@@ -159,69 +135,50 @@ public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVer
 		connection.setRequestProperty(PROPERTY_CONTENT_TYPE, "application/x-www-form-urlencoded");
 		connection.setInstanceFollowRedirects(true);
 		connection.setRequestProperty(USER_AGENT, userAgent);
-		connection.setDefaultUseCaches(false);
-		
 		return connection;
 	}
-	
-	private void setPermissiveTrustManager() throws KeyManagementException, NoSuchAlgorithmException {
-		TrustManager easyTrustManager = new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
 
-            public void checkServerTrusted(X509Certificate[] chain,
-                    String authType) throws CertificateException {
-            }
-
-            public void checkClientTrusted(X509Certificate[] chain,
-                    String authType) throws CertificateException {
-            }
-        };
-        
-        SSLContext sslCtx = null;
-        if (switched) {
-        	sslCtx = SSLContext.getDefault();
-        } else {
-        	sslCtx = SSLContext.getInstance("TLS");
-        	switched = true;
-        }
-       
-        sslCtx.init(new KeyManager[0], new TrustManager[] { easyTrustManager }, new SecureRandom());
-        SSLContext.setDefault(sslCtx);
+	private boolean isHttps(URL url) {
+		return "https".equals(url.getProtocol());
 	}
 	
-	private void setEnforcingTrustManager() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException  {
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
-        tmf.init((KeyStore)null);
-
-        TrustManager tms [] = tmf.getTrustManagers();
-
-        X509TrustManager pkixTrustManager = null;
-        for (int i = 0; i < tms.length; i++) {
-            if (tms[i] instanceof X509TrustManager) {
-                pkixTrustManager = (X509TrustManager) tms[i];
-                break;
-            }
-        }
-        
-        SSLContext sslCtx = null;
-        if (switched) {
-        	switched = false;
-        } else {
-        	sslCtx = SSLContext.getInstance("TLS");
-        	switched = true;
-        }
-        
-        sslCtx.init(new KeyManager[0], new TrustManager[] { pkixTrustManager }, new SecureRandom());
-        SSLContext.setDefault(sslCtx);
-		
+	/**
+	 * Sets a trust manager that will always trust.
+	 * <p>
+	 * TODO: dont swallog exceptions and setup things so that they dont disturb other components.
+	 */
+	private void setPermissiveSSLSocketFactory(HttpsURLConnection connection) {
+		try {
+			SSLContext sslContext = SSLContext.getInstance("SSL");
+			sslContext.init(new KeyManager[0], new TrustManager[] { new PermissiveTrustManager() }, new SecureRandom());
+			SSLSocketFactory socketFactory = sslContext.getSocketFactory();
+			((HttpsURLConnection) connection).setSSLSocketFactory(socketFactory);
+		} catch (KeyManagementException e) {
+			// ignore
+		} catch (NoSuchAlgorithmException e) {
+			// ignore
+		}
 	}
 	
 	private static class NoopHostnameVerifier implements HostnameVerifier {
-		 
-        public boolean verify(String hostname, SSLSession sslSession) {
-            return true;
-        }
-    }
+
+		public boolean verify(String hostname, SSLSession sslSession) {
+			return true;
+		}
+	}
+
+	private static class PermissiveTrustManager implements X509TrustManager {
+
+		public X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+
+		public void checkServerTrusted(X509Certificate[] chain,
+				String authType) throws CertificateException {
+		}
+
+		public void checkClientTrusted(X509Certificate[] chain,
+				String authType) throws CertificateException {
+		}
+	}
 }

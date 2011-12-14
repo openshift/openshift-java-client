@@ -43,7 +43,7 @@ public class CertTrustIntegrationTest {
 		service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 		service.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
 		
-		user = new TestUser(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"));
+		user = new TestUser(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"), service);
 	}
 
 	@Test

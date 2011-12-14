@@ -46,7 +46,8 @@ public class ApplicationLogReaderIntegrationTest {
 	public void setUp() throws OpenShiftException, IOException {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		this.service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
-		this.user = new TestUser();
+		service.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
+		this.user = new TestUser(service);
 	}
 
 	/**

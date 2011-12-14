@@ -47,7 +47,7 @@ public class OpenShiftEnvelopeFactory implements IOpenShiftRequestFactory {
 	public String createString() throws OpenShiftException {
 		try {
 			StringBuilder builder = new StringBuilder();
-			if (authKey != null) {
+			if (authKey != null && authIV != null) {
 				appendProperty(PROPERTY_AUTHKEY, authKey, builder);
 				builder.append(AMP);
 				appendProperty(PROPERTY_AUTHIV, authIV, builder);

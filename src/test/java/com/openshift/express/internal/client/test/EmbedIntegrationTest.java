@@ -49,7 +49,8 @@ public class EmbedIntegrationTest {
 	public void setUp() throws OpenShiftException, IOException {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		this.service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
-		this.user = new TestUser();
+		service.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
+		this.user = new TestUser(service);
 		this.application = service.createApplication(ApplicationUtils.createRandomApplicationName(),
 				ICartridge.JBOSSAS_7, user);
 	}
@@ -108,7 +109,7 @@ public class EmbedIntegrationTest {
 		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.MYSQL_51, user);
 		service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.PHPMYADMIN_34, user);
 
-		User newUser = new TestUser();
+		User newUser = new TestUser(service);
 		IApplication reloadedApplication = newUser.getApplicationByName(application.getName());
 		assertNotNull(reloadedApplication);
 		List<IEmbeddableCartridge> embeddedCartridges = reloadedApplication.getEmbeddedCartridges();

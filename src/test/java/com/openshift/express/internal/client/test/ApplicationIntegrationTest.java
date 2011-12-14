@@ -53,8 +53,8 @@ public class ApplicationIntegrationTest {
 		service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 		service.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
 		
-		user = new TestUser();
-		invalidUser = new TestUser("bogusPassword");
+		user = new TestUser(service);
+		invalidUser = new TestUser("bogusPassword", service);
 	}
 
 	//@Test(expected = InvalidCredentialsOpenShiftException.class)
@@ -62,7 +62,7 @@ public class ApplicationIntegrationTest {
 		service.createApplication(ApplicationUtils.createRandomApplicationName(), ICartridge.JBOSSAS_7, invalidUser);
 	}
 
-	//@Test
+	@Test
 	public void canCreateApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -79,7 +79,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void canCreatePHPApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		ICartridge cartridge = null;
@@ -99,14 +99,14 @@ public class ApplicationIntegrationTest {
 	}
 
 
-	//@Test
+	@Test
 	public void canDestroyApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		service.createApplication(applicationName, ICartridge.JBOSSAS_7, user);
 		service.destroyApplication(applicationName, ICartridge.JBOSSAS_7, user);
 	}
 
-	//@Test(expected = OpenShiftException.class)
+	@Test(expected = OpenShiftException.class)
 	public void createDuplicateApplicationThrowsException() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -117,7 +117,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void canStopApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -128,7 +128,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void canStartStoppedApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -140,7 +140,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void canStartStartedApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -158,7 +158,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void canStopStoppedApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -177,7 +177,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void canRestartApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -195,7 +195,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void canGetStatus() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -207,7 +207,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void returnsValidGitUri() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -220,7 +220,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void returnsValidApplicationUrl() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -233,7 +233,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void returnsCreationTime() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -259,7 +259,7 @@ public class ApplicationIntegrationTest {
 	 * @see UserInfo
 	 * @see ApplicationInfo
 	 */
-	//@Test
+	@Test
 	public void returnsCreationTimeOn2ndApplication() throws Exception {
 		String applicationName = null;
 		String applicationName2 = null;

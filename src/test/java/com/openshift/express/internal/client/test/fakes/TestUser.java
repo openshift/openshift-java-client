@@ -13,6 +13,7 @@ package com.openshift.express.internal.client.test.fakes;
 import java.io.IOException;
 
 import com.openshift.express.client.IApplication;
+import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.User;
@@ -35,23 +36,23 @@ public class TestUser extends User {
 	public static final String RHLOGIN_USER_WITHOUT_DOMAIN = "adietish+unittests_nodomain@redhat.com";
 	public static final String PASSWORD_USER_WITHOUT_DOMAIN = "1q2w3e";
 
-	public TestUser() throws OpenShiftException, IOException {
+	public TestUser(IOpenShiftService service) throws OpenShiftException, IOException {
 		super(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"),ID, 
-				new UserConfiguration(new SystemConfiguration(new DefaultConfiguration())).getLibraServer());
+				service);
 	}
-
-	public TestUser(String password) throws OpenShiftException, IOException {
+	
+	public TestUser(String password, IOpenShiftService service) throws OpenShiftException, IOException {
 		super(System.getProperty("RHLOGIN"), password, ID, 
-				new UserConfiguration(new SystemConfiguration(new DefaultConfiguration())).getLibraServer());
+				service);
 	}
 
-	public TestUser(String rhlogin, String password) throws OpenShiftException, IOException {
+	public TestUser(String rhlogin, String password, IOpenShiftService service) throws OpenShiftException, IOException {
 		super(rhlogin, password, ID, 
-				new UserConfiguration(new SystemConfiguration(new DefaultConfiguration())).getLibraServer());
+				service);
 	}
 
-	public TestUser(String rhlogin, String password, String url) {
-		super(rhlogin, password, ID, url);
+	public TestUser(String rhlogin, String password, String url, IOpenShiftService service) {
+		super(rhlogin, password, ID, url, service);
 	}
 	
 	public IApplication createTestApplication() throws OpenShiftException {

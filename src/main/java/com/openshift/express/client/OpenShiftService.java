@@ -69,7 +69,7 @@ public class OpenShiftService implements IOpenShiftService {
 
 	private String baseUrl;
 	private String id;
-	private boolean ignoreCertCheck;
+	private boolean doSSLChecks = true;
 
 	public OpenShiftService(String id, String baseUrl) {
 		this.id = id;
@@ -77,7 +77,7 @@ public class OpenShiftService implements IOpenShiftService {
 	}
 	
 	public void setIgnoreCertCheck(boolean ignoreCertCheck) {
-		this.ignoreCertCheck = ignoreCertCheck;
+		this.doSSLChecks = !ignoreCertCheck;
 	}
 	
 	public void setProxySet(boolean proxySet) {
@@ -354,7 +354,7 @@ public class OpenShiftService implements IOpenShiftService {
 	private String sendRequest(final String request, final String url, final String password, final String authKey, final String authIV, final String errorMessage) throws OpenShiftException {
 		try {
 			String requestMessage = new OpenShiftEnvelopeFactory(password, authKey, authIV, request).createString();
-			String response = createHttpClient(id, url).post(requestMessage);
+			String response = createHttpClient(id, url, this.doSSLChecks).post(requestMessage);
 			return JsonSanitizer.sanitize(response);
 		} catch (MalformedURLException e) {
 			throw new OpenShiftException(e, errorMessage);
@@ -366,19 +366,10 @@ public class OpenShiftService implements IOpenShiftService {
 			throw new OpenShiftEndpointException(url, e, errorMessage);
 		}
 	}
-	
-	protected IHttpClient createHttpClient(final String id, final String url) throws MalformedURLException {
-		return createHttpClient(id, url, true);
 
-	}
-
-	private IHttpClient createHttpClient(String id, String url, final boolean verifyHostnames) throws MalformedURLException {
+	protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames) throws MalformedURLException {
 		String userAgent = MessageFormat.format(USERAGENT_FORMAT, VERSION, id);
-		if (verifyHostnames) {
-			return new UrlConnectionHttpClient(userAgent, new URL(url), ignoreCertCheck);
-		} else {
-			return new UrlConnectionHttpClient(userAgent, new URL(url), ignoreCertCheck, UrlConnectionHttpClient.NOOP_HOSTNAMEVERIFIER);
-		}
+		return new UrlConnectionHttpClient(userAgent, new URL(url), verifyHostnames);
 	}
 
 }
