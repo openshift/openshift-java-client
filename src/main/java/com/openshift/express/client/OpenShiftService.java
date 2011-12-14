@@ -69,15 +69,15 @@ public class OpenShiftService implements IOpenShiftService {
 
 	private String baseUrl;
 	private String id;
-	private boolean doSSLChecks = true;
+	private boolean doSSLChecks = false;
 
 	public OpenShiftService(String id, String baseUrl) {
 		this.id = id;
 		this.baseUrl = baseUrl;
 	}
 	
-	public void setIgnoreCertCheck(boolean ignoreCertCheck) {
-		this.doSSLChecks = !ignoreCertCheck;
+	public void setEnableSSLCertChecks(boolean doSSLChecks) {
+		this.doSSLChecks = doSSLChecks;
 	}
 	
 	public void setProxySet(boolean proxySet) {

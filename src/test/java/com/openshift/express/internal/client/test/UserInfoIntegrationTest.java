@@ -46,7 +46,7 @@ public class UserInfoIntegrationTest {
 	public void setUp() throws OpenShiftException, IOException {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		this.openShiftService = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
-		openShiftService.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
+		openShiftService.setEnableSSLCertChecks(Boolean.parseBoolean(System.getProperty("enableSSLCertChecks")));
 		this.user = new TestUser(openShiftService);
 	}
 

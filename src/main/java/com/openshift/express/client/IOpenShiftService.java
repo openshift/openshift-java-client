@@ -363,11 +363,11 @@ public interface IOpenShiftService {
 	public boolean waitForApplication(IApplication application, long timeout) throws OpenShiftException;
 	
 	/**
-	 * Sets flag for accepting self-signed SSL certificates
+	 * Sets flag for enabling SSL certificate checks (i.e. self-signed SSL certificates)
 	 * 
-	 * @param ignoreCertCheck
+	 * @param doSSLChecks
 	 */
-	public void setIgnoreCertCheck(boolean ignoreCertCheck);
+	public void setEnableSSLCertChecks(boolean doSSLChecks);
 	
 	/**
 	 * Sets flag for using an HTTP proxy

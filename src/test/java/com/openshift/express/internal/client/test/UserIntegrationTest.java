@@ -58,7 +58,7 @@ public class UserIntegrationTest {
 			DatatypeConfigurationException, IOException {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
-		service.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
+		service.setEnableSSLCertChecks(Boolean.parseBoolean(System.getProperty("enableSSLCertChecks")));
 		this.user = new TestUser(service);
 		this.invalidUser = new TestUser("bogusPassword", service);
 		this.badUrlUser = new TestUser(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"),

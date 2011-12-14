@@ -49,7 +49,7 @@ public class EmbedIntegrationTest {
 	public void setUp() throws OpenShiftException, IOException {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		this.service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
-		service.setIgnoreCertCheck(Boolean.parseBoolean(System.getProperty("ignoreCertCheck")));
+		service.setEnableSSLCertChecks(Boolean.parseBoolean(System.getProperty("enableSSLCertChecks")));
 		this.user = new TestUser(service);
 		this.application = service.createApplication(ApplicationUtils.createRandomApplicationName(),
 				ICartridge.JBOSSAS_7, user);

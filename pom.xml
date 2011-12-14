@@ -59,13 +59,17 @@
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<excludes>
+					<!--excludes>
 						<exclude>**/OpenShiftIntegrationTestSuite.java</exclude>
-						<!--exclude>**/OpenShiftTestSuite.java</exclude-->
 					</excludes>
 					<includes>
 						<include>**/OpenShiftTestSuite.java</include>
-						<!--include>**/OpenShiftIntegrationTestSuite.java</include-->
+					</includes-->
+					<excludes>
+						<exclude>**/OpenShiftTestSuite.java</exclude>
+					</excludes>
+					<includes>
+						<include>**/OpenShiftIntegrationTestSuite.java</include>
 					</includes>
 				</configuration>
 			</plugin>
