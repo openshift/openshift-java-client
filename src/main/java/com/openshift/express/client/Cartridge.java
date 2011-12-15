@@ -8,9 +8,8 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package com.openshift.express;
+package com.openshift.express.client;
 
-import com.openshift.express.client.ICartridge;
 
 /**
  * A cartridge that is available on the openshift server. This class is no enum

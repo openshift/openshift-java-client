@@ -12,7 +12,7 @@ package com.openshift.express.internal.client.response.unmarshalling;
 
 import org.jboss.dmr.ModelNode;
 
-import com.openshift.express.Cartridge;
+import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IUser;

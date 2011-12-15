@@ -27,7 +27,7 @@ import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import com.openshift.express.Cartridge;
+import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;

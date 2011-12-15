@@ -12,7 +12,7 @@ package com.openshift.express.internal.client.test.fakes;
 
 import java.io.IOException;
 
-import com.openshift.express.Cartridge;
+import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.OpenShiftException;

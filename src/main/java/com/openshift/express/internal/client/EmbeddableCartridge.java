@@ -12,7 +12,7 @@ package com.openshift.express.internal.client;
 
 import java.text.MessageFormat;
 
-import com.openshift.express.Cartridge;
+import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.internal.client.Application;
