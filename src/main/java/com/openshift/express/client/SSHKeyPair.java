@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.openshift.express.client;
 
-import com.openshift.express.internal.client.utils.Base64Encoder;
+import com.openshift.express.client.utils.Base64Encoder;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
