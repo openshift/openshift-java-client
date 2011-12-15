@@ -12,12 +12,12 @@ package com.openshift.express.internal.client.response.unmarshalling;
 
 import org.jboss.dmr.ModelNode;
 
+import com.openshift.express.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.internal.client.Application;
-import com.openshift.express.internal.client.Cartridge;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.JBossASApplication;
 import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;

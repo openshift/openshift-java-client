@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.openshift.express.client;
 
-import com.openshift.express.internal.client.Cartridge;
+import com.openshift.express.Cartridge;
 
 /**
  * @author André Dietisheim

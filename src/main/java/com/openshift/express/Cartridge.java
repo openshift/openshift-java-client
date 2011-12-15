@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package com.openshift.express.internal.client;
+package com.openshift.express;
 
 import com.openshift.express.client.ICartridge;
 

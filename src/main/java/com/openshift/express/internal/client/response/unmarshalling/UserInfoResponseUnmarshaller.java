@@ -20,10 +20,10 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.jboss.dmr.ModelNode;
 
+import com.openshift.express.Cartridge;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.internal.client.ApplicationInfo;
-import com.openshift.express.internal.client.Cartridge;
 import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;

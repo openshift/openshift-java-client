@@ -12,6 +12,7 @@ package com.openshift.express.internal.client.test.fakes;
 
 import java.io.IOException;
 
+import com.openshift.express.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.OpenShiftException;
@@ -20,7 +21,6 @@ import com.openshift.express.client.User;
 import com.openshift.express.client.configuration.DefaultConfiguration;
 import com.openshift.express.client.configuration.SystemConfiguration;
 import com.openshift.express.client.configuration.UserConfiguration;
-import com.openshift.express.internal.client.Cartridge;
 import com.openshift.express.internal.client.test.utils.ApplicationUtils;
 
 /**
