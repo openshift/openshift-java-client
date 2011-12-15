@@ -39,8 +39,6 @@ import com.openshift.express.internal.client.utils.StreamUtils;
  */
 public class UrlConnectionHttpClient implements IHttpClient {
 
-public static final HostnameVerifier NOOP_HOSTNAMEVERIFIER = new NoopHostnameVerifier();
-	
 	private static final String PROPERTY_CONTENT_TYPE = "Content-Type";
 	private static final int TIMEOUT = 10 * 1024;
 
