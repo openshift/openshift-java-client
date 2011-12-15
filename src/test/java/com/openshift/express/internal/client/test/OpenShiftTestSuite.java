@@ -24,6 +24,7 @@ import org.junit.runners.Suite;
 	UserInfoTest.class,
 	UserTest.class,
 	CartridgeTest.class,
+	EmbeddableCartridgeTest.class,
 	SSHKeyTest.class
 })
 /**

@@ -15,7 +15,6 @@ import java.text.MessageFormat;
 import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.client.OpenShiftException;
-import com.openshift.express.internal.client.Application;
 
 /**
  * A cartridge that may be embedded into an application. This class is no enum
