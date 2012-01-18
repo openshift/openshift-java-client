@@ -33,6 +33,10 @@ public class ApplicationUtils {
 	public static void silentlyDestroyAS7Application(String name, User user, IOpenShiftService service) {
 		silentlyDestroyApplication(name, ICartridge.JBOSSAS_7, user, service);
 	}
+	
+	public static void silentlyDestroyRackApplication(String name, User user, IOpenShiftService service) {
+		silentlyDestroyApplication(name, ICartridge.RACK_11, user, service);
+	}
 
 	public static void silentlyDestroyJenkinsApplication(String name, User user, IOpenShiftService service) {
 		silentlyDestroyApplication(name, ICartridge.JENKINS_14, user, service);

@@ -17,13 +17,20 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IJBossASApplication;
 import com.openshift.express.client.IOpenShiftService;
+import com.openshift.express.client.IRackApplication;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.User;
@@ -34,6 +41,8 @@ import com.openshift.express.internal.client.ApplicationInfo;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.test.fakes.TestUser;
 import com.openshift.express.internal.client.test.utils.ApplicationUtils;
+import com.openshift.express.internal.client.utils.StreamUtils;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -280,7 +289,7 @@ public class ApplicationIntegrationTest {
 	}
 	
 	@Test
-	public void canThreadDumpApplication() throws Exception {
+	public void canThreadDumpJBossApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		ApplicationLogReader reader = null;
 		try {
@@ -304,6 +313,68 @@ public class ApplicationIntegrationTest {
 			
 			if (reader != null)
 				reader.close();
+		}
+	}
+	
+	protected String getRackLogFile() throws Exception {
+		Calendar cal = Calendar.getInstance();
+		
+		String month = null;
+		if (cal.get(Calendar.MONTH) > 8)
+			month = String.valueOf(cal.get(Calendar.MONTH) + 1);
+		else
+			month = "0" + String.valueOf(cal.get(Calendar.MONTH) + 1);
+		
+		
+		String logFile = "rack1/logs/error_log-" + cal.get(Calendar.YEAR) + month + cal.get(Calendar.DAY_OF_MONTH) + "-000000-EST";
+		System.out.println("!!!!!! logFile " + logFile);
+		
+		return logFile;
+	}
+	
+	@Test
+	public void canThreadDumpRackApplication() throws Exception {
+		String applicationName = ApplicationUtils.createRandomApplicationName();
+		ApplicationLogReader reader = null;
+		URLConnection conn = null;
+		InputStream urlStream = null;
+		try {
+			ICartridge cartridge = ICartridge.RACK_11;
+			IRackApplication application = (IRackApplication)service.createApplication(applicationName, cartridge, user);
+			assertNotNull(application);
+			assertEquals(applicationName, application.getName());
+			assertEquals(cartridge, application.getCartridge());
+			
+			URL url = new URL("http://" + applicationName + "-" + System.getProperty("RHLOGIN") + ".dev.rhcloud.com/lobster");
+			
+			System.out.println("!!! url " + url);
+			
+			Date date = new Date();
+		
+			Thread.sleep(60 * 1000);
+			
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			
+			String result = StreamUtils.readToString(connection.getInputStream());
+			System.out.println("!!!! result " + result);
+			
+			application.threadDump();
+			
+			String log = service.getStatus(applicationName, cartridge, user, getRackLogFile(), 100);
+			
+			assertTrue("Failed to retrieve logged thread dump", log.contains("passenger-3.0.4"));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			ApplicationUtils.silentlyDestroyRackApplication(applicationName, user, service);
+			
+			if (reader != null)
+				reader.close();
+			
+			if (urlStream != null)
+				urlStream.close();
 		}
 	}
 }
