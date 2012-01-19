@@ -104,6 +104,8 @@ public class UrlConnectionHttpClient implements IHttpClient {
 				return new BadRequestException(errorMessage, ioe);
 			case 401:
 				return new UnauthorizedException(errorMessage, ioe);
+			case 404:
+				return new NotFoundException(errorMessage, ioe);
 			default:
 				return new HttpClientException(errorMessage, ioe);
 			}

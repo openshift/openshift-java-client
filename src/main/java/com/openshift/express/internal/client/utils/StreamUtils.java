@@ -52,10 +52,16 @@ public class StreamUtils {
 	}
 
 	public static String readToString(InputStream inputStream) throws IOException {
+		if (inputStream == null) {
+			return null;
+		}
 		return readToString(new InputStreamReader(inputStream));
 	}
 
 	public static String readToString(Reader reader) throws IOException {
+		if (reader == null) {
+			return null;
+		}
 		BufferedReader bufferedReader = new BufferedReader(reader);
 		StringWriter writer = new StringWriter();
 		String line = null;
