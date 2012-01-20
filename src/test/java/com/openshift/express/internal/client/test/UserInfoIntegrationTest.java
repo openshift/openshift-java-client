@@ -68,7 +68,7 @@ public class UserInfoIntegrationTest {
 	 * {@link OpenShiftService#getUserInfo(InternalUser)} for a user without
 	 * domain throws {@link NotFoundOpenShiftException}
 	 */
-	@Test(expected = NotFoundOpenShiftException.class)
+	@Test(expected = InvalidCredentialsOpenShiftException.class)
 	public void canGetUserInfoForUserWithoutDomain() throws Exception {
 		TestUser inexistantUser = new TestUser(TestUser.RHLOGIN_USER_WITHOUT_DOMAIN, TestUser.PASSWORD_USER_WITHOUT_DOMAIN, openShiftService);
 		openShiftService.getUserInfo(inexistantUser);
