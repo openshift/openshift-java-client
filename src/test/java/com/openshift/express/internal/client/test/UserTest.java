@@ -19,13 +19,18 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
@@ -35,21 +40,13 @@ import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.ISSHPublicKey;
 import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
-import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.utils.RFC822DateUtils;
 import com.openshift.express.internal.client.ApplicationInfo;
 import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.test.fakes.CartridgeResponseFake;
-import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
 import com.openshift.express.internal.client.test.fakes.UserInfoResponseFake;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
  * @author André Dietisheim
@@ -180,7 +177,8 @@ public class UserTest {
 				, UserInfoResponseFake.SSH_KEY
 				, UserInfoResponseFake.RHC_DOMAIN
 				, UserInfoResponseFake.NAMESPACE
-				, applicationInfos);
+				, applicationInfos
+				, UserInfoResponseFake.SSH_KEY_TYPE);
 	}
 
 }

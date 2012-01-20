@@ -22,7 +22,7 @@ import org.jboss.dmr.ModelNode;
 
 import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.ICartridge;
-import com.openshift.express.client.IEmbeddableCartridge;
+import com.openshift.express.client.OpenShiftUnknonwSSHKeyTypeException;
 import com.openshift.express.internal.client.ApplicationInfo;
 import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 import com.openshift.express.internal.client.UserInfo;
@@ -33,9 +33,9 @@ import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
  */
 public class UserInfoResponseUnmarshaller extends AbstractOpenShiftJsonResponseUnmarshaller<UserInfo> {
 
-	private static final Pattern URL_REGEX = Pattern.compile(".*URL: (.+)"); 
-	
-	protected UserInfo createOpenShiftObject(ModelNode node) throws DatatypeConfigurationException {
+	private static final Pattern URL_REGEX = Pattern.compile(".*URL: (.+)");
+
+	protected UserInfo createOpenShiftObject(ModelNode node) throws DatatypeConfigurationException, OpenShiftUnknonwSSHKeyTypeException {
 		ModelNode dataNode = node.get(IOpenShiftJsonConstants.PROPERTY_DATA);
 		if (!isSet(dataNode)) {
 			return null;
@@ -47,14 +47,16 @@ public class UserInfoResponseUnmarshaller extends AbstractOpenShiftJsonResponseU
 		}
 
 		String sshPublicKey = getString(IOpenShiftJsonConstants.PROPERTY_SSH_KEY, userInfoNode);
+		String sshKeyType = getString(IOpenShiftJsonConstants.PROPERTY_SSH_TYPE, userInfoNode);
 		String rhlogin = getString(IOpenShiftJsonConstants.PROPERTY_RHLOGIN, userInfoNode);
 		String uuid = getString(IOpenShiftJsonConstants.PROPERTY_UUID, userInfoNode);
 		String namespace = getString(IOpenShiftJsonConstants.PROPERTY_NAMESPACE, userInfoNode);
 		String rhcDomain = getString(IOpenShiftJsonConstants.PROPERTY_RHC_DOMAIN, userInfoNode);
 
-		List<ApplicationInfo> applicationInfos = createApplicationInfos(dataNode.get(IOpenShiftJsonConstants.PROPERTY_APP_INFO));
+		List<ApplicationInfo> applicationInfos = createApplicationInfos(dataNode
+				.get(IOpenShiftJsonConstants.PROPERTY_APP_INFO));
 
-		return new UserInfo(rhlogin, uuid, sshPublicKey, rhcDomain, namespace, applicationInfos);
+		return new UserInfo(rhlogin, uuid, sshPublicKey, rhcDomain, namespace, applicationInfos, sshKeyType);
 	}
 
 	private List<ApplicationInfo> createApplicationInfos(ModelNode appInfoNode) throws DatatypeConfigurationException {

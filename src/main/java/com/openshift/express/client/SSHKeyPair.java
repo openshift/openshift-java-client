@@ -10,11 +10,10 @@
  ******************************************************************************/
 package com.openshift.express.client;
 
-import com.openshift.express.client.utils.Base64Encoder;
-
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
+import com.openshift.express.client.utils.Base64Encoder;
 
 /**
  * @author André Dietisheim
@@ -32,10 +31,17 @@ public class SSHKeyPair implements ISSHPublicKey {
 
 	private KeyPair keyPair;
 	private String privateKeyPath;
-
+	private SSHKeyType sSHKeyType;
 	private String publicKeyPath;
 
-	private SSHKeyPair(KeyPair keyPair, String privateKeyPath, String publicKeyPath) throws OpenShiftException {
+	private SSHKeyPair(KeyPair keyPair, String privateKeyPath, String publicKeyPath, String keyTypeId)
+			throws OpenShiftException {
+		this(keyPair, privateKeyPath, publicKeyPath, SSHKeyType.getByTypeId(keyTypeId));
+	}
+
+	private SSHKeyPair(KeyPair keyPair, String privateKeyPath, String publicKeyPath, SSHKeyType sSHKeyType)
+			throws OpenShiftException {
+		this.sSHKeyType = sSHKeyType;
 		this.keyPair = keyPair;
 		this.privateKeyPath = privateKeyPath;
 		this.publicKeyPath = publicKeyPath;
@@ -62,7 +68,7 @@ public class SSHKeyPair implements ISSHPublicKey {
 			keyPair.setPassphrase(passPhrase);
 			keyPair.writePublicKey(publicKeyPath, "created by " + IOpenShiftService.ID);
 			keyPair.writePrivateKey(privateKeyPath);
-			return new SSHKeyPair(keyPair, privateKeyPath, publicKeyPath);
+			return new SSHKeyPair(keyPair, privateKeyPath, publicKeyPath, SSHKeyType.SSH_RSA);
 		} catch (Exception e) {
 			throw new OpenShiftException(e, "Could not create new rsa key", e);
 		}
@@ -82,9 +88,9 @@ public class SSHKeyPair implements ISSHPublicKey {
 			throws OpenShiftException {
 		try {
 			KeyPair keyPair = KeyPair.load(new JSch(), privateKeyPath, publicKeyPath);
-			return new SSHKeyPair(keyPair, privateKeyPath, publicKeyPath);
+			return new SSHKeyPair(keyPair, privateKeyPath, publicKeyPath, SSHKeyType.getByJSchKeyType(keyPair));
 		} catch (JSchException e) {
-			throw new OpenShiftException(e, "Could not create new rsa key");
+			throw new OpenShiftException(e, "Could not create new ssh key");
 		}
 	}
 
@@ -98,5 +104,9 @@ public class SSHKeyPair implements ISSHPublicKey {
 
 	public String getPublicKeyPath() {
 		return publicKeyPath;
+	}
+
+	public SSHKeyType getKeyType() {
+		return sSHKeyType;
 	}
 }

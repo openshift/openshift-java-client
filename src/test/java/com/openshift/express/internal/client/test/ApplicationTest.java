@@ -231,7 +231,8 @@ public class ApplicationTest {
 						ApplicationResponseFake.SSHPUBLICKEY,
 						ApplicationResponseFake.RHC_DOMAIN,
 						ApplicationResponseFake.NAMESPACE,
-						Arrays.asList(new ApplicationInfo[] { applicationInfo }));
+						Arrays.asList(new ApplicationInfo[] { applicationInfo }),
+						ApplicationResponseFake.SSHKEYTYPE);
 			}
 		};
 		return userInfoService;

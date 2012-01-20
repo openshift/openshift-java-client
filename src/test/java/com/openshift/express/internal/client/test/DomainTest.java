@@ -17,8 +17,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.junit.Test;
+
 import com.openshift.express.client.IDomain;
 import com.openshift.express.client.IOpenShiftService;
+import com.openshift.express.client.SSHKeyType;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.SSHKeyPair;
 import com.openshift.express.internal.client.InternalUser;
@@ -31,7 +34,6 @@ import com.openshift.express.internal.client.response.unmarshalling.DomainRespon
 import com.openshift.express.internal.client.response.unmarshalling.JsonSanitizer;
 import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
 import com.openshift.express.internal.client.test.fakes.TestSSHKey;
-import org.junit.Test;
 
 /**
  * @author André Dietisheim
@@ -45,13 +47,13 @@ public class DomainTest {
 	@Test
 	public void canMarshallDomainCreateRequest() throws IOException, OpenShiftException {
 		SSHKeyPair sshKey = TestSSHKey.create();
-		String expectedRequestString = createDomainRequestString(PASSWORD, RHLOGIN, true, "myDomain", false,
-				sshKey.getPublicKey());
+		String expectedRequestString = createDomainRequestString(
+				PASSWORD, RHLOGIN, true, "myDomain", false, sshKey.getPublicKey(), sshKey.getKeyType());
 
 		CreateDomainRequest request = new CreateDomainRequest("myDomain", sshKey, RHLOGIN, true);
 		String requestString =
 				new OpenShiftEnvelopeFactory(
-						PASSWORD, null, null, 
+						PASSWORD, null, null,
 						new DomainRequestJsonMarshaller().marshall(request))
 						.createString();
 		assertEquals(expectedRequestString, requestString);
@@ -65,7 +67,8 @@ public class DomainTest {
 		responseString = JsonSanitizer.sanitize(responseString);
 		IOpenShiftService service = new NoopOpenShiftServiceFake();
 		InternalUser user = new InternalUser(RHLOGIN, PASSWORD, service);
-		OpenShiftResponse<IDomain> response = new DomainResponseUnmarshaller(domainName, user, service).unmarshall(responseString);
+		OpenShiftResponse<IDomain> response = new DomainResponseUnmarshaller(domainName, user, service)
+				.unmarshall(responseString);
 
 		assertNotNull(response);
 		IDomain domain = response.getOpenShiftObject();
@@ -75,20 +78,20 @@ public class DomainTest {
 	@Test
 	public void canMarshallDomainAlterRequest() throws IOException, OpenShiftException {
 		SSHKeyPair sshKey = TestSSHKey.create();
-		String expectedRequestString = createDomainRequestString(PASSWORD, RHLOGIN, true, "myDomain", true,
-				sshKey.getPublicKey());
+		String expectedRequestString = createDomainRequestString(
+				PASSWORD, RHLOGIN, true, "myDomain", true, sshKey.getPublicKey(), sshKey.getKeyType());
 
 		ChangeDomainRequest request = new ChangeDomainRequest("myDomain", sshKey, RHLOGIN, true);
 		String requestString =
 				new OpenShiftEnvelopeFactory(
-						PASSWORD, null, null, 
+						PASSWORD, null, null,
 						new DomainRequestJsonMarshaller().marshall(request))
 						.createString();
 		assertEquals(expectedRequestString, requestString);
 	}
 
 	private String createDomainRequestString(String password, String username, boolean debug, String namespace,
-			boolean alter, String sshPublicKey) throws UnsupportedEncodingException {
+			 boolean alter, String sshPublicKey, SSHKeyType sSHKeyType) throws UnsupportedEncodingException {
 		return "password="
 				+ password
 				+ "&json_data=%7B"
@@ -102,13 +105,14 @@ public class DomainTest {
 				+ "%2C+%22ssh%22+%3A+%22"
 				+ URLEncoder.encode(sshPublicKey, "UTF-8")
 				+ "%22"
+				+ "%2C+%22key_type%22+%3A+%22" + URLEncoder.encode(sSHKeyType.getTypeId(), "UTF-8") + "%22"
 				+ "%7D";
 	}
 
 	/**
 	 * WARNING: the response this method returns matches the actual response
-	 * from the openshift service (9-12-2011). It is not valid json since it quotes the
-	 * nested json object
+	 * from the openshift service (9-12-2011). It is not valid json since it
+	 * quotes the nested json object
 	 * <p>
 	 * "data": "{\"rhlogin\": ...
 	 */

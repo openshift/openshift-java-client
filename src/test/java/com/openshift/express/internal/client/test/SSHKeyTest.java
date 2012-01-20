@@ -17,13 +17,22 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
-import com.openshift.express.client.ISSHPublicKey;
-import com.openshift.express.client.SSHKeyPair;
-import com.openshift.express.client.SSHPublicKey;
 import org.junit.Test;
+
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.KeyPair;
+import com.openshift.express.client.IOpenShiftService;
+import com.openshift.express.client.ISSHPublicKey;
+import com.openshift.express.client.OpenShiftUnknonwSSHKeyTypeException;
+import com.openshift.express.client.SSHKeyPair;
+import com.openshift.express.client.SSHKeyType;
+import com.openshift.express.client.SSHPublicKey;
 
 public class SSHKeyTest {
 
+	private static final String SSH_RSA = "ssh-rsa";
+	private static final String SSH_DSA = "ssh-dss";
 	private static final String PASSPHRASE = "12345";
 
 	@Test
@@ -32,10 +41,13 @@ public class SSHKeyTest {
 		String privateKeyPath = createTempFile().getAbsolutePath();
 		SSHKeyPair sshKey = SSHKeyPair.create(PASSPHRASE, privateKeyPath, publicKeyPath);
 		String publicKey = sshKey.getPublicKey();
-
+		assertNotNull(sshKey.getKeyType());
+		String keyType = sshKey.getKeyType().getTypeId();
+		
 		assertNotNull(publicKey);
-		assertTrue(!publicKey.contains("ssh-rsa")); // no identifier
+		assertTrue(!publicKey.contains(SSH_RSA)); // no identifier
 		assertTrue(!publicKey.contains(" ")); // no comment
+		assertEquals(SSHKeyType.SSH_RSA.getTypeId(), keyType);
 	}
 
 	@Test
@@ -46,10 +58,13 @@ public class SSHKeyTest {
 
 		SSHKeyPair sshKey = SSHKeyPair.load(privateKeyPath, publicKeyPath);
 		String publicKey = sshKey.getPublicKey();
+		assertNotNull(sshKey.getKeyType());
+		String keyType = sshKey.getKeyType().getTypeId();
 
 		assertNotNull(publicKey);
-		assertTrue(!publicKey.contains("ssh-rsa")); // no identifier
+		assertTrue(!publicKey.contains(SSH_RSA)); // no identifier
 		assertTrue(!publicKey.contains(" ")); // no comment
+		assertEquals(SSHKeyType.SSH_RSA.getTypeId(), keyType);
 	}
 
 	@Test
@@ -60,16 +75,74 @@ public class SSHKeyTest {
 
 		ISSHPublicKey sshKey = new SSHPublicKey(new File(publicKeyPath));
 		String publicKey = sshKey.getPublicKey();
+		assertNotNull(sshKey.getKeyType());
+		String keyType = sshKey.getKeyType().getTypeId();
 
 		assertNotNull(publicKey);
-		assertTrue(!publicKey.contains("ssh-rsa")); // no identifier
+		assertTrue(!publicKey.contains(SSH_RSA)); // no identifier
 		assertTrue(!publicKey.contains(" ")); // no comment
 
 		SSHKeyPair keyPair = SSHKeyPair.load(privateKeyPath, publicKeyPath);
 		assertEquals(publicKey, keyPair.getPublicKey());
-	}
+		assertEquals(SSHKeyType.SSH_RSA.getTypeId(), keyType);
+	  }
+	
+	  @Test
+	  public void canLoadKeyPairDsa() throws Exception {
+	    String publicKeyPath = createTempFile().getAbsolutePath();
+	    String privateKeyPath = createTempFile().getAbsolutePath();
+	    createDsaKeyPair(publicKeyPath, privateKeyPath);
+	
+	    SSHKeyPair sshKey = SSHKeyPair.load(privateKeyPath, publicKeyPath);
+	    String publicKey = sshKey.getPublicKey();
+		assertNotNull(sshKey.getKeyType());
+		String keyType = sshKey.getKeyType().getTypeId();
+	
+	    assertNotNull(publicKey);
+	    assertTrue(!publicKey.contains(SSH_DSA)); // no identifier
+	    assertTrue(!publicKey.contains(" ")); // no comment
+	    assertEquals(SSHKeyType.SSH_DSA.getTypeId(), keyType);
+	  }
 
-	private File createTempFile() throws IOException {
+	  @Test
+	  public void canLoadPublicKeyDsa() throws Exception {
+	    String publicKeyPath = createTempFile().getAbsolutePath();
+	    String privateKeyPath = createTempFile().getAbsolutePath();
+	    createDsaKeyPair(publicKeyPath, privateKeyPath);
+	
+	    ISSHPublicKey sshKey = new SSHPublicKey(new File(publicKeyPath));
+	    String publicKey = sshKey.getPublicKey();
+		assertNotNull(sshKey.getKeyType());
+		String keyType = sshKey.getKeyType().getTypeId();
+	
+	    assertNotNull(publicKey);
+	    assertTrue(!publicKey.contains(SSH_DSA)); // no identifier
+	    assertTrue(!publicKey.contains(" ")); // no comment
+	
+	    SSHKeyPair keyPair = SSHKeyPair.load(privateKeyPath, publicKeyPath);
+	    assertEquals(publicKey, keyPair.getPublicKey());
+	    assertEquals(SSHKeyType.SSH_DSA.getTypeId(), keyType);
+	  }
+	
+	  @Test
+	  public void canGetKeyTypeByTypeId() throws OpenShiftUnknonwSSHKeyTypeException {
+		  assertTrue(SSHKeyType.SSH_DSA == SSHKeyType.getByTypeId(SSH_DSA));
+		  assertTrue(SSHKeyType.SSH_RSA == SSHKeyType.getByTypeId(SSH_RSA));
+	  }
+	  
+	  @Test(expected=OpenShiftUnknonwSSHKeyTypeException.class)
+	  public void getKeyTypeByTypeIdReturnsNullIfNoMatchingType() throws OpenShiftUnknonwSSHKeyTypeException {
+		  SSHKeyType.getByTypeId("dummy");
+	  }
+
+	  private void createDsaKeyPair(String publicKeyPath, String privateKeyPath) throws IOException, JSchException {
+	    KeyPair keyPair = KeyPair.genKeyPair(new JSch(), KeyPair.DSA, 1024);
+	    keyPair.setPassphrase(PASSPHRASE);
+	    keyPair.writePublicKey(publicKeyPath, "created by " + IOpenShiftService.ID);
+	    keyPair.writePrivateKey(privateKeyPath);
+	   }
+	 
+	   private File createTempFile() throws IOException {
 		return File.createTempFile(String.valueOf(System.currentTimeMillis()), null);
 	}
 }

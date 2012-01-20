@@ -24,19 +24,25 @@ import com.openshift.express.internal.client.utils.StreamUtils;
  */
 public class SSHPublicKey implements ISSHPublicKey {
 
-	private static final Pattern PUBLICKEY_PATTERN = Pattern.compile("[^ ]+ ([^ ]+)( .+)*");
+	private static final Pattern PUBLICKEY_PATTERN = Pattern.compile("([^ ]+) ([^ ]+)( .+)*");
 
 	private String publicKey;
+	private SSHKeyType keyType;
 
 	public SSHPublicKey(File publicKeyFilePath) throws IOException, OpenShiftException {
-		this.publicKey = extractPublicKey(publicKeyFilePath);
+		initializePublicKey(publicKeyFilePath);
 	}
 
-	public SSHPublicKey(String publicKey) {
+	public SSHPublicKey(String publicKey, String keyTypeId) throws OpenShiftUnknonwSSHKeyTypeException {
+		this(publicKey, SSHKeyType.getByTypeId(keyTypeId));
+	}
+
+	public SSHPublicKey(String publicKey, SSHKeyType keyType) {
 		this.publicKey = publicKey;
+		this.keyType = keyType;
 	}
 
-	private String extractPublicKey(File file) throws OpenShiftException, FileNotFoundException, IOException {
+	private void initializePublicKey(File file) throws OpenShiftException, FileNotFoundException, IOException {
 		String keyWithIdAndComment = StreamUtils.readToString(new FileReader(file));
 		Matcher matcher = PUBLICKEY_PATTERN.matcher(keyWithIdAndComment);
 		if (!matcher.find()
@@ -44,14 +50,15 @@ public class SSHPublicKey implements ISSHPublicKey {
 			throw new OpenShiftException("Could not load public key from file \"{0}\"", file.getAbsolutePath());
 		}
 
-		return matcher.group(1);
+		this.keyType = SSHKeyType.getByTypeId(matcher.group(1));
+		this.publicKey = matcher.group(2);
 	}
 
 	public String getPublicKey() {
 		return publicKey;
 	}
 
-	void update(String publicKey) {
-		this.publicKey = publicKey;
+	public SSHKeyType getKeyType() {
+		return keyType;
 	}
 }

@@ -11,26 +11,13 @@
 package com.openshift.express.client;
 
 /**
- * @author André Dietisheim
+ * @author Andre Dietisheim
  */
-public interface ISSHPublicKey {
+public class OpenShiftUnknonwSSHKeyTypeException  extends OpenShiftException {
 
-	/**
-	 * Returns the content of the public key (key content without ssh-rsa
-	 * identifier nor comment) of the ssh key
-	 * 
-	 * @return the content of the public key (without signature, without
-	 *         comment)
-	 * @throws OpenShiftException
-	 */
-	public String getPublicKey() throws OpenShiftException;
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Returns the type of the key (ssh-rsa or ssh-dss)
-	 * 
-	 * @return the type of key, either ssh-rsa or ssh-dss
-	 * @throws OpenShiftException
-	 */
-	public SSHKeyType getKeyType();
-
+	public OpenShiftUnknonwSSHKeyTypeException(String message, Object... arguments) {
+		super(message, arguments);
+	}
 }

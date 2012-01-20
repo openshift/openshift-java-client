@@ -24,5 +24,6 @@ public class DomainRequestJsonMarshaller extends AbstractJsonMarshaller<Abstract
 		node.get(IOpenShiftJsonConstants.PROPERTY_NAMESPACE).set(request.getName());
 		node.get(IOpenShiftJsonConstants.PROPERTY_ALTER).set(String.valueOf(request.isAlter()));
 		node.get(IOpenShiftJsonConstants.PROPERTY_SSH).set(request.getSshKey().getPublicKey());
+		node.get(IOpenShiftJsonConstants.PROPERTY_KEY_TYPE).set(request.getSshKey().getKeyType().getTypeId());
 	}
 }

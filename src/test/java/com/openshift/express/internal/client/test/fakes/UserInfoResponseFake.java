@@ -11,6 +11,7 @@ public class UserInfoResponseFake {
 
 	public static final String RHLOGIN = "jbosstools@redhat.com";
 	public static final String PASSWORD = "$!445password%&";
+	public static final String SSH_KEY_TYPE = "ssh-rsa";
 	
 	public static final String RHC_DOMAIN = "rhcloud.com";
 	public static final String NAMESPACE = "1315839296868";
@@ -20,7 +21,7 @@ public class UserInfoResponseFake {
 					+ "SJBke/hE8MLBBG1+5ZwktsrE+f2VdVt0McRLVAO6rdJRyMUX0rTbm7"
 					+ "SABRVSX+zeQjlfqbbUtYFc7TIfd4RQc3GaISG1rS3C4svRSjdWaG36"
 					+ "vDY2KxowdFvpKj8i8IYNPlLoRA/7EzzyneS6iyw==";
-
+	
 	public static final String APP1_NAME = "1315836963263";
 	public static final String APP1_UUID = "810540bafc1c4b5e8cac830fb8ca786f";
 	public static final String APP1_CARTRIDGE = "jbossas-7.0";
