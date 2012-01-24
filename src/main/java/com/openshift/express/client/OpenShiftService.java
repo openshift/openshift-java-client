@@ -21,11 +21,8 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
-import com.openshift.express.internal.client.httpclient.BadRequestException;
 import com.openshift.express.internal.client.httpclient.HttpClientException;
-import com.openshift.express.internal.client.httpclient.InternalServerErrorException;
 import com.openshift.express.internal.client.httpclient.NotFoundException;
 import com.openshift.express.internal.client.httpclient.UnauthorizedException;
 import com.openshift.express.internal.client.httpclient.UrlConnectionHttpClient;
@@ -62,9 +59,7 @@ public class OpenShiftService implements IOpenShiftService {
 	
 	// TODO extract to properties file
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
-	
 	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
-
 	private static final long APPLICATION_WAIT_DELAY = 2;
 
 	private String baseUrl;
@@ -81,10 +76,11 @@ public class OpenShiftService implements IOpenShiftService {
 	}
 	
 	public void setProxySet(boolean proxySet) {
-		if (proxySet)
+		if (proxySet) {
 			System.setProperty("proxySet", "true");
-		else
+		} else {
 			System.setProperty("proxySet", "false");
+		}
 	}
 	
 	public void setProxyHost(String proxyHost) {
@@ -120,8 +116,8 @@ public class OpenShiftService implements IOpenShiftService {
 	}
 	
 	public List<IEmbeddableCartridge> getEmbeddableCartridges(final IUser user) throws OpenShiftException {
-		ListCartridgesRequest listCartridgesRequest = new ListCartridgesRequest(
-				ListCartridgesRequest.CartridgeType.EMBEDDED, user.getRhlogin(), true);
+		ListCartridgesRequest listCartridgesRequest = 
+				new ListCartridgesRequest(ListCartridgesRequest.CartridgeType.EMBEDDED, user.getRhlogin(), true);
 		String url = listCartridgesRequest.getUrlString(getServiceUrl());
 		String request =
 				new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
@@ -133,8 +129,8 @@ public class OpenShiftService implements IOpenShiftService {
 	}
 
 	public List<ICartridge> getCartridges(final IUser user) throws OpenShiftException {
-		ListCartridgesRequest listCartridgesRequest = new ListCartridgesRequest(
-				ListCartridgesRequest.CartridgeType.STANDALONE, user.getRhlogin(), true);
+		ListCartridgesRequest listCartridgesRequest = 
+				new ListCartridgesRequest(ListCartridgesRequest.CartridgeType.STANDALONE, user.getRhlogin(), true);
 		String url = listCartridgesRequest.getUrlString(getServiceUrl());
 		String request =
 				new ListCartridgesRequestJsonMarshaller().marshall(listCartridgesRequest);
@@ -158,8 +154,10 @@ public class OpenShiftService implements IOpenShiftService {
 			throws OpenShiftException {
 		String url = domainRequest.getUrlString(getServiceUrl());
 		String request = new DomainRequestJsonMarshaller().marshall(domainRequest);
-		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
-				MessageFormat.format("Could not {0}", domainRequest.getOperation()));
+		String response = 
+				sendRequest(
+						request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(), 
+						MessageFormat.format("Could not {0}", domainRequest.getOperation()));
 		OpenShiftResponse<IDomain> domainResponse =
 				new DomainResponseUnmarshaller(domainRequest.getName(), user, this).unmarshall(response);
 		return domainResponse.getOpenShiftObject();
@@ -167,52 +165,50 @@ public class OpenShiftService implements IOpenShiftService {
 
 	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
-		IApplication application = requestApplicationAction(
-				new ApplicationRequest(name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true),
-				user);
-		return application;
+		return requestApplicationAction(
+				new ApplicationRequest(
+						name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true), user);
 	}
 	
 	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user, final String size)
 			throws OpenShiftException {
-		IApplication application = requestApplicationAction(
-				new ApplicationRequest(name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true, size),
-				user);
-		return application;
+		return requestApplicationAction(
+				new ApplicationRequest(
+						name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true, size), user);
 	}
 
 	public void destroyApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {
 		requestApplicationAction(
-				new ApplicationRequest(name, cartridge, ApplicationAction.DECONFIGURE, user.getRhlogin(), true),
-				user);
+				new ApplicationRequest(
+						name, cartridge, ApplicationAction.DECONFIGURE, user.getRhlogin(), true), user);
 	}
 
 	public IApplication startApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
 		return requestApplicationAction(
-				new ApplicationRequest(name, cartridge, ApplicationAction.START, user.getRhlogin(), true),
-				user);
+				new ApplicationRequest(
+						name, cartridge, ApplicationAction.START, user.getRhlogin(), true), user);
 	}
 
 
 	public IApplication restartApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
 		return requestApplicationAction(
-				new ApplicationRequest(name, cartridge, ApplicationAction.RESTART, user.getRhlogin(), true),
-				user);
+				new ApplicationRequest(
+						name, cartridge, ApplicationAction.RESTART, user.getRhlogin(), true), user);
 	}
 
 	public IApplication stopApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {
 		return requestApplicationAction(
-				new ApplicationRequest(name, cartridge, ApplicationAction.STOP, user.getRhlogin(), true),
-				user);
+				new ApplicationRequest(
+						name, cartridge, ApplicationAction.STOP, user.getRhlogin(), true), user);
 	}
 	
 	public IApplication threadDumpApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
 		return requestApplicationAction(
-				new JBossApplicationRequest(name, cartridge, ApplicationAction.THREADDUMP, user.getRhlogin(), true),
-				user);
+				new JBossApplicationRequest(
+						name, cartridge, ApplicationAction.THREADDUMP, user.getRhlogin(), true), user);
 	}
 
 	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user) throws OpenShiftException {
@@ -229,7 +225,8 @@ public class OpenShiftService implements IOpenShiftService {
 		return openshiftResponse.getOpenShiftObject();
 	}
 	
-	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile, final int numLines) throws OpenShiftException {
+	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile, final int numLines) 
+			throws OpenShiftException {
 		try {
 			JSch jsch = new JSch();
 			String host = this.getServiceUrl().replace("https://", "").replace("/broker", "");
@@ -249,7 +246,11 @@ public class OpenShiftService implements IOpenShiftService {
 			((ChannelExec)channel).setErrStream(System.err);
 			InputStream in = channel.getInputStream();
 			
-			String command = "tail -" + numLines +  " /var/lib/libra/" + applicationName + "-" + user.getDomain().getNamespace() + "/" + applicationName + "/jbossas-7.0/" + logFile;
+			String command = 
+					"tail "
+					+ "-" + numLines 
+					+ " /var/lib/libra/" + applicationName
+					+ "-" + user.getDomain().getNamespace() + "/" + applicationName + "/jbossas-7.0/" + logFile;
 		
 			((ChannelExec)channel).setCommand(command);
 	
@@ -257,7 +258,7 @@ public class OpenShiftService implements IOpenShiftService {
 			
 			byte[] tmp = new byte[1024];
 			StringBuffer buff = new StringBuffer();
-			int read;
+			int read = 0;
 			while ((read = in.read(tmp)) > 0){
 				buff.append(new String(tmp, 0, read-1));
 			}
@@ -306,12 +307,6 @@ public class OpenShiftService implements IOpenShiftService {
 				try {
 					Thread.sleep(APPLICATION_WAIT_DELAY);
 					response = client.get();
-				} catch (InternalServerErrorException e) {
-					return true;
-				} catch (BadRequestException e) {
-					return true;
-				} catch (NotFoundException e) {
-					return true;
 				} catch (HttpClientException e) {
 					// not available yet
 				}
