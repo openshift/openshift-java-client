@@ -13,11 +13,14 @@ package com.openshift.express.internal.client.test;
 import static com.openshift.express.internal.client.test.utils.EmbeddableCartridgeAsserts.assertThatContainsCartridge;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
@@ -31,9 +34,6 @@ import com.openshift.express.client.configuration.SystemConfiguration;
 import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.test.fakes.TestUser;
 import com.openshift.express.internal.client.test.utils.ApplicationUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author André Dietisheim

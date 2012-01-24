@@ -18,17 +18,16 @@ import static org.junit.Assert.assertTrue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.internal.client.Application;
-import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author André Dietisheim

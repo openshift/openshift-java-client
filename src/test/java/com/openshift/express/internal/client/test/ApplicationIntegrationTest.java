@@ -20,10 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.IApplication;
@@ -42,9 +43,6 @@ import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.test.fakes.TestUser;
 import com.openshift.express.internal.client.test.utils.ApplicationUtils;
 import com.openshift.express.internal.client.utils.StreamUtils;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author André Dietisheim
@@ -336,7 +334,6 @@ public class ApplicationIntegrationTest {
 	public void canThreadDumpRackApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		ApplicationLogReader reader = null;
-		URLConnection conn = null;
 		InputStream urlStream = null;
 		try {
 			ICartridge cartridge = ICartridge.RACK_11;
@@ -349,8 +346,6 @@ public class ApplicationIntegrationTest {
 			
 			System.out.println("!!! url " + url);
 			
-			Date date = new Date();
-		
 			Thread.sleep(60 * 1000);
 			
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -20,7 +20,6 @@ import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.internal.client.Application;
-import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
 
 /**

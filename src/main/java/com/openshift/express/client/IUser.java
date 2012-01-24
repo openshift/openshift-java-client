@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.openshift.express.client;
 
-import java.util.Collection;
 import java.util.List;
 
 

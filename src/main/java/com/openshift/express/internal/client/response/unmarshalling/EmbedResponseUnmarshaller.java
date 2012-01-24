@@ -12,7 +12,6 @@ package com.openshift.express.internal.client.response.unmarshalling;
 
 import org.jboss.dmr.ModelNode;
 
-import com.openshift.express.client.IApplication;
 import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;

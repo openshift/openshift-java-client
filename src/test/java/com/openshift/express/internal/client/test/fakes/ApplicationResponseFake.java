@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.openshift.express.client.ICartridge;
-import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 
 /**

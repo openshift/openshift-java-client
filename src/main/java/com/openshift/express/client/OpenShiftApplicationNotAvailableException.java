@@ -10,9 +10,6 @@
  ******************************************************************************/ 
 package com.openshift.express.client;
 
-import java.text.MessageFormat;
-
-
 /**
  * @author Xavier Coulon
  */

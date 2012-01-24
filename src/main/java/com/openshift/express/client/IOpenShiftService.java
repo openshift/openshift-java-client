@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import com.openshift.express.internal.client.ApplicationInfo;
-import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
 
 /**

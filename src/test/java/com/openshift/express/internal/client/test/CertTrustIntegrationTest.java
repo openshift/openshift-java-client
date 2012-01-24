@@ -11,23 +11,20 @@
 package com.openshift.express.internal.client.test;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
 import org.junit.Before;
-import org.junit.Test;
 
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.IUser;
-import com.openshift.express.client.OpenShiftEndpointException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.configuration.DefaultConfiguration;
 import com.openshift.express.client.configuration.SystemConfiguration;
 import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.test.fakes.TestUser;
-import com.openshift.express.internal.client.test.utils.ApplicationUtils;
 
 /**
  * @author William DeCoste
