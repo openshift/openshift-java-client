@@ -109,8 +109,7 @@ public class ApplicationAsserts {
 		assertNotNull(cartridge);
 		assertNotNull(application);
 		assertEquals(name, application.getName());
-		assertNotNull(application.getCartridge());
-		assertEquals(cartridge, application.getCartridge().getName());
+		assertEquals(cartridge, application.getCartridge());
 	}
 
 	public static void assertApplication(String name, String uuid, ICartridge cartridge, IApplication application)
