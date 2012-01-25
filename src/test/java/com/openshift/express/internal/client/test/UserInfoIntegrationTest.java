@@ -16,10 +16,12 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.ISSHPublicKey;
-import com.openshift.express.client.InvalidCredentialsOpenShiftException;
 import com.openshift.express.client.NotFoundOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
@@ -31,8 +33,6 @@ import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.test.fakes.TestUser;
 import com.openshift.express.internal.client.test.utils.ApplicationInfoAsserts;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author André Dietisheim
@@ -68,7 +68,7 @@ public class UserInfoIntegrationTest {
 	 * {@link OpenShiftService#getUserInfo(InternalUser)} for a user without
 	 * domain throws {@link NotFoundOpenShiftException}
 	 */
-	@Test(expected = InvalidCredentialsOpenShiftException.class)
+	@Test(expected = NotFoundOpenShiftException.class)
 	public void canGetUserInfoForUserWithoutDomain() throws Exception {
 		TestUser inexistantUser = new TestUser(TestUser.RHLOGIN_USER_WITHOUT_DOMAIN, TestUser.PASSWORD_USER_WITHOUT_DOMAIN, openShiftService);
 		openShiftService.getUserInfo(inexistantUser);
