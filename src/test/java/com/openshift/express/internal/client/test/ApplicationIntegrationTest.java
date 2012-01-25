@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,9 +30,11 @@ import org.junit.Test;
 import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
+import com.openshift.express.client.IHttpClient;
 import com.openshift.express.client.IJBossASApplication;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.IRackApplication;
+import com.openshift.express.client.InvalidCredentialsOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.User;
@@ -64,7 +67,7 @@ public class ApplicationIntegrationTest {
 		invalidUser = new TestUser("bogusPassword", service);
 	}
 
-	//@Test(expected = InvalidCredentialsOpenShiftException.class)
+	@Test(expected = InvalidCredentialsOpenShiftException.class)
 	public void createApplicationWithInvalidCredentialsThrowsException() throws Exception {
 		service.createApplication(ApplicationUtils.createRandomApplicationName(), ICartridge.JBOSSAS_7, invalidUser);
 	}
