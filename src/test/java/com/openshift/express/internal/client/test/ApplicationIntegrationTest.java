@@ -314,7 +314,7 @@ public class ApplicationIntegrationTest {
 		}
 	}
 	
-	protected String getRackLogFile() throws Exception {
+	private String getRackLogFile() throws Exception {
 		Calendar cal = Calendar.getInstance();
 		
 		String month = null;
