@@ -26,32 +26,30 @@ import com.openshift.express.internal.client.test.utils.ApplicationUtils;
 public class TestUser extends User {
 
 	public static final String ID = "com.openshift.express.client.test " + OpenShiftService.VERSION;
-	
-//	public static final String RHLOGIN_USER_WITHOUT_DOMAIN = "toolsjboss+unittests_nodomain@gmail.com";
-//	public static final String PASSWORD_USER_WITHOUT_DOMAIN = "1q2w3e";
+
+	// public static final String RHLOGIN_USER_WITHOUT_DOMAIN = "toolsjboss+unittests_nodomain@gmail.com";
+	// public static final String PASSWORD_USER_WITHOUT_DOMAIN = "1q2w3e";
 
 	public static final String RHLOGIN_USER_WITHOUT_DOMAIN = "adietish+unittests_nodomain@redhat.com";
 	public static final String PASSWORD_USER_WITHOUT_DOMAIN = "1q2w3e";
 
 	public TestUser(IOpenShiftService service) throws OpenShiftException, IOException {
-		super(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"),ID, 
-				service);
+		super(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"), ID, service);
 	}
-	
+
 	public TestUser(String password, IOpenShiftService service) throws OpenShiftException, IOException {
-		super(System.getProperty("RHLOGIN"), password, ID, 
-				service);
+		super(System.getProperty("RHLOGIN"), password, ID, service);
 	}
 
 	public TestUser(String rhlogin, String password, IOpenShiftService service) throws OpenShiftException, IOException {
-		super(rhlogin, password, ID, 
+		super(rhlogin, password, ID,
 				service);
 	}
 
 	public TestUser(String rhlogin, String password, String url, IOpenShiftService service) {
 		super(rhlogin, password, ID, url, service);
 	}
-	
+
 	public IApplication createTestApplication() throws OpenShiftException {
 		return createApplication(ApplicationUtils.createRandomApplicationName(), Cartridge.JBOSSAS_7);
 	}
