@@ -23,6 +23,7 @@ public class ApplicationResponseFake {
 
 	public static final String RHLOGIN = "jbosstools@redhat.com";
 	public static final String PASSWORD = "$!445password%&";
+	public static final String APPLICATION_HEALTH_CHECK_PATH = "health";
 	public static final String UUID = "0123456789abcdefghijklmnopqrstuvwz";
 	public static final String SSHPUBLICKEY = "sshpublicKey&!%$123456";
 	public static final String SSHKEYTYPE = "ssh-rsa";
@@ -43,7 +44,8 @@ public class ApplicationResponseFake {
 					+ "	\"messages\":\"\","
 					+ "	\"debug\":\"Validating application limit toolsjboss@gmail.com: num of apps(0) must be < app limit(5)\n\","
 					+ "	\"data\":{"
-					+ "		\"health_check_path\":\"health\""
+					+ "		\"health_check_path\":\"" + APPLICATION_HEALTH_CHECK_PATH + "\","
+					+ "		\"uuid\":\"" + APPLICATION_UUID + "\"" 
 					+ "	},"
 					+ "	\"api\":\"1.1.1\","
 					+ "	\"api_c\":[\"placeholder\"],"

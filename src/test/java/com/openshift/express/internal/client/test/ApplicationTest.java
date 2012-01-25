@@ -21,14 +21,18 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 
+import org.junit.Test;
+
 import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
+import com.openshift.express.client.IDomain;
 import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.internal.client.Application;
 import com.openshift.express.internal.client.ApplicationInfo;
+import com.openshift.express.internal.client.Domain;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.request.ApplicationAction;
@@ -43,15 +47,21 @@ import com.openshift.express.internal.client.test.fakes.ApplicationResponseFake;
 import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
 import com.openshift.express.internal.client.test.fakes.UserFake;
 
-import org.junit.Test;
-
 /**
  * @author André Dietisheim
  */
 public class ApplicationTest {
 
 	private InternalUser user = new InternalUser(ApplicationResponseFake.RHLOGIN, ApplicationResponseFake.PASSWORD,
-			new NoopOpenShiftServiceFake());
+			new NoopOpenShiftServiceFake()) {
+		public IDomain getDomain() throws OpenShiftException {
+			return new Domain(
+					"testNamespace"
+					, "testRhcDomain"
+					, this
+					, getService());
+		}
+	};
 
 	@Test
 	public void canMarshallApplicationCreateRequest() throws Exception {
@@ -73,7 +83,7 @@ public class ApplicationTest {
 				new ApplicationRequest(
 						"test-application", ICartridge.JBOSSAS_7, ApplicationAction.CONFIGURE,
 						ApplicationResponseFake.RHLOGIN, true));
-		String effectiveRequest = new OpenShiftEnvelopeFactory(ApplicationResponseFake.PASSWORD, null, null, 
+		String effectiveRequest = new OpenShiftEnvelopeFactory(ApplicationResponseFake.PASSWORD, null, null,
 				createApplicationRequest).createString();
 
 		assertEquals(expectedRequestString, effectiveRequest);
@@ -117,8 +127,10 @@ public class ApplicationTest {
 		IApplication application = openshiftResponse.getOpenShiftObject();
 		assertApplication(
 				ApplicationResponseFake.APPLICATION_NAME
+				, ApplicationResponseFake.APPLICATION_UUID
 				, ApplicationResponseFake.APPLICATION_CREATION_LOG
-				, ApplicationResponseFake.APPLICATION_CARTRIDGE
+				, ApplicationResponseFake.APPLICATION_HEALTH_CHECK_PATH
+				, ApplicationResponseFake.APPLICATION_CARTRIDGE.getName()
 				, application);
 	}
 
@@ -174,8 +186,14 @@ public class ApplicationTest {
 		};
 
 		Application application =
-				new Application(ApplicationResponseFake.APPLICATION_NAME,
-						ApplicationResponseFake.APPLICATION_CARTRIDGE, user, service);
+				new Application(
+						ApplicationResponseFake.APPLICATION_NAME,
+						ApplicationResponseFake.APPLICATION_UUID,
+						ApplicationResponseFake.APPLICATION_CREATION_LOG,
+						ApplicationResponseFake.APPLICATION_HEALTH_CHECK_PATH,
+						ApplicationResponseFake.APPLICATION_CARTRIDGE,
+						user,
+						service);
 		ApplicationLogReader reader = new ApplicationLogReader(application, user, service);
 
 		int charactersRead = 0;
@@ -194,6 +212,7 @@ public class ApplicationTest {
 	private IApplication createApplication(OpenShiftService userInfoService, UserFake user) {
 		Application application = new Application(
 				ApplicationResponseFake.APPLICATION_NAME
+				, ApplicationResponseFake.APPLICATION_UUID
 				, ApplicationResponseFake.APPLICATION_CARTRIDGE
 				, new ApplicationInfo(
 						ApplicationResponseFake.APPLICATION_NAME
@@ -204,7 +223,8 @@ public class ApplicationTest {
 				, user
 				, userInfoService);
 		/**
-		 * we have to add it manually since we dont create the application with the user class
+		 * we have to add it manually since we dont create the application with
+		 * the user class
 		 * 
 		 * @see user#createApplication
 		 */

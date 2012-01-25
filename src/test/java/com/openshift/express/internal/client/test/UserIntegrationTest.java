@@ -73,7 +73,7 @@ public class UserIntegrationTest {
 		assertTrue(user.isValid());
 	}
 
-	//@Test
+	// @Test
 	public void throwsExceptionIfInvalidCredentials() throws OpenShiftException {
 		assertFalse(invalidUser.isValid());
 	}
@@ -146,8 +146,7 @@ public class UserIntegrationTest {
 			IApplication application = user.createApplication(applicationName,
 					ICartridge.JBOSSAS_7);
 			assertEquals(numOfApplications + 1, applications.size());
-			assertApplication(applicationName, ICartridge.JBOSSAS_7.getName(),
-					application);
+			assertApplication(applicationName, ICartridge.JBOSSAS_7, application);
 		} finally {
 			ApplicationUtils.silentlyDestroyAS7Application(applicationName,
 					user,
@@ -156,7 +155,7 @@ public class UserIntegrationTest {
 	}
 
 	@Test
-	public void canGetApplicationByName() 
+	public void canGetApplicationByName()
 			throws OpenShiftException, DatatypeConfigurationException, IOException {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		try {
@@ -172,34 +171,34 @@ public class UserIntegrationTest {
 					service);
 		}
 	}
-	
-	@Test
-    public void canGetApplicationByCartridge()
-                    throws OpenShiftException, DatatypeConfigurationException, IOException {
-            int currentAs7Apps = user.getApplicationsByCartridge(ICartridge.JBOSSAS_7).size();
-            List<IApplication> toRemove = new ArrayList<IApplication>();
-            try {
-                    IApplication application1 = user.createApplication(
-                                    ApplicationUtils.createRandomApplicationName()
-                                    ,ICartridge.JBOSSAS_7);
-                    toRemove.add(application1);
-                    IApplication application2 = user.createApplication(
-                                    ApplicationUtils.createRandomApplicationName()
-                                    ,ICartridge.JENKINS_14);
-                    toRemove.add(application2);
 
-                    List<IApplication> applicationsFound =
-                                    user.getApplicationsByCartridge(ICartridge.JBOSSAS_7);
-                    assertNotNull(applicationsFound);
-                    assertEquals(currentAs7Apps + 1, applicationsFound.size());
-            } finally {	
-                    for (IApplication application : toRemove) {
-                            ApplicationUtils.silentlyDestroyApplication(
-                                            application.getName(),
-                                            application.getCartridge(),
-                                            user, service);
-                    }
-            }
-    }
+	@Test
+	public void canGetApplicationByCartridge()
+			throws OpenShiftException, DatatypeConfigurationException, IOException {
+		int currentAs7Apps = user.getApplicationsByCartridge(ICartridge.JBOSSAS_7).size();
+		List<IApplication> toRemove = new ArrayList<IApplication>();
+		try {
+			IApplication application1 = user.createApplication(
+					ApplicationUtils.createRandomApplicationName()
+					, ICartridge.JBOSSAS_7);
+			toRemove.add(application1);
+			IApplication application2 = user.createApplication(
+					ApplicationUtils.createRandomApplicationName()
+					, ICartridge.JENKINS_14);
+			toRemove.add(application2);
+
+			List<IApplication> applicationsFound =
+					user.getApplicationsByCartridge(ICartridge.JBOSSAS_7);
+			assertNotNull(applicationsFound);
+			assertEquals(currentAs7Apps + 1, applicationsFound.size());
+		} finally {
+			for (IApplication application : toRemove) {
+				ApplicationUtils.silentlyDestroyApplication(
+						application.getName(),
+						application.getCartridge(),
+						user, service);
+			}
+		}
+	}
 
 }

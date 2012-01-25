@@ -375,4 +375,27 @@ public class ApplicationIntegrationTest {
 				urlStream.close();
 		}
 	}
+	
+	@Test
+	public void canWaitForApplication() throws OpenShiftException, MalformedURLException, IOException {
+		String applicationName = null;
+		try {
+			applicationName = ApplicationUtils.createRandomApplicationName();
+			IApplication application = user.createApplication(applicationName, ICartridge.JBOSSAS_7);
+			assertNotNull(application);
+			long waitStartTime = System.currentTimeMillis();
+			assertTrue(application.waitForAccessible(10 * 1024));
+
+			assertTrue(System.currentTimeMillis() > waitStartTime);
+			String applicationUrl = application.getApplicationUrl();
+			assertNotNull(applicationUrl);
+			HttpURLConnection connection = (HttpURLConnection) new URL(applicationUrl).openConnection();
+			assertEquals(IHttpClient.RESPONSE_CODE_OK, connection.getResponseCode());
+			String applicationResponse = StreamUtils.readToString(connection.getInputStream());
+			assertNotNull(applicationResponse);
+			
+		} finally {
+			ApplicationUtils.silentlyDestroyAS7Application(applicationName, user, service);
+		}
+	}
 }

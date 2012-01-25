@@ -50,6 +50,14 @@ public interface IApplication {
 	public String getApplicationUrl() throws OpenShiftException;
 
 	/**
+	 * Returns the url at which this application may be checked for its health state.
+	 * 
+	 * @return the url at which the health state may be queried.
+	 * @throws OpenShiftException
+	 */
+	public String getHealthCheckUrl() throws OpenShiftException;
+
+	/**
 	 * Returns the cartridge (application type) that this app is running on.
 	 * 
 	 * @return the cartridge of this application

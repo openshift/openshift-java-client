@@ -34,21 +34,21 @@ import com.openshift.express.client.utils.RFC822DateUtils;
 public class ApplicationAsserts {
 
 	/**
-	 * $1 = application uuid $2 = application name $3 = InternalUser uuid $4 = rhc cloud domain (rhcloud.com) $5 =
-	 * application name
+	 * $1 = application uuid $2 = application name $3 = InternalUser uuid $4 =
+	 * rhc cloud domain (rhcloud.com) $5 = application name
 	 */
 	public static final Pattern GIT_URI_REGEXP = Pattern.compile("ssh://(.+)@(.+)-([^\\.]+)\\.(.+)/~/git/(.+).git/");
 
 	public static final Pattern APPLICATION_URL_REGEXP = Pattern.compile("https*://(.+)-([^\\.]+)\\.(.+)/");
 
 	public static void assertThatContainsApplication(String applicationName, List<IEmbeddableCartridge> embedded,
-			String applicationUUID,
-			String cartridgeName, String creationTime, List<IApplication> applications) throws OpenShiftException {
+			String uuid, String cartridgeName, String creationTime, List<IApplication> applications)
+			throws OpenShiftException {
 		IApplication application = getApplication(applicationName, applications);
 		if (application == null) {
 			fail(MessageFormat.format("Could not find application with name \"{0}\"", applicationName));
 		}
-		assertApplication(applicationName, applicationUUID, cartridgeName, embedded, creationTime, application);
+		assertApplication(applicationName, uuid, cartridgeName, embedded, creationTime, application);
 	}
 
 	public static void assertThatContainsApplication(String applicationName, List<IApplication> applications) {
@@ -66,24 +66,29 @@ public class ApplicationAsserts {
 		return matchingApplication;
 	}
 
-	public static void assertApplication(String name, String creationLog, ICartridge cartridge, IApplication application)
-			throws OpenShiftException {
+	public static void assertApplication(String name, String uuid, String creationLog, ICartridge cartridge,
+			IApplication application) throws OpenShiftException {
 		assertNotNull(cartridge);
-		assertApplication(name, cartridge.getName(), application);
+		assertApplication(name, uuid, creationLog, cartridge.getName(), application);
 	}
 
-	public static void assertApplication(String name, String creationLog, String cartridgeName, IApplication application)
-			throws OpenShiftException {
+	public static void assertApplication(String name, String uuid, String creationLog, String cartridgeName,
+			IApplication application) throws OpenShiftException {
 		assertNotNull(application);
-		assertApplication(name, cartridgeName, application);
+		assertApplication(name, uuid, cartridgeName, application);
 		assertEquals(creationLog, application.getCreationLog());
+	}
+
+	public static void assertApplication(String name, String uuid, String creationLog, String healthPath,
+			String cartridgeName, IApplication application) throws OpenShiftException {
+		assertApplication(name, uuid, creationLog, cartridgeName, application);
+		assertEquals(healthPath, getHealthPath(application));
 	}
 
 	public static void assertApplication(String name, String uuid, String cartridgeName,
 			List<IEmbeddableCartridge> embedded, String creationTime, IApplication application)
 			throws OpenShiftException {
-		assertApplication(name, cartridgeName, application);
-		assertEquals(uuid, application.getUUID());
+		assertApplication(name, uuid, cartridgeName, application);
 		assertEquals(embedded, application.getEmbeddedCartridges());
 		try {
 			assertEquals(RFC822DateUtils.getDate(creationTime), application.getCreationTime());
@@ -96,17 +101,29 @@ public class ApplicationAsserts {
 			List<IEmbeddableCartridge> embedded, String creationTime, IApplication application)
 			throws OpenShiftException {
 		assertApplication(name, uuid, cartridgeName, embedded, creationTime, application);
+		assertEquals(creationLog, application.getCreationLog());
 	}
 
 	public static void assertApplication(String name, ICartridge cartridge, IApplication application)
 			throws OpenShiftException {
 		assertNotNull(cartridge);
-		assertApplication(name, cartridge.getName(), application);
+		assertNotNull(application);
+		assertEquals(name, application.getName());
+		assertNotNull(application.getCartridge());
+		assertEquals(cartridge, application.getCartridge().getName());
 	}
 
-	public static void assertApplication(String name, String cartridgeName, IApplication application)
+	public static void assertApplication(String name, String uuid, ICartridge cartridge, IApplication application)
+			throws OpenShiftException {
+		assertNotNull(cartridge);
+		assertApplication(name, uuid, cartridge.getName(), application);
+	}
+
+	public static void assertApplication(String name, String uuid, String cartridgeName, IApplication application)
 			throws OpenShiftException {
 		assertNotNull(application);
+		assertEquals(name, application.getName());
+		assertEquals(uuid, application.getUUID());
 		assertNotNull(application.getCartridge());
 		assertEquals(cartridgeName, application.getCartridge().getName());
 	}
@@ -161,4 +178,21 @@ public class ApplicationAsserts {
 				application.getName()));
 	}
 
+	private static String getHealthPath(IApplication application) throws OpenShiftException {
+		if (application == null) {
+			return null;
+		}
+
+		String url = application.getHealthCheckUrl();
+		if (url == null) {
+			return null;
+		}
+
+		int pathStart = url.lastIndexOf('/');
+		if (pathStart < 0
+				|| pathStart >= url.length()) {
+			return null;
+		}
+		return url.substring(pathStart + 1);
+	}
 }

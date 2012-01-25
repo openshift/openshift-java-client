@@ -10,47 +10,30 @@
  ******************************************************************************/
 package com.openshift.express.internal.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.openshift.express.client.ICartridge;
-import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.client.IJBossASApplication;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.OpenShiftException;
 
 /**
  * @author William DeCoste
+ * @author Andre Dietisheim
  */
 public class JBossASApplication extends Application implements IJBossASApplication {
 
-	public JBossASApplication(String name, ICartridge cartridge, InternalUser user, IOpenShiftService service) {
-		super(name, cartridge, new ArrayList<IEmbeddableCartridge>(), null, user, service);
-	}
-
-	public JBossASApplication(String name, String creationLog, ICartridge cartridge, InternalUser user, IOpenShiftService service) {
-		super(name, creationLog, cartridge, new ArrayList<IEmbeddableCartridge>(), null, user, service);
-	}
-
-	public JBossASApplication(String name, ICartridge cartridge, ApplicationInfo applicationInfo, InternalUser user,
+	public JBossASApplication(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge,
+			InternalUser user,
 			IOpenShiftService service) {
-		super(name, cartridge, null, applicationInfo, user, service);
+		super(name, uuid, creationLog, healthCheckPath, cartridge, user, service);
 	}
 
-	public JBossASApplication(String name, ICartridge cartridge, List<IEmbeddableCartridge> embeddedCartridges,
-			ApplicationInfo applicationInfo, InternalUser user, IOpenShiftService service) {
-		super(name, null, cartridge, embeddedCartridges, applicationInfo, user, service);
-	}
-
-	public JBossASApplication(String name, String creationLog, ICartridge cartridge,
-			List<IEmbeddableCartridge> embeddedCartridges, ApplicationInfo applicationInfo, InternalUser user,
+	public JBossASApplication(String name, String uuid, ICartridge cartridge, ApplicationInfo applicationInfo, InternalUser user,
 			IOpenShiftService service) {
-		super(name, creationLog, cartridge, embeddedCartridges, applicationInfo, user, service);
+		super(name, uuid, cartridge, applicationInfo, user, service);
 	}
 
 	public void threadDump() throws OpenShiftException {
 		service.threadDumpApplication(name, cartridge, getUser());
 	}
-
 
 }

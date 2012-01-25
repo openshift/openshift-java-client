@@ -16,6 +16,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
+
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.utils.RFC822DateUtils;
 import com.openshift.express.internal.client.response.OpenShiftResponse;
@@ -50,15 +51,43 @@ public abstract class AbstractOpenShiftJsonResponseUnmarshaller<OPENSHIFTOBJECT>
 		return response;
 	}
 
+	protected String getDataNodeProperty(String property, ModelNode node) {
+		ModelNode dataNode = node.get(IOpenShiftJsonConstants.PROPERTY_DATA);
+		if (!isSet(node)) {
+			return null;
+		}
+		
+		return getString(property, dataNode);
+	}
+
 	protected String getString(String property, ModelNode node) {
+		ModelNode child = getChild(property, node);
+		if (child == null) {
+			return null;
+		}
+		return child.asString();
+	}
+
+	protected ModelNode getChild(String property, ModelNode node) {
+		if (!(hasProperty(property, node))) {
+			return null;
+		}
 		ModelNode propertyNode = node.get(property);
 		if (!isSet(propertyNode)) {
 			// replace "undefined" by null
 			return null;
 		}
-		return propertyNode.asString();
+		return propertyNode;
 	}
 
+	
+	protected boolean hasProperty(String property, ModelNode node) {
+		if (!isSet(node)) {
+			return false;
+		}
+		return node.hasDefined(property);
+	}
+	
 	protected boolean isSet(ModelNode node) {
 		return node != null
 				&& node.getType() != ModelType.UNDEFINED;

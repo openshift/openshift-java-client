@@ -266,6 +266,7 @@ public class InternalUser implements IUser {
 
 	private Application createApplication(ApplicationInfo applicationInfo) {
 		return new Application(applicationInfo.getName()
+				, applicationInfo.getUuid()
 				, applicationInfo.getCartridge()
 				, applicationInfo
 				, this, service);

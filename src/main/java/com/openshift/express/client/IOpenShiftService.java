@@ -351,15 +351,18 @@ public interface IOpenShiftService {
 	public UserInfo getUserInfo(IUser user) throws OpenShiftException;
 	
 	/**
-	 * Waits for the given application to become accessible on it's public url. 
+	 * Waits for the given application to become accessible on it's public url.
 	 * 
-	 * @param applicationName
-	 * @throws OpenShiftException 
-	 * @throws MalformedURLException 
-	 * 
+	 * @param healthCheckUrl
+	 *            the url at which the application may be queried for it's accessibility
+	 * @param timeout
+	 *            the max time that shall be waited for.
+	 * @return true, if successful
+	 * @throws OpenShiftException
+	 *             the open shift exception
 	 * @see IApplication#getApplicationUrl()
 	 */
-	public boolean waitForApplication(IApplication application, long timeout) throws OpenShiftException;
+	public boolean waitForApplication(String applicationHealthCheckUrl, long timeout) throws OpenShiftException;
 	
 	/**
 	 * Sets flag for enabling SSL certificate checks (i.e. self-signed SSL certificates)

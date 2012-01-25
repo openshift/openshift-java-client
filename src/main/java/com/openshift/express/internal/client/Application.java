@@ -39,32 +39,27 @@ public class Application extends UserInfoAware implements IApplication {
 	private List<IEmbeddableCartridge> embeddedCartridges;
 	protected IOpenShiftService service;
 	private HashMap<String, ApplicationLogReader> logReaders = new HashMap<String, ApplicationLogReader>();
+	private String healthCheckPath;
 	private ApplicationInfo applicationInfo;
 	private String creationLog;
+	private String uuid;
 
-	public Application(String name, ICartridge cartridge, InternalUser user, IOpenShiftService service) {
-		this(name, cartridge, new ArrayList<IEmbeddableCartridge>(), null, user, service);
+	public Application(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge, InternalUser user, IOpenShiftService service) {
+		this(name, uuid, creationLog, healthCheckPath, cartridge, new ArrayList<IEmbeddableCartridge>(), null, user, service);
 	}
 
-	public Application(String name, String creationLog, ICartridge cartridge, InternalUser user, IOpenShiftService service) {
-		this(name, creationLog, cartridge, new ArrayList<IEmbeddableCartridge>(), null, user, service);
-	}
-
-	public Application(String name, ICartridge cartridge, ApplicationInfo applicationInfo, InternalUser user,
+	public Application(String name, String uuid, ICartridge cartridge, ApplicationInfo applicationInfo, InternalUser user,
 			IOpenShiftService service) {
-		this(name, cartridge, null, applicationInfo, user, service);
+		this(name, uuid, null, null, cartridge, new ArrayList<IEmbeddableCartridge>(), applicationInfo, user, service);
 	}
 
-	public Application(String name, ICartridge cartridge, List<IEmbeddableCartridge> embeddedCartridges,
-			ApplicationInfo applicationInfo, InternalUser user, IOpenShiftService service) {
-		this(name, null, cartridge, embeddedCartridges, applicationInfo, user, service);
-	}
-
-	public Application(String name, String creationLog, ICartridge cartridge,
+	protected Application(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge,
 			List<IEmbeddableCartridge> embeddedCartridges, ApplicationInfo applicationInfo, InternalUser user,
 			IOpenShiftService service) {
 		super(user);
 		this.name = name;
+		this.uuid = uuid;
+		this.healthCheckPath = healthCheckPath;
 		this.creationLog = creationLog;
 		this.cartridge = cartridge;
 		this.embeddedCartridges = embeddedCartridges;
@@ -77,7 +72,7 @@ public class Application extends UserInfoAware implements IApplication {
 	}
 
 	public String getUUID() throws OpenShiftException {
-		return getApplicationInfo().getUuid();
+		return uuid;
 	}
 
 	public ICartridge getCartridge() {
@@ -144,6 +139,10 @@ public class Application extends UserInfoAware implements IApplication {
 		return MessageFormat.format(APPLICATION_URL_PATTERN, name, domain.getNamespace(), domain.getRhcDomain());
 	}
 
+	public String getHealthCheckUrl() throws OpenShiftException {
+		return getApplicationUrl() + '/' + healthCheckPath;
+	}
+	
 	public void addEmbbedCartridge(IEmbeddableCartridge embeddedCartridge) throws OpenShiftException {
 		service.addEmbeddedCartridge(getName(), embeddedCartridge, getUser());
 		Assert.isTrue(embeddedCartridge instanceof EmbeddableCartridge);
@@ -214,7 +213,10 @@ public class Application extends UserInfoAware implements IApplication {
 	}
 	
 	public boolean waitForAccessible(long timeout) throws OpenShiftException {
-		return service.waitForApplication(this, timeout);
+		if (healthCheckPath == null) {
+			return true;
+		}
+		return service.waitForApplication(getHealthCheckUrl(), timeout);
 	}
 	
 	public int hashCode() {

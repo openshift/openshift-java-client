@@ -33,7 +33,8 @@ public class ApplicationResponseUnmarshaller extends AbstractOpenShiftJsonRespon
 	protected final ICartridge cartridge;
 	protected final OpenShiftService service;
 
-	public ApplicationResponseUnmarshaller(final String applicationName, final ICartridge cartridge, final IUser user, final OpenShiftService service) {
+	public ApplicationResponseUnmarshaller(final String applicationName, final ICartridge cartridge, final IUser user,
+			final OpenShiftService service) {
 		this.applicationName = applicationName;
 		this.cartridge = cartridge;
 		this.user = (InternalUser) user;
@@ -42,11 +43,14 @@ public class ApplicationResponseUnmarshaller extends AbstractOpenShiftJsonRespon
 
 	protected IApplication createOpenShiftObject(ModelNode node) {
 		String creationLog = getString(IOpenShiftJsonConstants.PROPERTY_RESULT, node);
-		if (cartridge == Cartridge.JBOSSAS_7)
-			return new JBossASApplication(applicationName, creationLog, cartridge, user, service);
-		else if (cartridge == Cartridge.RACK_11)
-			return new RackApplication(applicationName, creationLog, cartridge, user, service);
-		else
-			return new Application(applicationName, creationLog, cartridge, user, service);
+		String healthCheckPath = getDataNodeProperty(IOpenShiftJsonConstants.PROPERTY_HEALTH_CHECK_PATH, node);
+		String uuid = getDataNodeProperty(IOpenShiftJsonConstants.PROPERTY_UUID, node);
+		if (cartridge == Cartridge.JBOSSAS_7) {
+			return new JBossASApplication(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
+		} else if (cartridge == Cartridge.RACK_11) {
+			return new RackApplication(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
+		} else {
+			return new Application(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
+		}
 	}
 }

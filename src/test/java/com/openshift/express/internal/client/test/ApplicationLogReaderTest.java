@@ -36,12 +36,12 @@ public class ApplicationLogReaderTest {
 
 	private static final int LOGREADER_TIMEOUT = 2 * 1024;
 
-	private static final String LOG_HEADER = 
+	private static final String LOG_HEADER =
 			"tailing /var/lib/libra/f36a4acf8a73450cb98637ed4483ea02/1317146294966//jbossas-7.0/standalone/log/server.log"
 					+ "------ Tail of 1317146294966 application server.log ------\n";
 
 	private static final String INITIAL_LOG =
-					"11:31:36,289 INFO  [org.jboss.as.ee] (Controller Boot Thread) Activating EE subsystem\n"
+			"11:31:36,289 INFO  [org.jboss.as.ee] (Controller Boot Thread) Activating EE subsystem\n"
 					+ "11:31:36,340 INFO  [org.apache.coyote.http11.Http11Protocol] (MSC service thread 1-1) Starting Coyote HTTP/1.1 on http--127.1.9.1-8080\n"
 					+ "11:31:36,440 INFO  [org.jboss.as.connector] (MSC service thread 1-4) Starting JCA Subsystem (JBoss IronJacamar 1.0.3.Final)\n"
 					+ "11:31:36,471 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-1) Bound data source [java:jboss/datasources/ExampleDS]\n"
@@ -111,7 +111,7 @@ public class ApplicationLogReaderTest {
 	private class ApplicationLogFake extends Application {
 
 		private ApplicationLogFake(IOpenShiftService service) {
-			super("fakeApplication", ICartridge.JBOSSAS_7, null, service);
+			super("fakeApplication", "fakeUUID", "fakeCreationLog", "fakeHealthCheckUrl", ICartridge.JBOSSAS_7, null, service);
 		}
 
 		public synchronized void restart() throws OpenShiftException {

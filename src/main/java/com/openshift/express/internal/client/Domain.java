@@ -22,6 +22,7 @@ public class Domain extends UserInfoAware implements IDomain {
 
 	private String namespace;
 	private IOpenShiftService service;
+	private String rhcDomain;
 
 	public Domain(String namespace, InternalUser user, IOpenShiftService service) {
 		this(namespace, null, user, service);
@@ -30,6 +31,7 @@ public class Domain extends UserInfoAware implements IDomain {
 	public Domain(String namespace, String rhcDomain, InternalUser user, IOpenShiftService service) {
 		super(user);
 		this.namespace = namespace;
+		this.rhcDomain = rhcDomain;
 		this.service = service;
 	}
 
@@ -38,7 +40,10 @@ public class Domain extends UserInfoAware implements IDomain {
 	}
 	
 	public String getRhcDomain() throws OpenShiftException {
-		return getUserInfo().getRhcDomain();
+		if (rhcDomain == null) {
+			this.rhcDomain = getUserInfo().getRhcDomain();
+		}
+		return rhcDomain;
 	}
 
 	public void setNamespace(String namespace) throws OpenShiftException {
@@ -47,7 +52,8 @@ public class Domain extends UserInfoAware implements IDomain {
 		update(domain);
 	}
 
-	private void update(IDomain domain) {
+	private void update(IDomain domain) throws OpenShiftException {
 		this.namespace = domain.getNamespace();
+		this.rhcDomain = domain.getRhcDomain();
 	}
 }

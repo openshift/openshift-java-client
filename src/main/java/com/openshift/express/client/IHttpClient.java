@@ -17,6 +17,8 @@ import com.openshift.express.internal.client.httpclient.HttpClientException;
  */
 public interface IHttpClient {
 
+	public static final int RESPONSE_CODE_OK = 200;
+	
 	public static final String USER_AGENT = "User-Agent"; //$NON-NLS-1$
 
 	public String post(String data) throws HttpClientException;

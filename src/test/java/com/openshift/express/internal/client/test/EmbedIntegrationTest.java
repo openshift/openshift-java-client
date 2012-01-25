@@ -83,7 +83,7 @@ public class EmbedIntegrationTest {
 		String jenkinsAppName = "jenkins";
 		try {
 			IApplication jenkins = service.createApplication(jenkinsAppName, ICartridge.JENKINS_14, user);
-			assertTrue(service.waitForApplication(jenkins, WAIT_FOR_APPLICATION));
+			assertTrue(service.waitForApplication(jenkins.getHealthCheckUrl(), WAIT_FOR_APPLICATION));
 			service.addEmbeddedCartridge(application.getName(), IEmbeddableCartridge.JENKINS_14, user);
 		} finally {
 			ApplicationUtils.silentlyDestroyJenkinsApplication(jenkinsAppName, user, service);

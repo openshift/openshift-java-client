@@ -61,7 +61,8 @@ public class OpenShiftService implements IOpenShiftService {
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
 	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
 	private static final long APPLICATION_WAIT_DELAY = 2;
-
+	private static final String HEALTH_RESPONSE_OK = "1";
+	
 	private String baseUrl;
 	private String id;
 	private boolean doSSLChecks = false;
@@ -296,13 +297,13 @@ public class OpenShiftService implements IOpenShiftService {
 		return openshiftResponse.getOpenShiftObject();
 	}
 	
-	public boolean waitForApplication(final IApplication application, final long timeout) 
+	public boolean waitForApplication(final String healthCheckUrl, final long timeout) 
 			throws OpenShiftException {
 		try {
-			IHttpClient client = createHttpClient(id, application.getApplicationUrl(), false);
+			IHttpClient client = createHttpClient(id, healthCheckUrl, false);
 			String response = null;
 			long startTime = System.currentTimeMillis();
-			while (response == null
+			while (!HEALTH_RESPONSE_OK.equals(response)
 					&& System.currentTimeMillis() < startTime + timeout) {
 				try {
 					Thread.sleep(APPLICATION_WAIT_DELAY);
@@ -311,14 +312,14 @@ public class OpenShiftService implements IOpenShiftService {
 					// not available yet
 				}
 			}
+			return HEALTH_RESPONSE_OK.equals(response);
 		} catch (InterruptedException e) {
 			return false;
 		} catch (MalformedURLException e) {
-			throw new OpenShiftException(e, MALFORMED_URL_EXCEPTION_MSG, application.getApplicationUrl());
+			throw new OpenShiftException(e, MALFORMED_URL_EXCEPTION_MSG, healthCheckUrl);
 		}
-		return true;
 	}
-
+	
 	public IEmbeddableCartridge addEmbeddedCartridge(final String applicationName, final IEmbeddableCartridge cartridge,
 			IUser user) throws OpenShiftException {
 		return requestEmbedAction(
