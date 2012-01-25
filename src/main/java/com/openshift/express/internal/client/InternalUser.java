@@ -205,6 +205,7 @@ public class InternalUser implements IUser {
 		for (IApplication application : applications) {
 			if (name.equals(application.getName())) {
 				matchingApplication = application;
+				break;
 			}
 		}
 		return matchingApplication;
