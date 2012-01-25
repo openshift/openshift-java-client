@@ -44,13 +44,15 @@ public class Application extends UserInfoAware implements IApplication {
 	private String creationLog;
 	private String uuid;
 
-	public Application(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge, InternalUser user, IOpenShiftService service) {
-		this(name, uuid, creationLog, healthCheckPath, cartridge, new ArrayList<IEmbeddableCartridge>(), null, user, service);
+	public Application(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge,
+			InternalUser user, IOpenShiftService service) {
+		this(name, uuid, creationLog, healthCheckPath, cartridge, new ArrayList<IEmbeddableCartridge>(), null, user,
+				service);
 	}
 
-	public Application(String name, String uuid, ICartridge cartridge, ApplicationInfo applicationInfo, InternalUser user,
-			IOpenShiftService service) {
-		this(name, uuid, null, null, cartridge, new ArrayList<IEmbeddableCartridge>(), applicationInfo, user, service);
+	public Application(String name, String uuid, ICartridge cartridge, ApplicationInfo applicationInfo,
+			InternalUser user, IOpenShiftService service) {
+		this(name, uuid, null, null, cartridge, null, applicationInfo, user, service);
 	}
 
 	protected Application(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge,
@@ -112,7 +114,7 @@ public class Application extends UserInfoAware implements IApplication {
 		}
 		return logReader;
 	}
-	
+
 	public ApplicationLogReader getLogReader(String logFile) throws OpenShiftException {
 		ApplicationLogReader logReader = null;
 		if (logReaders.get(logFile) == null) {
@@ -142,7 +144,7 @@ public class Application extends UserInfoAware implements IApplication {
 	public String getHealthCheckUrl() throws OpenShiftException {
 		return getApplicationUrl() + '/' + healthCheckPath;
 	}
-	
+
 	public void addEmbbedCartridge(IEmbeddableCartridge embeddedCartridge) throws OpenShiftException {
 		service.addEmbeddedCartridge(getName(), embeddedCartridge, getUser());
 		Assert.isTrue(embeddedCartridge instanceof EmbeddableCartridge);
@@ -152,7 +154,8 @@ public class Application extends UserInfoAware implements IApplication {
 
 	public void addEmbbedCartridges(List<IEmbeddableCartridge> embeddedCartridges) throws OpenShiftException {
 		for (IEmbeddableCartridge cartridge : embeddedCartridges) {
-			// TODO: catch exceptions when removing cartridges, contine removing and report the exceptions that occurred<
+			// TODO: catch exceptions when removing cartridges, contine removing
+			// and report the exceptions that occurred<
 			addEmbbedCartridge(cartridge);
 		}
 	}
@@ -168,7 +171,8 @@ public class Application extends UserInfoAware implements IApplication {
 
 	public void removeEmbbedCartridges(List<IEmbeddableCartridge> embeddedCartridges) throws OpenShiftException {
 		for (IEmbeddableCartridge cartridge : embeddedCartridges) {
-			// TODO: catch exceptions when removing cartridges, contine removing and report the exceptions that occurred<
+			// TODO: catch exceptions when removing cartridges, contine removing
+			// and report the exceptions that occurred<
 			removeEmbbedCartridge(cartridge);
 		}
 	}
@@ -211,14 +215,14 @@ public class Application extends UserInfoAware implements IApplication {
 		}
 		return applicationInfo;
 	}
-	
+
 	public boolean waitForAccessible(long timeout) throws OpenShiftException {
 		if (healthCheckPath == null) {
 			return true;
 		}
 		return service.waitForApplication(getHealthCheckUrl(), timeout);
 	}
-	
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

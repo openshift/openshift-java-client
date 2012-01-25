@@ -166,7 +166,8 @@ public class UserTest {
 						new ApplicationInfo(UserInfoResponseFake.APP2_NAME
 						, UserInfoResponseFake.APP2_UUID
 						, Collections.singletonList(
-								new EmbeddableCartridgeInfo(UserInfoResponseFake.APP2_EMBEDDED_NAME,
+								new EmbeddableCartridgeInfo(
+										UserInfoResponseFake.APP2_EMBEDDED_NAME,
 										UserInfoResponseFake.APP2_EMBEDDED_URL))
 						, Cartridge.valueOf(UserInfoResponseFake.APP2_CARTRIDGE)
 						, RFC822DateUtils.getDate(UserInfoResponseFake.APP2_CREATION_TIME)));
