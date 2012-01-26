@@ -70,6 +70,10 @@ public class OpenShiftService implements IOpenShiftService {
 	public OpenShiftService(String id, String baseUrl) {
 		this.id = id;
 		this.baseUrl = baseUrl;
+		
+		
+		//JDK7 bug workaround
+		System.setProperty("jsse.enableSNIExtension", "false");
 	}
 	
 	public void setEnableSSLCertChecks(boolean doSSLChecks) {

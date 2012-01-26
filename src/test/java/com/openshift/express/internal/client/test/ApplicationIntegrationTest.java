@@ -333,7 +333,7 @@ public class ApplicationIntegrationTest {
 		return logFile;
 	}
 	
-	@Test
+	//@Test
 	public void canThreadDumpRackApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		ApplicationLogReader reader = null;
