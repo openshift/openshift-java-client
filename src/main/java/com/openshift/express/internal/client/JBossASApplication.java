@@ -32,8 +32,10 @@ public class JBossASApplication extends Application implements IJBossASApplicati
 		super(name, uuid, cartridge, applicationInfo, user, service);
 	}
 
-	public void threadDump() throws OpenShiftException {
+	public String threadDump() throws OpenShiftException {
 		service.threadDumpApplication(name, cartridge, getUser());
+		
+		return "stdout.log";
 	}
 
 }

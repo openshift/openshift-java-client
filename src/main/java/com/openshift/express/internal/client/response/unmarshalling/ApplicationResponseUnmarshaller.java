@@ -20,7 +20,7 @@ import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.internal.client.Application;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.JBossASApplication;
-import com.openshift.express.internal.client.RackApplication;
+import com.openshift.express.internal.client.RubyApplication;
 import com.openshift.express.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
@@ -47,8 +47,8 @@ public class ApplicationResponseUnmarshaller extends AbstractOpenShiftJsonRespon
 		String uuid = getDataNodeProperty(IOpenShiftJsonConstants.PROPERTY_UUID, node);
 		if (cartridge == Cartridge.JBOSSAS_7) {
 			return new JBossASApplication(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
-		} else if (cartridge == Cartridge.RACK_11) {
-			return new RackApplication(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
+		} else if (cartridge == Cartridge.RUBY_18) {
+			return new RubyApplication(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
 		} else {
 			return new Application(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
 		}

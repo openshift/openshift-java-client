@@ -21,6 +21,6 @@ public interface IJBossASApplication extends IApplication {
 	 * 
 	 * @throws OpenShiftException
 	 */
-	public void threadDump() throws OpenShiftException;
+	public String threadDump() throws OpenShiftException;
 
 }

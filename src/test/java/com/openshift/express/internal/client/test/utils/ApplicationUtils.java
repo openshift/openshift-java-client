@@ -34,8 +34,8 @@ public class ApplicationUtils {
 		silentlyDestroyApplication(name, ICartridge.JBOSSAS_7, user, service);
 	}
 	
-	public static void silentlyDestroyRackApplication(String name, User user, IOpenShiftService service) {
-		silentlyDestroyApplication(name, ICartridge.RACK_11, user, service);
+	public static void silentlyDestroyRubyApplication(String name, User user, IOpenShiftService service) {
+		silentlyDestroyApplication(name, ICartridge.RUBY_18, user, service);
 	}
 
 	public static void silentlyDestroyJenkinsApplication(String name, User user, IOpenShiftService service) {

@@ -13,7 +13,7 @@ package com.openshift.express.client;
 /**
  * @author William DeCoste
  */
-public interface IRackApplication extends IApplication {
+public interface IRubyApplication extends IApplication {
 
 
 	/**
@@ -21,6 +21,6 @@ public interface IRackApplication extends IApplication {
 	 * 
 	 * @throws OpenShiftException
 	 */
-	public void threadDump() throws OpenShiftException;
+	public String threadDump() throws OpenShiftException;
 
 }

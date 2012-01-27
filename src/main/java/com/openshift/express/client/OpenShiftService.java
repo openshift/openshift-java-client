@@ -251,11 +251,15 @@ public class OpenShiftService implements IOpenShiftService {
 			((ChannelExec)channel).setErrStream(System.err);
 			InputStream in = channel.getInputStream();
 			
+			String logLocation = "/";
+			if (cartridge == Cartridge.JBOSSAS_7)
+				logLocation = "/jbossas-7.0/";
+			
 			String command = 
 					"tail "
 					+ "-" + numLines 
 					+ " /var/lib/libra/" + applicationName
-					+ "-" + user.getDomain().getNamespace() + "/" + applicationName + "/jbossas-7.0/" + logFile;
+					+ "-" + user.getDomain().getNamespace() + "/" + applicationName + logLocation + logFile;
 		
 			((ChannelExec)channel).setCommand(command);
 	

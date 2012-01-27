@@ -33,7 +33,7 @@ import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IHttpClient;
 import com.openshift.express.client.IJBossASApplication;
 import com.openshift.express.client.IOpenShiftService;
-import com.openshift.express.client.IRackApplication;
+import com.openshift.express.client.IRubyApplication;
 import com.openshift.express.client.InvalidCredentialsOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
@@ -300,9 +300,9 @@ public class ApplicationIntegrationTest {
 			assertEquals(applicationName, application.getName());
 			assertEquals(cartridge, application.getCartridge());
 			
-			application.threadDump();
+			String logFile = application.threadDump();
 			
-			String log = service.getStatus(applicationName, cartridge, user, "stdout.log", 100);
+			String log = service.getStatus(applicationName, cartridge, user, logFile, 100);
 			
 			assertTrue("Failed to retrieve logged thread dump", log.contains("object space"));
 			
@@ -317,48 +317,30 @@ public class ApplicationIntegrationTest {
 		}
 	}
 	
-	private String getRackLogFile() throws Exception {
-		Calendar cal = Calendar.getInstance();
-		
-		String month = null;
-		if (cal.get(Calendar.MONTH) > 8)
-			month = String.valueOf(cal.get(Calendar.MONTH) + 1);
-		else
-			month = "0" + String.valueOf(cal.get(Calendar.MONTH) + 1);
-		
-		
-		String logFile = "rack1/logs/error_log-" + cal.get(Calendar.YEAR) + month + cal.get(Calendar.DAY_OF_MONTH) + "-000000-EST";
-		System.out.println("!!!!!! logFile " + logFile);
-		
-		return logFile;
-	}
-	
-	//@Test
+	@Test
 	public void canThreadDumpRackApplication() throws Exception {
 		String applicationName = ApplicationUtils.createRandomApplicationName();
 		ApplicationLogReader reader = null;
 		InputStream urlStream = null;
 		try {
-			ICartridge cartridge = ICartridge.RACK_11;
-			IRackApplication application = (IRackApplication)service.createApplication(applicationName, cartridge, user);
+			ICartridge cartridge = ICartridge.RUBY_18;
+			IRubyApplication application = (IRubyApplication)service.createApplication(applicationName, cartridge, user);
 			assertNotNull(application);
 			assertEquals(applicationName, application.getName());
 			assertEquals(cartridge, application.getCartridge());
 			
-			URL url = new URL("http://" + applicationName + "-" + System.getProperty("RHLOGIN") + ".dev.rhcloud.com/lobster");
+			URL url = new URL("http://" + applicationName + "-" + user.getDomain().getNamespace() + ".dev.rhcloud.com/lobster");
 			
-			System.out.println("!!! url " + url);
-			
-			Thread.sleep(60 * 1000);
+			Thread.sleep(20 * 1000);
 			
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			
+			//Need to hit the app to start the Rack/Ruby process
 			String result = StreamUtils.readToString(connection.getInputStream());
-			System.out.println("!!!! result " + result);
 			
-			application.threadDump();
+			String logFile = application.threadDump();
 			
-			String log = service.getStatus(applicationName, cartridge, user, getRackLogFile(), 100);
+			String log = service.getStatus(applicationName, cartridge, user, logFile, 100);
 			
 			assertTrue("Failed to retrieve logged thread dump", log.contains("passenger-3.0.4"));
 			
@@ -366,7 +348,7 @@ public class ApplicationIntegrationTest {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			ApplicationUtils.silentlyDestroyRackApplication(applicationName, user, service);
+			ApplicationUtils.silentlyDestroyRubyApplication(applicationName, user, service);
 			
 			if (reader != null)
 				reader.close();

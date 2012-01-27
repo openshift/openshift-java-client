@@ -10,29 +10,48 @@
  ******************************************************************************/
 package com.openshift.express.internal.client;
 
+import java.util.Calendar;
+
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IOpenShiftService;
-import com.openshift.express.client.IRackApplication;
+import com.openshift.express.client.IRubyApplication;
 import com.openshift.express.client.OpenShiftException;
 
 /**
  * @author William DeCoste
  * @author Andre Dietisheim
  */
-public class RackApplication extends Application implements IRackApplication {
+public class RubyApplication extends Application implements IRubyApplication {
 
-	public RackApplication(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge,
+	public RubyApplication(String name, String uuid, String creationLog, String healthCheckPath, ICartridge cartridge,
 			InternalUser user, IOpenShiftService service) {
 		super(name, uuid, creationLog, healthCheckPath, cartridge, user, service);
 	}
 
-	public RackApplication(String name, String uuid, ICartridge cartridge, ApplicationInfo applicationInfo, InternalUser user,
+	public RubyApplication(String name, String uuid, ICartridge cartridge, ApplicationInfo applicationInfo, InternalUser user,
 			IOpenShiftService service) {
 		super(name, uuid, cartridge, applicationInfo, user, service);
 	}
 
-	public void threadDump() throws OpenShiftException {
+	public String threadDump() throws OpenShiftException {
 		service.threadDumpApplication(name, cartridge, getUser());
+		
+		return getRackLogFile();
+	}
+	
+	private String getRackLogFile() {
+		Calendar cal = Calendar.getInstance();
+		
+		String month = null;
+		if (cal.get(Calendar.MONTH) > 8)
+			month = String.valueOf(cal.get(Calendar.MONTH) + 1);
+		else
+			month = "0" + String.valueOf(cal.get(Calendar.MONTH) + 1);
+		
+		
+		String logFile = "logs/error_log-" + cal.get(Calendar.YEAR) + month + cal.get(Calendar.DAY_OF_MONTH) + "-000000-EST";
+		
+		return logFile;
 	}
 
 }

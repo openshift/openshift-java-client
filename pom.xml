@@ -17,7 +17,7 @@
 	<!-- Artifact Information -->
 	<groupId>com.openshift.express</groupId>
 	<artifactId>openshift-java-client</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>OpenShift Java Client</name>
 	<url>http://openshift.redhat.com</url>
@@ -59,23 +59,19 @@
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-	        <systemPropertyVariables>
-            <PASSWORD>${PASSWORD}</PASSWORD>
-            <RHLOGIN>${RHLOGIN}</RHLOGIN>
-        </systemPropertyVariables>
- 				<excludes>
+					<systemPropertyVariables>
+						<PASSWORD>${PASSWORD}</PASSWORD>
+						<RHLOGIN>${RHLOGIN}</RHLOGIN>
+					</systemPropertyVariables>
+					<excludes>
 						<exclude>**/OpenShiftIntegrationTestSuite.java</exclude>
 					</excludes>
 					<includes>
 						<include>**/OpenShiftTestSuite.java</include>
 					</includes>
-					<!--excludes>
-						<exclude>**/OpenShiftTestSuite.java</exclude>
-					</excludes>
-					<includes>
-						<include>**/OpenShiftIntegrationTestSuite.java</include>
-					</includes-->
-					<!--jvm>/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/bin/java</jvm-->
+					<!--excludes> <exclude>**/OpenShiftTestSuite.java</exclude> </excludes> 
+						<includes> <include>**/OpenShiftIntegrationTestSuite.java</include> </includes -->
+					<!--jvm>/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/bin/java</jvm -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -158,49 +154,49 @@
 			</build>
 		</profile>
 
-    <profile>
-    <id>integration-tests</id>
-    <build>
-      <plugins>  
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <systemPropertyVariables>
-                 <propertyName>PASSWORD</propertyName>
-                 <buildDirectory>${PASSWORD}</buildDirectory>
-                 <propertyName>RHLOGIN</propertyName>
-                 <buildDirectory>${RHLOGIN}</buildDirectory>
-              </systemPropertyVariables>
-              <excludes>
-                <exclude>**/OpenShiftSuite.java</exclude>
-              </excludes>
-              <includes>
-                <include>**/OpenShiftIntegrationTestSuite.java</include>
-              </includes>
-            </configuration>
-            <executions>
-              <execution>
-                <id>integration-tests</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <skip>false</skip>
-                  <excludes>
-                    <exclude>none</exclude>
-                  </excludes>
-                  <includes>
-                    <include>**/integration/*Test.java</include>
-                  </includes>
-                </configuration>
-               </execution>
-            </executions>
-          </plugin>
-        </plugins>
-     </build> 
-   </profile>
+		<profile>
+			<id>integration-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<systemPropertyVariables>
+								<propertyName>PASSWORD</propertyName>
+								<buildDirectory>${PASSWORD}</buildDirectory>
+								<propertyName>RHLOGIN</propertyName>
+								<buildDirectory>${RHLOGIN}</buildDirectory>
+							</systemPropertyVariables>
+							<excludes>
+								<exclude>**/OpenShiftSuite.java</exclude>
+							</excludes>
+							<includes>
+								<include>**/OpenShiftIntegrationTestSuite.java</include>
+							</includes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>integration-tests</id>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<skip>false</skip>
+									<excludes>
+										<exclude>none</exclude>
+									</excludes>
+									<includes>
+										<include>**/integration/*Test.java</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 	</profiles>
 </project>
