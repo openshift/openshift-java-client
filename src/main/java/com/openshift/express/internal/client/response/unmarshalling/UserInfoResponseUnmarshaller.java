@@ -47,13 +47,7 @@ public class UserInfoResponseUnmarshaller extends AbstractOpenShiftJsonResponseU
 		}
 		
 		String sshPublicKey = getString(IOpenShiftJsonConstants.PROPERTY_SSH_KEY, userInfoNode);
-		String sshKeyType = getString(IOpenShiftJsonConstants.PROPERTY_SSH_TYPE, userInfoNode);
-		if (sshKeyType == null) {
-			ModelNode sshKeyNode = this.getChild(IOpenShiftJsonConstants.PROPERTY_SSH_KEY, userInfoNode);
-			if (sshKeyNode != null)
-				sshKeyType = getString(IOpenShiftJsonConstants.PROPERTY_TYPE, sshKeyNode);
-		}
-			
+		String sshKeyType = getSshKeyType(userInfoNode);
 		String rhlogin = getString(IOpenShiftJsonConstants.PROPERTY_RHLOGIN, userInfoNode);
 		String uuid = getString(IOpenShiftJsonConstants.PROPERTY_UUID, userInfoNode);
 		String namespace = getString(IOpenShiftJsonConstants.PROPERTY_NAMESPACE, userInfoNode);
@@ -63,6 +57,16 @@ public class UserInfoResponseUnmarshaller extends AbstractOpenShiftJsonResponseU
 				.get(IOpenShiftJsonConstants.PROPERTY_APP_INFO));
 
 		return new UserInfo(rhlogin, uuid, sshPublicKey, rhcDomain, namespace, applicationInfos, sshKeyType);
+	}
+
+	private String getSshKeyType(ModelNode userInfoNode) {
+		String sshKeyType = getString(IOpenShiftJsonConstants.PROPERTY_SSH_TYPE, userInfoNode);
+		if (sshKeyType == null) {
+			ModelNode sshKeyNode = this.getChild(IOpenShiftJsonConstants.PROPERTY_SSH_KEY, userInfoNode);
+			if (sshKeyNode != null)
+				sshKeyType = getString(IOpenShiftJsonConstants.PROPERTY_TYPE, sshKeyNode);
+		}
+		return sshKeyType;
 	}
 
 	private List<ApplicationInfo> createApplicationInfos(ModelNode appInfoNode) throws DatatypeConfigurationException {
