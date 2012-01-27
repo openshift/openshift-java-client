@@ -59,7 +59,11 @@
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<excludes>
+	        <systemPropertyVariables>
+            <PASSWORD>${PASSWORD}</PASSWORD>
+            <RHLOGIN>${RHLOGIN}</RHLOGIN>
+        </systemPropertyVariables>
+ 				<excludes>
 						<exclude>**/OpenShiftIntegrationTestSuite.java</exclude>
 					</excludes>
 					<includes>
@@ -162,8 +166,14 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
+              <systemPropertyVariables>
+                 <propertyName>PASSWORD</propertyName>
+                 <buildDirectory>${PASSWORD}</buildDirectory>
+                 <propertyName>RHLOGIN</propertyName>
+                 <buildDirectory>${RHLOGIN}</buildDirectory>
+              </systemPropertyVariables>
               <excludes>
-                <exclude>**/OpenShiftIntegrationSuite.java</exclude>
+                <exclude>**/OpenShiftSuite.java</exclude>
               </excludes>
               <includes>
                 <include>**/OpenShiftIntegrationTestSuite.java</include>
