@@ -155,7 +155,7 @@
 		</profile>
 
     <profile>
-    <id>integration-test</id>
+    <id>integration-tests</id>
     <build>
       <plugins>  
         <plugin>
