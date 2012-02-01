@@ -16,6 +16,8 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -170,16 +172,26 @@ public class OpenShiftService implements IOpenShiftService {
 
 	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
-		return requestApplicationAction(
-				new ApplicationRequest(
-						name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true), user);
+		return createApplication(name, cartridge, user, null);
 	}
 	
 	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user, final String size)
 			throws OpenShiftException {
+		
+		validateApplicationName(name);
+		
 		return requestApplicationAction(
 				new ApplicationRequest(
 						name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true, size), user);
+	}
+	
+	protected void validateApplicationName(final String name)
+			throws OpenShiftException {
+		for (int i=0;i<name.length();++i) {
+			if (!Character.isLetterOrDigit(name.charAt(i))) {
+				throw new OpenShiftException("Application name '" + name + "' contains non-alphanumeric characters!");
+			}
+		}
 	}
 
 	public void destroyApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {

@@ -16,6 +16,7 @@ import static com.openshift.express.internal.client.test.utils.ApplicationAssert
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -27,9 +28,14 @@ import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;
+import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.IUser;
+import com.openshift.express.client.InvalidCredentialsOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
+import com.openshift.express.client.configuration.DefaultConfiguration;
+import com.openshift.express.client.configuration.SystemConfiguration;
+import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.Application;
 import com.openshift.express.internal.client.ApplicationInfo;
 import com.openshift.express.internal.client.Domain;
@@ -45,7 +51,9 @@ import com.openshift.express.internal.client.response.unmarshalling.ApplicationS
 import com.openshift.express.internal.client.response.unmarshalling.JsonSanitizer;
 import com.openshift.express.internal.client.test.fakes.ApplicationResponseFake;
 import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
+import com.openshift.express.internal.client.test.fakes.TestUser;
 import com.openshift.express.internal.client.test.fakes.UserFake;
+import com.openshift.express.internal.client.test.utils.ApplicationUtils;
 
 /**
  * @author André Dietisheim
@@ -206,6 +214,19 @@ public class ApplicationTest {
 							+ " was '" + character + "'"
 							+ " but we expected '" + characterToMatch + "'.",
 					characterToMatch, character);
+		}
+	}
+	
+	@Test
+	public void createApplicationWithInvalidApplicationName() throws Exception {
+		try {
+			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
+			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+			user = new TestUser(service);
+			service.createApplication("invalid_name", ICartridge.JBOSSAS_7, user);
+			fail("Excepted OpenShiftException");
+		} catch (OpenShiftException e){
+			
 		}
 	}
 
