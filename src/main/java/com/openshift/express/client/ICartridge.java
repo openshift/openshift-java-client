@@ -22,6 +22,12 @@ public interface ICartridge {
 	public static final ICartridge PYTHON_26 = new Cartridge("python-2.6");
 	public static final ICartridge RUBY_18 = new Cartridge("ruby-1.8");
 	public static final ICartridge PHP_53 = new Cartridge("php-5.3");
+	
+	@Deprecated
+	public static final ICartridge RACK_11 = new Cartridge("ruby-1.8");
+	@Deprecated
+	public static final ICartridge WSGI_32 = new Cartridge("python-2.6");
+	
 
 	public abstract String getName();
 
