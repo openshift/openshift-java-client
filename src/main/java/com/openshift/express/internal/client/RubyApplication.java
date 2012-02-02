@@ -48,8 +48,14 @@ public class RubyApplication extends Application implements IRubyApplication {
 		else
 			month = "0" + String.valueOf(cal.get(Calendar.MONTH) + 1);
 		
+		String day = null;
+		if (cal.get(Calendar.DAY_OF_MONTH) > 9)
+			day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+		else
+			day = "0" + String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
 		
-		String logFile = "logs/error_log-" + cal.get(Calendar.YEAR) + month + cal.get(Calendar.DAY_OF_MONTH) + "-000000-EST";
+		
+		String logFile = "logs/error_log-" + cal.get(Calendar.YEAR) + month + day + "-000000-EST";
 		
 		return logFile;
 	}
