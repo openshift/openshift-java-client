@@ -64,6 +64,7 @@ public class OpenShiftService implements IOpenShiftService {
 	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
 	private static final long APPLICATION_WAIT_DELAY = 2;
 	private static final String HEALTH_RESPONSE_OK = "1";
+	private static final int MAX_APP_NAME_LENGTH = 16;
 	
 	private String baseUrl;
 	private String id;
@@ -150,6 +151,8 @@ public class OpenShiftService implements IOpenShiftService {
 
 
 	public IDomain createDomain(final String name, final ISSHPublicKey sshKey, final IUser user) throws OpenShiftException {
+		
+		validateDomainName(name);
 		return requestDomainAction(new CreateDomainRequest(name, sshKey, user.getRhlogin(), true), user);
 	}
 
@@ -187,9 +190,20 @@ public class OpenShiftService implements IOpenShiftService {
 	
 	protected void validateApplicationName(final String name)
 			throws OpenShiftException {
+		
 		for (int i=0;i<name.length();++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
 				throw new OpenShiftException("Application name '" + name + "' contains non-alphanumeric characters!");
+			}
+		}
+	}
+	
+	protected void validateDomainName(final String name)
+			throws OpenShiftException {
+		
+		for (int i=0;i<name.length();++i) {
+			if (!Character.isLetterOrDigit(name.charAt(i))) {
+				throw new OpenShiftException("Domain name '" + name + "' contains non-alphanumeric characters!");
 			}
 		}
 	}

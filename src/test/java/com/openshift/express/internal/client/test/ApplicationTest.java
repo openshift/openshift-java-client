@@ -218,13 +218,26 @@ public class ApplicationTest {
 	}
 	
 	@Test
-	public void createApplicationWithInvalidApplicationName() throws Exception {
+	public void createApplicationWithInvalidName() throws Exception {
 		try {
 			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 			user = new TestUser(service);
 			service.createApplication("invalid_name", ICartridge.JBOSSAS_7, user);
-			fail("Excepted OpenShiftException");
+			fail("Expected OpenShiftException");
+		} catch (OpenShiftException e){
+			
+		}
+	}
+	
+	@Test
+	public void createDomainWithInvalidName() throws Exception {
+		try {
+			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
+			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+			user = new TestUser(service);
+			service.createDomain("invalid_name", null, user);
+			fail("Expected OpenShiftException");
 		} catch (OpenShiftException e){
 			
 		}
