@@ -30,7 +30,6 @@ import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.IUser;
-import com.openshift.express.client.InvalidCredentialsOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.configuration.DefaultConfiguration;
@@ -53,7 +52,6 @@ import com.openshift.express.internal.client.test.fakes.ApplicationResponseFake;
 import com.openshift.express.internal.client.test.fakes.NoopOpenShiftServiceFake;
 import com.openshift.express.internal.client.test.fakes.TestUser;
 import com.openshift.express.internal.client.test.fakes.UserFake;
-import com.openshift.express.internal.client.test.utils.ApplicationUtils;
 
 /**
  * @author André Dietisheim
@@ -230,17 +228,12 @@ public class ApplicationTest {
 		}
 	}
 	
-	@Test
+	@Test(expected=OpenShiftException.class)
 	public void createDomainWithInvalidName() throws Exception {
-		try {
 			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 			user = new TestUser(service);
 			service.createDomain("invalid_name", null, user);
-			fail("Expected OpenShiftException");
-		} catch (OpenShiftException e){
-			
-		}
 	}
 
 	private IApplication createApplication(OpenShiftService userInfoService, UserFake user) {
