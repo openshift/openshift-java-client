@@ -25,5 +25,9 @@ public interface IOpenShiftConfiguration {
 
 	public abstract void setLibraServer(String libraServer);
 
+	public abstract String getLibraDomain();
+
+	public abstract void setLibraDomain(String libraDomain);
+
 	public Properties getProperties();
 }

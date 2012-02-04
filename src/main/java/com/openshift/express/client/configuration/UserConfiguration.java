@@ -11,9 +11,7 @@
 package com.openshift.express.client.configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
 
 import com.openshift.express.client.OpenShiftException;
 
@@ -27,25 +25,6 @@ public class UserConfiguration extends AbstractOpenshiftConfiguration {
 	private static final String PROPERTY_USERHOME = "user.home";
 	
 	public UserConfiguration(SystemConfiguration systemConfiguration) throws OpenShiftException, IOException {
-		initProperties(systemConfiguration);
-	}
-
-	protected void initProperties(SystemConfiguration systemConfiguration) throws FileNotFoundException, IOException {
-		File configurationFile = doGetFile();
-		Properties systemProperties = null;
-		if (systemConfiguration == null) {
-			systemProperties = new Properties();
-		} else {
-			systemProperties = systemConfiguration.getProperties();
-		}
-		super.initProperties(configurationFile, systemProperties);
-	}
-
-	protected File doGetFile() {
-		String userHome = System.getProperty(PROPERTY_USERHOME);
-		
-		File configurationFile = new File(userHome + File.separatorChar + CONFIGURATION_FOLDER, CONFIGURATION_FILE);
-	
-		return configurationFile;
+		super(new File(System.getProperty(PROPERTY_USERHOME) + File.separatorChar + CONFIGURATION_FOLDER, CONFIGURATION_FILE), systemConfiguration);
 	}
 }

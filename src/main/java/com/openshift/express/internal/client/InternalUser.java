@@ -27,11 +27,8 @@ import com.openshift.express.client.InvalidCredentialsOpenShiftException;
 import com.openshift.express.client.NotFoundOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
-import com.openshift.express.client.configuration.DefaultConfiguration;
 import com.openshift.express.client.configuration.IOpenShiftConfiguration;
-import com.openshift.express.client.configuration.SystemConfiguration;
-import com.openshift.express.client.configuration.SystemProperties;
-import com.openshift.express.client.configuration.UserConfiguration;
+import com.openshift.express.client.configuration.OpenShiftConfiguration;
 
 /**
  * @author André Dietisheim
@@ -52,7 +49,7 @@ public class InternalUser implements IUser {
 	private IOpenShiftService service;
 
 	public InternalUser(String password, String id) throws OpenShiftException, IOException {
-		this(new SystemProperties(new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()))), password, id);
+		this(new OpenShiftConfiguration(), password, id);
 	}
 
 	public InternalUser(IOpenShiftConfiguration configuration, String password, String id) {
@@ -61,7 +58,7 @@ public class InternalUser implements IUser {
 
 	public InternalUser(String rhlogin, String password, String id) throws OpenShiftException, IOException {
 		this(rhlogin, password, null, null, (ISSHPublicKey) null, new OpenShiftService(id, 
-				new SystemProperties(new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()))).getLibraServer()));
+				new OpenShiftConfiguration().getLibraServer()));
 	}
 
 	public InternalUser(String rhlogin, String password, String id, String url) {

@@ -11,9 +11,11 @@
 package com.openshift.express.internal.client.test.fakes;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Properties;
 
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.configuration.SystemConfiguration;
@@ -33,10 +35,10 @@ public class UserConfigurationFake extends UserConfiguration {
 		super(systemConfiguration);
 	}
 
-	protected File doGetFile() {
-		File file = createFile();
+	protected void initProperties(File file, Properties defaultProperties) throws FileNotFoundException, IOException {
+		file = createFile();
 		initFile(file);
-		return file;
+		super.initProperties(file,defaultProperties);
 	}
 
 	protected void initFile(File file) {
@@ -71,4 +73,7 @@ public class UserConfigurationFake extends UserConfiguration {
 		return String.valueOf(System.currentTimeMillis());
 	}
 
+	public File getFile() {
+		return super.getFile();
+	}
 }

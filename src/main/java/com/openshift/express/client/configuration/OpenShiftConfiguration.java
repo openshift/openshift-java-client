@@ -10,29 +10,20 @@
  ******************************************************************************/
 package com.openshift.express.client.configuration;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
 
 import com.openshift.express.client.OpenShiftException;
 
 /**
  * @author André Dietisheim
  */
-public class DefaultConfiguration extends AbstractOpenshiftConfiguration {
+public class OpenShiftConfiguration extends AbstractOpenshiftConfiguration {
 
-	public static final String LIBRA_SERVER = "openshift.redhat.com";
-	public static final String LIBRA_DOMAIN = "rhcloud.com";
-	
-	public DefaultConfiguration() throws OpenShiftException, IOException {
-		super();
-	}
-
-	@Override
-	protected Properties getProperties(File file, Properties defaultProperties) {
-		Properties properties = new Properties();
-	    properties.put(KEY_LIBRA_SERVER, LIBRA_SERVER);
-	    properties.put(KEY_LIBRA_DOMAIN, LIBRA_DOMAIN);
-		return properties;
+	public OpenShiftConfiguration() throws FileNotFoundException, IOException, OpenShiftException {
+		super(new SystemProperties(
+				new UserConfiguration(
+						new SystemConfiguration(
+								new DefaultConfiguration()))));
 	}
 }

@@ -11,7 +11,6 @@
 package com.openshift.express.client.configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.openshift.express.client.OpenShiftException;
@@ -23,18 +22,8 @@ public class SystemConfiguration extends AbstractOpenshiftConfiguration {
 
 	private static final String CONFIGURATION_FOLDER = File.separatorChar + "etc" + File.separatorChar + "openshift";
 	private static final String CONFIGURATION_FILE = "express.conf";
-	protected static final String KEY_LIBRA_SERVER = "libra_server";
 	
 	public SystemConfiguration(IOpenShiftConfiguration configuration) throws OpenShiftException, IOException {
-		initProperties(configuration);
-	}
-
-	protected void initProperties(IOpenShiftConfiguration configuration) throws FileNotFoundException, IOException {
-		File configurationFile = new File(CONFIGURATION_FOLDER, CONFIGURATION_FILE);
-		if (configuration == null) {
-			initProperties(configurationFile);
-		} else {
-			initProperties(configurationFile, configuration.getProperties());
-		}
+		super(new File(CONFIGURATION_FOLDER, CONFIGURATION_FILE), configuration);
 	}
 }

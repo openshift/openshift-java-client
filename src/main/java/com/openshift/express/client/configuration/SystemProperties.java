@@ -10,8 +10,9 @@
  ******************************************************************************/
 package com.openshift.express.client.configuration;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import com.openshift.express.client.OpenShiftException;
 
@@ -20,30 +21,23 @@ import com.openshift.express.client.OpenShiftException;
  */
 public class SystemProperties extends AbstractOpenshiftConfiguration {
 
-	private IOpenShiftConfiguration parentConfiguration;
-
 	public SystemProperties(IOpenShiftConfiguration parentConfiguration) throws OpenShiftException, IOException {
-		initProperties(parentConfiguration);
+		super(parentConfiguration);
 	}
 
-	protected void initProperties(IOpenShiftConfiguration parentConfiguration) throws FileNotFoundException, IOException {
-		initProperties(System.getProperties());
-		this.parentConfiguration = parentConfiguration;
+	@Override
+	protected Properties getProperties(File file, Properties defaultProperties) {
+		Properties properties = new Properties(defaultProperties);
+		copySystemProperty(KEY_LIBRA_DOMAIN, properties);
+		copySystemProperty(KEY_LIBRA_SERVER, properties);
+		copySystemProperty(KEY_RHLOGIN, properties);
+		return properties;
 	}
 
-	public String getLibraServer() {
-		return appendScheme(removeSingleQuotes(getSystemPropertyOrParent(KEY_LIBRA_SERVER)));
-	}
-
-	public String getRhlogin() {
-		return getSystemPropertyOrParent(KEY_RHLOGIN);
-	}
-
-	private String getSystemPropertyOrParent(String key) {
-		if (getProperties().containsKey(key)) {
-			return getProperties().getProperty(key);
-		} else {
-			return parentConfiguration.getProperties().getProperty(key);
+	private void copySystemProperty(String key, Properties properties) {
+		Object value = System.getProperties().get(key);
+		if (value != null) {
+			properties.put(key, value);
 		}
 	}
 }

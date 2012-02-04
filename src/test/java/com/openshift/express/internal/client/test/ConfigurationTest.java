@@ -23,6 +23,8 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.Test;
+
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.configuration.DefaultConfiguration;
 import com.openshift.express.client.configuration.IOpenShiftConfiguration;
@@ -32,7 +34,6 @@ import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.test.fakes.SystemConfigurationFake;
 import com.openshift.express.internal.client.test.fakes.UserConfigurationFake;
 import com.openshift.express.internal.client.utils.StreamUtils;
-import org.junit.Test;
 
 /**
  * @author André Dietisheim
@@ -86,16 +87,19 @@ public class ConfigurationTest {
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME).append('\n');
 			}
-
 		};
+		assertEquals(USERNAME, userConfiguration.getRhlogin());
 		userConfiguration.setRhlogin(ANOTHER_USERNAME);
 		userConfiguration.save();
 		final File userConfigurationFile = userConfiguration.getFile();
 		assertNotNull(userConfigurationFile);
 		UserConfigurationFake userConfiguration2 = new UserConfigurationFake() {
 
-			protected File doGetFile() {
+			protected File createFile() {
 				return userConfigurationFile;
+			}
+
+			protected void initFile(File file) {
 			}
 		};
 		assertEquals(ANOTHER_USERNAME, userConfiguration2.getRhlogin());
@@ -166,9 +170,10 @@ public class ConfigurationTest {
 	}
 	
 	@Test
-	public void libraserverInSystemPropsOverridesUsernameInSystemconfig() throws OpenShiftException, IOException {
+	public void systemPropsOverrideSystemconfig() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
+			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -176,21 +181,39 @@ public class ConfigurationTest {
 		};
 		UserConfigurationFake userConfiguration = new UserConfigurationFake(systemConfiguration) {
 
+			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME2).append('\n');
 			}
 			
 		};
-		
-		IOpenShiftConfiguration configuration = new SystemProperties(userConfiguration);
+		IOpenShiftConfiguration configuration = new SystemProperties(userConfiguration) {
+
+			@Override
+			protected Properties getProperties(File file, Properties defaultProperties) {
+				// save orig rhlogin
+				String originalRhLogin = System.getProperty(KEY_RHLOGIN); 
+				System.setProperty(KEY_RHLOGIN, USERNAME3);
+				Properties properties = super.getProperties(file, defaultProperties);
+				// resore orig rhlogin
+				if (originalRhLogin != null) {
+					System.setProperty(KEY_RHLOGIN, originalRhLogin); 
+				} else {
+					System.clearProperty(KEY_RHLOGIN);
+				}
+				return properties;
+			}
+			
+		};
 		configuration.setRhlogin(USERNAME3);
 		assertEquals(USERNAME3, configuration.getRhlogin());
 	}
 
 	@Test
-	public void systemPropsDefaultToUserconfig() throws OpenShiftException, IOException {
+	public void systemPropertiesDefaultToUserConfig() throws OpenShiftException, IOException {
 		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
 
+			@Override
 			protected void init(Properties properties) {
 				properties.put(KEY_RHLOGIN, USERNAME);
 			}
@@ -198,6 +221,7 @@ public class ConfigurationTest {
 		};
 		UserConfigurationFake userConfiguration = new UserConfigurationFake(systemConfiguration) {
 
+			@Override
 			protected void initFile(Writer writer) throws IOException {
 				writer.append(KEY_RHLOGIN).append('=').append(USERNAME2).append('\n');
 			}

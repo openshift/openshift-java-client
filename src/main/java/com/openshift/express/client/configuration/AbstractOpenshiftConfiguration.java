@@ -20,7 +20,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.openshift.express.internal.client.utils.Assert;
 import com.openshift.express.internal.client.utils.StreamUtils;
 
 /**
@@ -32,16 +31,32 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 
 	protected static final String KEY_RHLOGIN = "default_rhlogin";
 	protected static final String KEY_LIBRA_SERVER = "libra_server";
-	
+	protected static final String KEY_LIBRA_DOMAIN = "libra_domain";
+
 	private static final Pattern SINGLEQUOTED_REGEX = Pattern.compile("'*([^']+)'*");
-	
+	private static final char SINGLEQUOTE = '\'';
+
 	private Properties properties;
 	private File file;
-	
+
+	public AbstractOpenshiftConfiguration() throws FileNotFoundException, IOException {
+		this(null, null);
+	}
+
+	public AbstractOpenshiftConfiguration(IOpenShiftConfiguration configuration) throws FileNotFoundException,
+			IOException {
+		this(null, configuration);
+	}
+
+	public AbstractOpenshiftConfiguration(File file, IOpenShiftConfiguration configuration)
+			throws FileNotFoundException, IOException {
+		initProperties(file, configuration == null ? null : configuration.getProperties());
+	}
+
 	protected void initProperties(File file) throws FileNotFoundException, IOException {
 		initProperties(file, null);
 	}
-	
+
 	protected void initProperties(Properties defaultProperties) throws FileNotFoundException, IOException {
 		initProperties(null, defaultProperties);
 	}
@@ -51,41 +66,37 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 		this.properties = getProperties(file, defaultProperties);
 	}
 
-	protected Properties getProperties(File file, Properties defaultProperties) throws FileNotFoundException, IOException {
-		Properties properties = null;
-		
+	protected Properties getProperties(File file, Properties defaultProperties)
+			throws FileNotFoundException, IOException {
+
 		if (file == null
 				|| !file.canRead()) {
-			properties = new Properties(defaultProperties);
-			
-			if (System.getProperty("libra_server") != null)
-				properties.put(KEY_LIBRA_SERVER, System.getProperty("libra_server"));
-			return properties;
+			return new Properties(defaultProperties);
 		}
-		
+
 		FileReader reader = null;
 		try {
-			properties = new Properties(defaultProperties);
+			Properties properties = new Properties(defaultProperties);
 			reader = new FileReader(file);
 			properties.load(reader);
-			
-			if (System.getProperty("libra_server") != null)
-				properties.put(KEY_LIBRA_SERVER, System.getProperty("libra_server"));
-			
 			return properties;
 		} finally {
 			StreamUtils.close(reader);
 		}
-		
-		
 	}
-		
-	public File getFile() {
+
+	protected File getFile() {
 		return file;
 	}
-	
+
+	public Properties getProperties() {
+		return properties;
+	}
+
 	public void save() throws IOException {
-		Assert.notNull(file);
+		if (file == null) {
+			return;
+		}
 		Writer writer = null;
 		try {
 			writer = new FileWriter(file);
@@ -95,16 +106,28 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 		}
 	}
 
-	public String getRhlogin() {
-		return properties.getProperty(KEY_RHLOGIN);
-	}
-	
 	public void setRhlogin(String rhlogin) {
 		properties.put(KEY_RHLOGIN, rhlogin);
 	}
-	
+
+	public String getRhlogin() {
+		return properties.getProperty(KEY_RHLOGIN);
+	}
+
+	public void setLibraServer(String libraServer) {
+		properties.put(KEY_LIBRA_SERVER, ensureIsSingleQuoted(libraServer));
+	}
+
 	public String getLibraServer() {
 		return appendScheme(removeSingleQuotes(properties.getProperty(KEY_LIBRA_SERVER)));
+	}
+
+	public void setLibraDomain(String libraDomain) {
+		properties.put(KEY_LIBRA_DOMAIN, ensureIsSingleQuoted(libraDomain));
+	}
+
+	public String getLibraDomain() {
+		return removeSingleQuotes(properties.getProperty(KEY_LIBRA_DOMAIN));
 	}
 
 	protected String appendScheme(String host) {
@@ -112,9 +135,12 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 			return host;
 		}
 		return SCHEME_HTTPS + host;
-
 	}
-	
+
+	protected String ensureIsSingleQuoted(String value) {
+		return SINGLEQUOTE + removeSingleQuotes(value) + SINGLEQUOTE;
+	}
+
 	protected String removeSingleQuotes(String value) {
 		if (value == null) {
 			return null;
@@ -126,13 +152,5 @@ public abstract class AbstractOpenshiftConfiguration implements IOpenShiftConfig
 		} else {
 			return value;
 		}
-	}
-
-	public void setLibraServer(String libraServer) {
-		properties.put(KEY_LIBRA_SERVER, libraServer);
-	}
-	
-	public Properties getProperties() {
-		return properties;
 	}
 }
