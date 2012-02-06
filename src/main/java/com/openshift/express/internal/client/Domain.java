@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.openshift.express.internal.client;
 
+import com.openshift.express.client.IApplication;
 import com.openshift.express.client.IDomain;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.OpenShiftException;
@@ -55,5 +56,13 @@ public class Domain extends UserInfoAware implements IDomain {
 	private void update(IDomain domain) throws OpenShiftException {
 		this.namespace = domain.getNamespace();
 		this.rhcDomain = domain.getRhcDomain();
+	}
+
+	public boolean waitForAccessible(long timeout) throws OpenShiftException {
+		boolean accessible = true;
+		for (IApplication application : getUser().getApplications()) {
+			accessible |= service.waitForHostResolves(application.getApplicationUrl(), timeout);
+		}
+		return accessible;
 	}
 }

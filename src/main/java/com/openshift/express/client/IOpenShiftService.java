@@ -364,6 +364,8 @@ public interface IOpenShiftService {
 	 */
 	public boolean waitForApplication(String applicationHealthCheckUrl, long timeout) throws OpenShiftException;
 	
+	public boolean waitForHostResolves(String url, long timeout) throws OpenShiftException;
+	
 	/**
 	 * Sets flag for enabling SSL certificate checks (i.e. self-signed SSL certificates)
 	 * 

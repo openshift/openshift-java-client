@@ -16,13 +16,12 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import com.openshift.express.client.utils.HostUtils;
 import com.openshift.express.internal.client.UserInfo;
 import com.openshift.express.internal.client.httpclient.HttpClientException;
 import com.openshift.express.internal.client.httpclient.NotFoundException;
@@ -58,14 +57,14 @@ import com.openshift.express.internal.client.response.unmarshalling.UserInfoResp
  * @author André Dietisheim
  */
 public class OpenShiftService implements IOpenShiftService {
-	
+
 	// TODO extract to properties file
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
 	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
 	private static final long APPLICATION_WAIT_DELAY = 2;
 	private static final String HEALTH_RESPONSE_OK = "1";
 	private static final int MAX_APP_NAME_LENGTH = 16;
-	
+
 	private String baseUrl;
 	private String id;
 	private boolean doSSLChecks = false;
@@ -73,16 +72,15 @@ public class OpenShiftService implements IOpenShiftService {
 	public OpenShiftService(String id, String baseUrl) {
 		this.id = id;
 		this.baseUrl = baseUrl;
-		
-		
-		//JDK7 bug workaround
+
+		// JDK7 bug workaround
 		System.setProperty("jsse.enableSNIExtension", "false");
 	}
-	
+
 	public void setEnableSSLCertChecks(boolean doSSLChecks) {
 		this.doSSLChecks = doSSLChecks;
 	}
-	
+
 	public void setProxySet(boolean proxySet) {
 		if (proxySet) {
 			System.setProperty("proxySet", "true");
@@ -90,11 +88,11 @@ public class OpenShiftService implements IOpenShiftService {
 			System.setProperty("proxySet", "false");
 		}
 	}
-	
+
 	public void setProxyHost(String proxyHost) {
 		System.setProperty("proxyHost", proxyHost);
 	}
-	
+
 	public void setProxyPort(String proxyPort) {
 		System.setProperty("proxyPort", proxyPort);
 	}
@@ -114,7 +112,7 @@ public class OpenShiftService implements IOpenShiftService {
 	public UserInfo getUserInfo(final IUser user) throws OpenShiftException {
 		UserInfoRequest userInfoRequest = new UserInfoRequest(user.getRhlogin(), true);
 		String url = userInfoRequest.getUrlString(getServiceUrl());
-			
+
 		String request = new UserInfoRequestJsonMarshaller().marshall(userInfoRequest);
 		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
 				"Could not get user info for user \"{0}\" at \"{1}\"");
@@ -122,9 +120,9 @@ public class OpenShiftService implements IOpenShiftService {
 				new UserInfoResponseUnmarshaller().unmarshall(response);
 		return userInfoResponse.getOpenShiftObject();
 	}
-	
+
 	public List<IEmbeddableCartridge> getEmbeddableCartridges(final IUser user) throws OpenShiftException {
-		ListCartridgesRequest listCartridgesRequest = 
+		ListCartridgesRequest listCartridgesRequest =
 				new ListCartridgesRequest(ListCartridgesRequest.CartridgeType.EMBEDDED, user.getRhlogin(), true);
 		String url = listCartridgesRequest.getUrlString(getServiceUrl());
 		String request =
@@ -137,7 +135,7 @@ public class OpenShiftService implements IOpenShiftService {
 	}
 
 	public List<ICartridge> getCartridges(final IUser user) throws OpenShiftException {
-		ListCartridgesRequest listCartridgesRequest = 
+		ListCartridgesRequest listCartridgesRequest =
 				new ListCartridgesRequest(ListCartridgesRequest.CartridgeType.STANDALONE, user.getRhlogin(), true);
 		String url = listCartridgesRequest.getUrlString(getServiceUrl());
 		String request =
@@ -149,14 +147,15 @@ public class OpenShiftService implements IOpenShiftService {
 		return cartridgesResponse.getOpenShiftObject();
 	}
 
+	public IDomain createDomain(final String name, final ISSHPublicKey sshKey, final IUser user)
+			throws OpenShiftException {
 
-	public IDomain createDomain(final String name, final ISSHPublicKey sshKey, final IUser user) throws OpenShiftException {
-		
 		validateDomainName(name);
 		return requestDomainAction(new CreateDomainRequest(name, sshKey, user.getRhlogin(), true), user);
 	}
 
-	public IDomain changeDomain(final String newName, final ISSHPublicKey sshKey, final IUser user) throws OpenShiftException {
+	public IDomain changeDomain(final String newName, final ISSHPublicKey sshKey, final IUser user)
+			throws OpenShiftException {
 		return requestDomainAction(new ChangeDomainRequest(newName, sshKey, user.getRhlogin(), true), user);
 	}
 
@@ -164,9 +163,9 @@ public class OpenShiftService implements IOpenShiftService {
 			throws OpenShiftException {
 		String url = domainRequest.getUrlString(getServiceUrl());
 		String request = new DomainRequestJsonMarshaller().marshall(domainRequest);
-		String response = 
+		String response =
 				sendRequest(
-						request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(), 
+						request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
 						MessageFormat.format("Could not {0}", domainRequest.getOperation()));
 		OpenShiftResponse<IDomain> domainResponse =
 				new DomainResponseUnmarshaller(domainRequest.getName(), user, this).unmarshall(response);
@@ -177,38 +176,40 @@ public class OpenShiftService implements IOpenShiftService {
 			throws OpenShiftException {
 		return createApplication(name, cartridge, user, null);
 	}
-	
-	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user, final String size)
+
+	public IApplication createApplication(final String name, final ICartridge cartridge, final IUser user,
+			final String size)
 			throws OpenShiftException {
-		
+
 		validateApplicationName(name);
-		
+
 		return requestApplicationAction(
 				new ApplicationRequest(
 						name, cartridge, ApplicationAction.CONFIGURE, user.getRhlogin(), true, size), user);
 	}
-	
+
 	protected void validateApplicationName(final String name)
 			throws OpenShiftException {
-		
-		for (int i=0;i<name.length();++i) {
+
+		for (int i = 0; i < name.length(); ++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
 				throw new OpenShiftException("Application name '" + name + "' contains non-alphanumeric characters!");
 			}
 		}
 	}
-	
+
 	protected void validateDomainName(final String name)
 			throws OpenShiftException {
-		
-		for (int i=0;i<name.length();++i) {
+
+		for (int i = 0; i < name.length(); ++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
 				throw new OpenShiftException("Domain name '" + name + "' contains non-alphanumeric characters!");
 			}
 		}
 	}
 
-	public void destroyApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {
+	public void destroyApplication(final String name, final ICartridge cartridge, final IUser user)
+			throws OpenShiftException {
 		requestApplicationAction(
 				new ApplicationRequest(
 						name, cartridge, ApplicationAction.DECONFIGURE, user.getRhlogin(), true), user);
@@ -221,7 +222,6 @@ public class OpenShiftService implements IOpenShiftService {
 						name, cartridge, ApplicationAction.START, user.getRhlogin(), true), user);
 	}
 
-
 	public IApplication restartApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
 		return requestApplicationAction(
@@ -229,12 +229,13 @@ public class OpenShiftService implements IOpenShiftService {
 						name, cartridge, ApplicationAction.RESTART, user.getRhlogin(), true), user);
 	}
 
-	public IApplication stopApplication(final String name, final ICartridge cartridge, final IUser user) throws OpenShiftException {
+	public IApplication stopApplication(final String name, final ICartridge cartridge, final IUser user)
+			throws OpenShiftException {
 		return requestApplicationAction(
 				new ApplicationRequest(
 						name, cartridge, ApplicationAction.STOP, user.getRhlogin(), true), user);
 	}
-	
+
 	public IApplication threadDumpApplication(final String name, final ICartridge cartridge, final IUser user)
 			throws OpenShiftException {
 		return requestApplicationAction(
@@ -242,7 +243,8 @@ public class OpenShiftService implements IOpenShiftService {
 						name, cartridge, ApplicationAction.THREADDUMP, user.getRhlogin(), true), user);
 	}
 
-	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user) throws OpenShiftException {
+	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user)
+			throws OpenShiftException {
 		ApplicationRequest applicationRequest =
 				new ApplicationRequest(applicationName, cartridge, ApplicationAction.STATUS, user.getRhlogin(), true);
 		String url = applicationRequest.getUrlString(getServiceUrl());
@@ -255,68 +257,73 @@ public class OpenShiftService implements IOpenShiftService {
 				new ApplicationStatusResponseUnmarshaller().unmarshall(response);
 		return openshiftResponse.getOpenShiftObject();
 	}
-	
-	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile, final int numLines) 
+
+	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user,
+			final String logFile, final int numLines)
 			throws OpenShiftException {
 		try {
 			JSch jsch = new JSch();
 			String host = this.getServiceUrl().replace("https://", "").replace("/broker", "");
-		
+
 			Session session = jsch.getSession("root", host, 22);
-			
+
 			jsch.setKnownHosts(System.getProperty("KNOWN_HOSTS"));
 			jsch.addIdentity(System.getProperty("IDENTITY"));
-			
-			Properties config = new Properties(); 
+
+			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
 			session.setConfig(config);
 
 			session.connect();
-			
+
 			Channel channel = session.openChannel("exec");
-			((ChannelExec)channel).setErrStream(System.err);
+			((ChannelExec) channel).setErrStream(System.err);
 			InputStream in = channel.getInputStream();
-			
+
 			String logLocation = "/";
 			if (cartridge == Cartridge.JBOSSAS_7)
 				logLocation = "/jbossas-7.0/";
-			
-			String command = 
+
+			String command =
 					"tail "
-					+ "-" + numLines 
-					+ " /var/lib/libra/" + applicationName
-					+ "-" + user.getDomain().getNamespace() + "/" + applicationName + logLocation + logFile;
-		
-			((ChannelExec)channel).setCommand(command);
-	
+							+ "-" + numLines
+							+ " /var/lib/libra/" + applicationName
+							+ "-" + user.getDomain().getNamespace() + "/" + applicationName + logLocation + logFile;
+
+			((ChannelExec) channel).setCommand(command);
+
 			channel.connect();
-			
+
 			byte[] tmp = new byte[1024];
 			StringBuffer buff = new StringBuffer();
 			int read = 0;
-			while ((read = in.read(tmp)) > 0){
-				buff.append(new String(tmp, 0, read-1));
+			while ((read = in.read(tmp)) > 0) {
+				buff.append(new String(tmp, 0, read - 1));
 			}
 			return buff.toString();
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new OpenShiftException(e, "Unable to reteive status log", applicationName);
 		}
 	}
-	
-/*	public String getStatus(final String applicationName, final ICartridge cartridge, final IUser user, final String logFile) throws OpenShiftException {
-		ApplicationRequest applicationRequest =
-				new ApplicationRequest(applicationName, cartridge, ApplicationAction.STATUS, user.getRhlogin(), true, logFile);
-		String url = applicationRequest.getUrlString(getServiceUrl());
-		String request =
-				new ApplicationRequestJsonMarshaller().marshall(applicationRequest);
-		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
-				MessageFormat.format("Could not {0} application \"{1}\" at \"{2}\"",
-						applicationRequest.getAction().getCommand(), applicationRequest.getName(), url));
-		OpenShiftResponse<String> openshiftResponse =
-				new ApplicationStatusResponseUnmarshaller().unmarshall(response);
-		return openshiftResponse.getOpenShiftObject();
-	} */
+
+	/*
+	 * public String getStatus(final String applicationName, final ICartridge
+	 * cartridge, final IUser user, final String logFile) throws
+	 * OpenShiftException { ApplicationRequest applicationRequest = new
+	 * ApplicationRequest(applicationName, cartridge, ApplicationAction.STATUS,
+	 * user.getRhlogin(), true, logFile); String url =
+	 * applicationRequest.getUrlString(getServiceUrl()); String request = new
+	 * ApplicationRequestJsonMarshaller().marshall(applicationRequest); String
+	 * response = sendRequest(request, url, user.getPassword(),
+	 * user.getAuthKey(), user.getAuthIV(),
+	 * MessageFormat.format("Could not {0} application \"{1}\" at \"{2}\"",
+	 * applicationRequest.getAction().getCommand(),
+	 * applicationRequest.getName(), url)); OpenShiftResponse<String>
+	 * openshiftResponse = new
+	 * ApplicationStatusResponseUnmarshaller().unmarshall(response); return
+	 * openshiftResponse.getOpenShiftObject(); }
+	 */
 
 	protected IApplication requestApplicationAction(final ApplicationRequest applicationRequest, final IUser user)
 			throws OpenShiftException {
@@ -330,8 +337,8 @@ public class OpenShiftService implements IOpenShiftService {
 						applicationRequest.getCartridge(), user, this).unmarshall(response);
 		return openshiftResponse.getOpenShiftObject();
 	}
-	
-	public boolean waitForApplication(final String healthCheckUrl, final long timeout) 
+
+	public boolean waitForApplication(final String healthCheckUrl, final long timeout)
 			throws OpenShiftException {
 		try {
 			IHttpClient client = createHttpClient(id, healthCheckUrl, false);
@@ -353,14 +360,31 @@ public class OpenShiftService implements IOpenShiftService {
 			throw new OpenShiftException(e, MALFORMED_URL_EXCEPTION_MSG, healthCheckUrl);
 		}
 	}
-	
-	public IEmbeddableCartridge addEmbeddedCartridge(final String applicationName, final IEmbeddableCartridge cartridge,
+
+	public boolean waitForHostResolves(final String url, final long timeout) throws OpenShiftException {
+		try {
+			long startTime = System.currentTimeMillis();
+			boolean canResolv = false;
+			while (!(canResolv = HostUtils.canResolv(url))
+					&& System.currentTimeMillis() < startTime + timeout) {
+				Thread.sleep(APPLICATION_WAIT_DELAY);
+			}
+			return canResolv;
+		} catch (InterruptedException e) {
+			return false;
+		} catch (MalformedURLException e) {
+			throw new OpenShiftException(e, MALFORMED_URL_EXCEPTION_MSG, url);
+		}
+	}
+
+	public IEmbeddableCartridge addEmbeddedCartridge(final String applicationName,
+			final IEmbeddableCartridge cartridge,
 			IUser user) throws OpenShiftException {
 		return requestEmbedAction(
 				new EmbedRequest(applicationName, cartridge, EmbedAction.ADD, user.getRhlogin(), true)
 				, user);
 	}
-	
+
 	public void removeEmbeddedCartridge(final String applicationName, final IEmbeddableCartridge cartridge,
 			final IUser user) throws OpenShiftException {
 		requestEmbedAction(
@@ -380,8 +404,9 @@ public class OpenShiftService implements IOpenShiftService {
 						.unmarshall(response);
 		return openshiftResponse.getOpenShiftObject();
 	}
-	
-	private String sendRequest(final String request, final String url, final String password, final String authKey, final String authIV, final String errorMessage) throws OpenShiftException {
+
+	private String sendRequest(final String request, final String url, final String password, final String authKey,
+			final String authIV, final String errorMessage) throws OpenShiftException {
 		try {
 			String requestMessage = new OpenShiftEnvelopeFactory(password, authKey, authIV, request).createString();
 			String response = createHttpClient(id, url, this.doSSLChecks).post(requestMessage);
@@ -397,7 +422,8 @@ public class OpenShiftService implements IOpenShiftService {
 		}
 	}
 
-	protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames) throws MalformedURLException {
+	protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames)
+			throws MalformedURLException {
 		String userAgent = MessageFormat.format(USERAGENT_FORMAT, VERSION, id);
 		return new UrlConnectionHttpClient(userAgent, new URL(url), verifyHostnames);
 	}

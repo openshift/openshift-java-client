@@ -12,8 +12,13 @@ package com.openshift.express.internal.client.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import com.openshift.express.client.IDomain;
 import com.openshift.express.client.OpenShiftException;
@@ -24,9 +29,6 @@ import com.openshift.express.client.configuration.SystemConfiguration;
 import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.test.fakes.TestSSHKey;
 import com.openshift.express.internal.client.test.fakes.TestUser;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 public class DomainIntegrationTest {
 
@@ -52,6 +54,7 @@ public class DomainIntegrationTest {
 		assertEquals(domainName, domain.getNamespace());
 	}
 
+	@Ignore
 	@Test
 	public void canChangeDomain() throws Exception {
 		String domainName = createRandomString();
@@ -62,6 +65,7 @@ public class DomainIntegrationTest {
 		assertEquals(domainName, domain.getNamespace());
 	}
 
+	@Ignore
 	@Test
 	public void canSetNamespaceOnDomain() throws Exception {
 		IDomain domain = user.getDomain();
@@ -73,5 +77,15 @@ public class DomainIntegrationTest {
 
 	private String createRandomString() {
 		return String.valueOf(System.currentTimeMillis());
+	}
+	
+	@Test
+	public void canWaitForDomainToBecomeAccessible() throws OpenShiftException {
+		IDomain domain = user.getDomain();
+		assertNotNull(domain);
+		String newDomainName = createRandomString();
+		domain.setNamespace(newDomainName);
+		assertEquals(newDomainName, domain.getNamespace());
+		assertTrue(domain.waitForAccessible(10 * 1024));
 	}
 }
