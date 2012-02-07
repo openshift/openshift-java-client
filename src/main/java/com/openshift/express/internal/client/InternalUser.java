@@ -226,6 +226,11 @@ public class InternalUser implements IUser {
 		applications.add(application);
 	}
 
+	protected void destroy(IApplication application) throws OpenShiftException {
+		service.destroyApplication(application.getName(), application.getCartridge(), this);
+		remove(application);
+	}
+	
 	protected void remove(IApplication application) {
 		applications.remove(application);
 		this.userInfo.removeApplicationInfo(application.getName());

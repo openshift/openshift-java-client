@@ -90,8 +90,7 @@ public class Application extends UserInfoAware implements IApplication {
 	}
 
 	public void destroy() throws OpenShiftException {
-		service.destroyApplication(name, cartridge, getUser());
-		getUser().remove(this);
+		getUser().destroy(this);
 	}
 
 	public void start() throws OpenShiftException {
