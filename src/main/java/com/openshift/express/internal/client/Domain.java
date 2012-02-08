@@ -66,7 +66,6 @@ public class Domain extends UserInfoAware implements IDomain {
 		return accessible;
 	}
 	
-    @Override
     public void destroy() throws OpenShiftException {
     	getUser().destroyDomain();
     }

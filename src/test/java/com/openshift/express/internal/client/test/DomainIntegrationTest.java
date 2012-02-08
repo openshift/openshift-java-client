@@ -16,12 +16,16 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import com.openshift.express.client.IApplication;
 import com.openshift.express.client.IDomain;
+import com.openshift.express.client.IUser;
+import com.openshift.express.client.NotFoundOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.SSHKeyPair;
@@ -42,16 +46,8 @@ public class DomainIntegrationTest {
 		this.openShiftService = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 		openShiftService.setEnableSSLCertChecks(Boolean.parseBoolean(System.getProperty("enableSSLCertChecks")));
 		this.user = new TestUser(openShiftService);
-	}
-
-	@Test
-	public void canCreateDomain() throws Exception {
-		String domainName = createRandomString();
-		SSHKeyPair sshKey = TestSSHKey.create();
-		IDomain domain = openShiftService.createDomain(domainName, sshKey, user);
-
-		assertNotNull(domain);
-		assertEquals(domainName, domain.getNamespace());
+		ensureDomainExists(user);
+		ensureNoApplicationsExist(user);
 	}
 
 	@Test
@@ -72,11 +68,11 @@ public class DomainIntegrationTest {
 		domain.setNamespace(newDomainName);
 		assertEquals(newDomainName, domain.getNamespace());
 	}
-	
+
 	private String createRandomString() {
 		return String.valueOf(System.currentTimeMillis());
 	}
-	
+
 	@Test
 	public void canWaitForDomainToBecomeAccessible() throws OpenShiftException {
 		IDomain domain = user.getDomain();
@@ -86,23 +82,59 @@ public class DomainIntegrationTest {
 		assertEquals(newDomainName, domain.getNamespace());
 		assertTrue(domain.waitForAccessible(10 * 1024));
 	}
-	
-    @Test
-    public void canDeleteDomain() throws Exception {
-        IDomain domain = user.getDomain();
-        assertNotNull(domain);
 
-        if (user.getApplications().size() == 0) {
-            domain.destroy();
-            assertNull(user.getDomain());
-        } else {
-            try {
-                domain.destroy();
-                assertNotNull(domain);
-            } catch (OpenShiftException e) {
-                // OpenShift exception thrown - OK
-            }
-        }
+	@Test
+	public void canDeleteDomain() throws Exception {
+		IDomain domain = user.getDomain();
+		assertNotNull(domain);
 
-    }
+		domain.destroy();
+		assertNull(user.getDomain());
+	}
+
+	@Test
+	public void canCreateDomain() throws Exception {
+		IDomain domain = user.getDomain();
+		assertNotNull(domain);
+		domain.destroy();
+
+		String domainName = createRandomString();
+		SSHKeyPair sshKey = TestSSHKey.create();
+		domain = openShiftService.createDomain(domainName, sshKey, user);
+
+		assertNotNull(domain);
+		assertEquals(domainName, domain.getNamespace());
+	}
+
+	@Test(expected = OpenShiftException.class)
+	public void cannotDeleteDomainIfApplicationsPresent() throws OpenShiftException {
+		user.createTestApplication();
+		IDomain domain = user.getDomain();
+		assertNotNull(domain);
+		domain.destroy();
+		assertNotNull(domain);
+	}
+
+	private void ensureNoApplicationsExist(TestUser user) throws OpenShiftException {
+		try {
+			List<IApplication> allApplications = new ArrayList<IApplication>();
+			allApplications.addAll(user.getApplications());
+			for (IApplication application : allApplications) {
+				application.destroy();
+			}
+		} catch (NotFoundOpenShiftException e) {
+			// no domain present, ignore
+		}
+	}
+
+	private void ensureDomainExists(IUser user) throws OpenShiftException, IOException {
+		try {
+			user.getDomain();
+		} catch (OpenShiftException e) {
+			// no domain present
+			SSHKeyPair sshKey = TestSSHKey.create();
+			openShiftService.createDomain(createRandomString(), sshKey, user);
+		}
+	}
+
 }

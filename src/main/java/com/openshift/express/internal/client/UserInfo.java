@@ -46,6 +46,11 @@ public class UserInfo {
 		return sshPublicKey;
 	}
 
+	public boolean hasDomain() {
+		return rhLogin != null
+				&& namespace != null;
+	}
+	
 	public String getRhLogin() {
 		return rhLogin;
 	}

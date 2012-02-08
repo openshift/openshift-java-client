@@ -101,8 +101,7 @@ public class InternalUser implements IUser {
 		return domain;
 	}
 
-	@Override
-    public void destroyDomain() throws OpenShiftException {
+    protected void destroyDomain() throws OpenShiftException {
         if (getApplications().size() > 0) {
             throw new OpenShiftException(
                     "There are still applications, you can only delete the domain only if you delete all apps first!");
@@ -116,7 +115,8 @@ public class InternalUser implements IUser {
     }
 	
 	public IDomain getDomain() throws OpenShiftException {
-		if (domain == null && getUserInfo().getNamespace() != null) {
+		if (domain == null
+				&& getUserInfo().hasDomain()) {
 			try {
 				this.domain = new Domain(
 						getUserInfo().getNamespace()
