@@ -30,6 +30,11 @@ public class ChangeDomainRequest extends AbstractDomainRequest {
 	public boolean isAlter() {
 		return true;
 	}
+	
+	@Override
+	public boolean isDelete() {
+		return false;
+	}
 
 	public String getOperation() {
 		return "change domain to " + getName();

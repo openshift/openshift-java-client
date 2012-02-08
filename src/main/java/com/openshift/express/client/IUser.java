@@ -32,6 +32,15 @@ public interface IUser {
 
 	public IDomain createDomain(String name, ISSHPublicKey key) throws OpenShiftException;
 
+    /**
+     * Destroys the only one domain which you can have at a time.
+     * 
+     * Destroys domain only if there is no application deployed on OpenShift, otherwise throws an exception.
+     *  
+     * @throws OpenShiftException 
+     */
+    public void destroyDomain() throws OpenShiftException;
+	
 	/**
 	 * Returns the domain that this user created previously. Returns
 	 * <code>null</code> if no domain was created.

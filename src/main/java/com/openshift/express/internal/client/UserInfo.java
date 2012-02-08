@@ -84,4 +84,7 @@ public class UserInfo {
 		return rhcDomain;
 	}
 
+	protected void clearNameSpace() {
+		namespace = null;
+	}
 }

@@ -32,6 +32,7 @@ import com.openshift.express.internal.client.request.ApplicationAction;
 import com.openshift.express.internal.client.request.ApplicationRequest;
 import com.openshift.express.internal.client.request.ChangeDomainRequest;
 import com.openshift.express.internal.client.request.CreateDomainRequest;
+import com.openshift.express.internal.client.request.DestroyDomainRequest;
 import com.openshift.express.internal.client.request.EmbedAction;
 import com.openshift.express.internal.client.request.EmbedRequest;
 import com.openshift.express.internal.client.request.JBossApplicationRequest;
@@ -154,6 +155,10 @@ public class OpenShiftService implements IOpenShiftService {
 		return requestDomainAction(new CreateDomainRequest(name, sshKey, user.getRhlogin(), true), user);
 	}
 
+	public void destroyDomain(final String name, final IUser user) throws OpenShiftException {
+	    requestDomainAction(new DestroyDomainRequest(name, user.getSshKey(), user.getRhlogin()), user);
+	}
+	
 	public IDomain changeDomain(final String newName, final ISSHPublicKey sshKey, final IUser user)
 			throws OpenShiftException {
 		return requestDomainAction(new ChangeDomainRequest(newName, sshKey, user.getRhlogin(), true), user);
