@@ -48,7 +48,7 @@ public class DomainTest {
 	public void canMarshallDomainCreateRequest() throws IOException, OpenShiftException {
 		SSHKeyPair sshKey = TestSSHKey.create();
 		String expectedRequestString = createDomainRequestString(
-				PASSWORD, RHLOGIN, true, "myDomain", false, sshKey.getPublicKey(), sshKey.getKeyType());
+				PASSWORD, RHLOGIN, true, "myDomain", false, sshKey.getPublicKey(), sshKey.getKeyType(), false);
 
 		CreateDomainRequest request = new CreateDomainRequest("myDomain", sshKey, RHLOGIN, true);
 		String requestString =
@@ -79,7 +79,7 @@ public class DomainTest {
 	public void canMarshallDomainAlterRequest() throws IOException, OpenShiftException {
 		SSHKeyPair sshKey = TestSSHKey.create();
 		String expectedRequestString = createDomainRequestString(
-				PASSWORD, RHLOGIN, true, "myDomain", true, sshKey.getPublicKey(), sshKey.getKeyType());
+				PASSWORD, RHLOGIN, true, "myDomain", true, sshKey.getPublicKey(), sshKey.getKeyType(), false);
 
 		ChangeDomainRequest request = new ChangeDomainRequest("myDomain", sshKey, RHLOGIN, true);
 		String requestString =
@@ -91,7 +91,7 @@ public class DomainTest {
 	}
 
 	private String createDomainRequestString(String password, String username, boolean debug, String namespace,
-			 boolean alter, String sshPublicKey, SSHKeyType sSHKeyType) throws UnsupportedEncodingException {
+			 boolean alter, String sshPublicKey, SSHKeyType sSHKeyType, boolean delete) throws UnsupportedEncodingException {
 		return "password="
 				+ password
 				+ "&json_data=%7B"
@@ -105,7 +105,8 @@ public class DomainTest {
 				+ "%2C+%22ssh%22+%3A+%22"
 				+ URLEncoder.encode(sshPublicKey, "UTF-8")
 				+ "%22"
-				+ "%2C+%22key_type%22+%3A+%22" + URLEncoder.encode(sSHKeyType.getTypeId(), "UTF-8") + "%22"
+				+ "%2C+%22key_type%22+%3A+%22" + URLEncoder.encode(sSHKeyType.getTypeId(), "UTF-8") + "%22%2C"
+				+ "+%22delete%22+%3A+%22" + delete + "%22"
 				+ "%7D";
 	}
 
