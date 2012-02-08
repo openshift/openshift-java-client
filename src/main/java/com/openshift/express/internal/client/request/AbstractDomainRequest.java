@@ -45,5 +45,7 @@ public abstract class AbstractDomainRequest extends AbstractOpenShiftRequest {
 
 	public abstract boolean isAlter();
 	
+	public abstract boolean isDelete();
+	
 	public abstract String getOperation();
 }

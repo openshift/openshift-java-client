@@ -12,6 +12,7 @@ package com.openshift.express.internal.client.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -43,7 +44,6 @@ public class DomainIntegrationTest {
 		this.user = new TestUser(openShiftService);
 	}
 
-	@Ignore
 	@Test
 	public void canCreateDomain() throws Exception {
 		String domainName = createRandomString();
@@ -54,7 +54,6 @@ public class DomainIntegrationTest {
 		assertEquals(domainName, domain.getNamespace());
 	}
 
-	@Ignore
 	@Test
 	public void canChangeDomain() throws Exception {
 		String domainName = createRandomString();
@@ -65,7 +64,6 @@ public class DomainIntegrationTest {
 		assertEquals(domainName, domain.getNamespace());
 	}
 
-	@Ignore
 	@Test
 	public void canSetNamespaceOnDomain() throws Exception {
 		IDomain domain = user.getDomain();
@@ -74,7 +72,7 @@ public class DomainIntegrationTest {
 		domain.setNamespace(newDomainName);
 		assertEquals(newDomainName, domain.getNamespace());
 	}
-
+	
 	private String createRandomString() {
 		return String.valueOf(System.currentTimeMillis());
 	}
@@ -88,4 +86,23 @@ public class DomainIntegrationTest {
 		assertEquals(newDomainName, domain.getNamespace());
 		assertTrue(domain.waitForAccessible(10 * 1024));
 	}
+	
+    @Test
+    public void canDeleteDomain() throws Exception {
+        IDomain domain = user.getDomain();
+        assertNotNull(domain);
+
+        if (user.getApplications().size() == 0) {
+            domain.destroy();
+            assertNull(user.getDomain());
+        } else {
+            try {
+                domain.destroy();
+                assertNotNull(domain);
+            } catch (OpenShiftException e) {
+                // OpenShift exception thrown - OK
+            }
+        }
+
+    }
 }

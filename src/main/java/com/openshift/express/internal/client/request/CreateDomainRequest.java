@@ -30,6 +30,11 @@ public class CreateDomainRequest extends AbstractDomainRequest {
 		return false;
 	}
 	
+	@Override
+	public boolean isDelete() {
+		return false;
+	}
+	
 	public String getOperation() {
 		return "create domain " + getName();
 	}

@@ -337,6 +337,22 @@ public interface IOpenShiftService {
 	public IDomain createDomain(String name, ISSHPublicKey sshKey, IUser user) throws OpenShiftException;
 
 	/**
+	 * Destroys the OpenShift domain associated to the given User.
+	 * If there is any application deployed OpenShiftException is thrown.
+	 * 
+	 * @param name
+	 * 				domain namespace to destroy
+	 * @param user
+	 *             the user account to use
+	 * 
+	 * @throws OpenShiftException
+	 * 
+	 * @see IUser
+	 */
+	public void destroyDomain(String name, IUser user) throws OpenShiftException;
+	
+	
+	/**
 	 * Returns all informations for the given user and its applications.
 	 * 
 	 * @param user
