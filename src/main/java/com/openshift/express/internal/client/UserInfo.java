@@ -47,8 +47,7 @@ public class UserInfo {
 	}
 
 	public boolean hasDomain() {
-		return rhLogin != null
-				&& namespace != null;
+		return namespace != null;
 	}
 	
 	public String getRhLogin() {

@@ -108,10 +108,8 @@ public class InternalUser implements IUser {
         }
         
         service.destroyDomain(domain.getNamespace(), this);
-
         getUserInfo().clearNameSpace();
-        
-        clearDomain();
+        this.domain = null;
     }
 	
 	public IDomain getDomain() throws OpenShiftException {
@@ -130,11 +128,7 @@ public class InternalUser implements IUser {
 		return domain;
 	}
 
-    protected void clearDomain() {
-        this.domain = null;
-    }
-
-	public boolean hasDomain() throws OpenShiftException {
+    public boolean hasDomain() throws OpenShiftException {
 		return getDomain() != null;
 	}
 	
@@ -273,6 +267,7 @@ public class InternalUser implements IUser {
 	public void refresh() throws OpenShiftException {
 		this.domain = null;
 		this.sshKey = null;
+		this.userInfo = null;
 		getUserInfo();
 	}
 
