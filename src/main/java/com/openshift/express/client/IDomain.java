@@ -21,6 +21,8 @@ public interface IDomain {
 
 	public String getRhcDomain() throws OpenShiftException;
 
+	public void destroy() throws OpenShiftException;
+	
 	/**
 	 * Waits for the domain to become accessible. A domain is considered as
 	 * accessible as soon as at least 1 application url in it resolves to a
