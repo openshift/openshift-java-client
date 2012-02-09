@@ -22,6 +22,7 @@ import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;
 import com.openshift.express.client.IEmbeddableCartridge;
 import com.openshift.express.client.IOpenShiftService;
+import com.openshift.express.client.IUser;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.internal.client.utils.Assert;
 
@@ -90,25 +91,25 @@ public class Application extends UserInfoAware implements IApplication {
 	}
 
 	public void destroy() throws OpenShiftException {
-		getUser().destroy(this);
+		getInternalUser().destroy(this);
 	}
 
 	public void start() throws OpenShiftException {
-		service.startApplication(name, cartridge, getUser());
+		service.startApplication(name, cartridge, getInternalUser());
 	}
 
 	public void restart() throws OpenShiftException {
-		service.restartApplication(name, cartridge, getUser());
+		service.restartApplication(name, cartridge, getInternalUser());
 	}
 
 	public void stop() throws OpenShiftException {
-		service.stopApplication(name, cartridge, getUser());
+		service.stopApplication(name, cartridge, getInternalUser());
 	}
 
 	public ApplicationLogReader getLogReader() throws OpenShiftException {
 		ApplicationLogReader logReader = null;
 		if (logReaders.get(DEFAULT_LOGREADER) == null) {
-			logReader = new ApplicationLogReader(this, getUser(), service);
+			logReader = new ApplicationLogReader(this, getInternalUser(), service);
 			logReaders.put(DEFAULT_LOGREADER, logReader);
 		}
 		return logReader;
@@ -117,14 +118,14 @@ public class Application extends UserInfoAware implements IApplication {
 	public ApplicationLogReader getLogReader(String logFile) throws OpenShiftException {
 		ApplicationLogReader logReader = null;
 		if (logReaders.get(logFile) == null) {
-			logReader = new ApplicationLogReader(this, getUser(), service, logFile);
+			logReader = new ApplicationLogReader(this, getInternalUser(), service, logFile);
 			logReaders.put(logFile, logReader);
 		}
 		return logReader;
 	}
 
 	public String getGitUri() throws OpenShiftException {
-		IDomain domain = getUser().getDomain();
+		IDomain domain = getInternalUser().getDomain();
 		if (domain == null) {
 			return null;
 		}
@@ -133,7 +134,7 @@ public class Application extends UserInfoAware implements IApplication {
 	}
 
 	public String getApplicationUrl() throws OpenShiftException {
-		IDomain domain = getUser().getDomain();
+		IDomain domain = getInternalUser().getDomain();
 		if (domain == null) {
 			return null;
 		}
@@ -145,7 +146,7 @@ public class Application extends UserInfoAware implements IApplication {
 	}
 
 	public void addEmbbedCartridge(IEmbeddableCartridge embeddedCartridge) throws OpenShiftException {
-		service.addEmbeddedCartridge(getName(), embeddedCartridge, getUser());
+		service.addEmbeddedCartridge(getName(), embeddedCartridge, getInternalUser());
 		Assert.isTrue(embeddedCartridge instanceof EmbeddableCartridge);
 		((EmbeddableCartridge) embeddedCartridge).setApplication(this);
 		this.embeddedCartridges.add(embeddedCartridge);
@@ -164,7 +165,7 @@ public class Application extends UserInfoAware implements IApplication {
 			throw new OpenShiftException("There's no cartridge \"{0}\" embedded to the application \"{1}\"",
 					cartridge.getName(), getName());
 		}
-		service.removeEmbeddedCartridge(getName(), embeddedCartridge, getUser());
+		service.removeEmbeddedCartridge(getName(), embeddedCartridge, getInternalUser());
 		embeddedCartridges.remove(embeddedCartridge);
 	}
 
@@ -222,6 +223,10 @@ public class Application extends UserInfoAware implements IApplication {
 		return service.waitForApplication(getHealthCheckUrl(), timeout);
 	}
 
+	public IUser getUser() {
+		return getInternalUser();
+	}
+	
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

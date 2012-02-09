@@ -48,7 +48,7 @@ public class Domain extends UserInfoAware implements IDomain {
 	}
 
 	public void setNamespace(String namespace) throws OpenShiftException {
-		InternalUser user = getUser();
+		InternalUser user = getInternalUser();
 		IDomain domain = service.changeDomain(namespace, user.getSshKey(), user);
 		update(domain);
 	}
@@ -60,13 +60,13 @@ public class Domain extends UserInfoAware implements IDomain {
 
 	public boolean waitForAccessible(long timeout) throws OpenShiftException {
 		boolean accessible = true;
-		for (IApplication application : getUser().getApplications()) {
+		for (IApplication application : getInternalUser().getApplications()) {
 			accessible |= service.waitForHostResolves(application.getApplicationUrl(), timeout);
 		}
 		return accessible;
 	}
 	
     public void destroy() throws OpenShiftException {
-    	getUser().destroyDomain();
+    	getInternalUser().destroyDomain();
     }
 }

@@ -28,7 +28,7 @@ public class UserInfoAware {
 		return userInfo;
 	}
 
-	protected InternalUser getUser() {
+	protected InternalUser getInternalUser() {
 		return user;
 	}
 	

@@ -34,7 +34,7 @@ public class RubyApplication extends Application implements IRubyApplication {
 	}
 
 	public String threadDump() throws OpenShiftException {
-		service.threadDumpApplication(name, cartridge, getUser());
+		service.threadDumpApplication(name, cartridge, getInternalUser());
 		
 		return getRackLogFile();
 	}

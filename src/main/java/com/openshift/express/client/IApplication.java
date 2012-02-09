@@ -225,4 +225,6 @@ public interface IApplication {
 	 */
 	public boolean waitForAccessible(long timeout) throws OpenShiftException;
 
+	public IUser getUser();
+	
 }

@@ -33,7 +33,7 @@ public class JBossASApplication extends Application implements IJBossASApplicati
 	}
 
 	public String threadDump() throws OpenShiftException {
-		service.threadDumpApplication(name, cartridge, getUser());
+		service.threadDumpApplication(name, cartridge, getInternalUser());
 		
 		return "stdout.log";
 	}
