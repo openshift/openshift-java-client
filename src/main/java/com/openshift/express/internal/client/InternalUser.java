@@ -129,7 +129,12 @@ public class InternalUser implements IUser {
 	}
 
     public boolean hasDomain() throws OpenShiftException {
-		return getDomain() != null;
+		try {
+			return getDomain() != null;
+		} catch(NotFoundOpenShiftException e) {
+			// domain not found
+			return false;
+		}
 	}
 	
 	private void setSshKey(ISSHPublicKey key) {

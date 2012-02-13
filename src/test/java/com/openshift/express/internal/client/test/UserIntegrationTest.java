@@ -118,6 +118,12 @@ public class UserIntegrationTest {
 	}
 
 	@Test
+	public void getFalseIfNoDomainPresent() throws OpenShiftException {
+		Boolean hasDomain = userWithoutDomain.hasDomain();
+		assertFalse(hasDomain);
+	}
+	
+	@Test
 	public void getNullIfNoDomainPresent() throws OpenShiftException {
 		IDomain domain = userWithoutDomain.getDomain();
 		assertNull(domain);
