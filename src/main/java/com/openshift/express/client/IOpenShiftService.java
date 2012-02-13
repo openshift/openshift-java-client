@@ -22,7 +22,6 @@ import com.openshift.express.internal.client.UserInfo;
 public interface IOpenShiftService {
 
 	public static final String ID = "com.openshift.express.client";
-	public static final String VERSION = "2.3.0";
 
 	/**
 	 * The path (url path addition) to the service
