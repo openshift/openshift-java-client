@@ -10,6 +10,9 @@
  ******************************************************************************/
 package com.openshift.express.client;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -68,6 +71,8 @@ public class OpenShiftService implements IOpenShiftService {
 	private String baseUrl;
 	private String id;
 	private boolean doSSLChecks = false;
+	
+	protected static String version = null;
 
 	public OpenShiftService(String id, String baseUrl) {
 		this.id = id;
@@ -429,8 +434,25 @@ public class OpenShiftService implements IOpenShiftService {
 
 	protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames)
 			throws MalformedURLException {
-		String userAgent = MessageFormat.format(USERAGENT_FORMAT, VERSION, id);
+		String userAgent = MessageFormat.format(USERAGENT_FORMAT, version, id);
 		return new UrlConnectionHttpClient(userAgent, new URL(url), verifyHostnames);
+	}
+	
+	public static String getVersion() throws IOException {
+		if (version == null){
+			InputStream is = null;
+			try {
+				Properties props = new Properties();
+				is = OpenShiftService.class.getClassLoader().getResourceAsStream("version.properties");
+				props.load(is);
+				version = props.getProperty("version");
+			} finally {
+				if (is != null)
+					is.close();
+			}
+		}
+		
+		return version;
 	}
 
 }

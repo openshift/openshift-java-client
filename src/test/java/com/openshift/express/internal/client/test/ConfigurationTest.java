@@ -13,6 +13,7 @@ package com.openshift.express.internal.client.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -26,12 +27,15 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 import com.openshift.express.client.OpenShiftException;
+import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.configuration.DefaultConfiguration;
 import com.openshift.express.client.configuration.IOpenShiftConfiguration;
+import com.openshift.express.client.configuration.OpenShiftConfiguration;
 import com.openshift.express.client.configuration.SystemConfiguration;
 import com.openshift.express.client.configuration.SystemProperties;
 import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.test.fakes.SystemConfigurationFake;
+import com.openshift.express.internal.client.test.fakes.TestUser;
 import com.openshift.express.internal.client.test.fakes.UserConfigurationFake;
 import com.openshift.express.internal.client.utils.StreamUtils;
 
@@ -47,6 +51,14 @@ public class ConfigurationTest {
 	private static final String ANOTHER_USERNAME = "anotherUser";
 	protected static final String LIBRA_SERVER = "openshift.redhat.com";
 
+	@Test
+	public void versionTest() throws OpenShiftException, IOException {
+		String version = OpenShiftService.getVersion();
+	
+		assertNotNull(version);
+		assertFalse(version.contains("pom"));
+	}
+	
 	@Test
 	public void canReadUsername() throws OpenShiftException, IOException {
 		UserConfigurationFake userConfiguration = new UserConfigurationFake() {

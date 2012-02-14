@@ -26,7 +26,7 @@ import com.openshift.express.internal.client.test.utils.ApplicationUtils;
  */
 public class TestUser extends User {
 
-	public static final String ID = "com.openshift.express.client.test " + OpenShiftService.VERSION;
+	public static final String ID = "com.openshift.express.client.test ";
 	
 	 public static final String RHLOGIN_USER_WITHOUT_DOMAIN = "toolsjboss+unittests_nodomain@gmail.com";
 	 public static final String PASSWORD_USER_WITHOUT_DOMAIN = "1q2w3e";
