@@ -64,7 +64,6 @@ public class OpenShiftService implements IOpenShiftService {
 	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
 	private static final long APPLICATION_WAIT_DELAY = 2;
 	private static final String HEALTH_RESPONSE_OK = "1";
-	private static final int MAX_APP_NAME_LENGTH = 16;
 
 	private String baseUrl;
 	private String id;
@@ -115,8 +114,9 @@ public class OpenShiftService implements IOpenShiftService {
 		String url = userInfoRequest.getUrlString(getServiceUrl());
 
 		String request = new UserInfoRequestJsonMarshaller().marshall(userInfoRequest);
-		String response = sendRequest(request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
-				"Could not get user info for user \"{0}\" at \"{1}\"");
+		String response = sendRequest(
+				request, url, user.getPassword(), user.getAuthKey(), user.getAuthIV(),
+				MessageFormat.format("Could not get user info for user \"{0}\" at \"{1}\"", user.getRhlogin(), url));
 		OpenShiftResponse<UserInfo> userInfoResponse =
 				new UserInfoResponseUnmarshaller().unmarshall(response);
 		return userInfoResponse.getOpenShiftObject();
