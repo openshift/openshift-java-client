@@ -434,11 +434,11 @@ public class OpenShiftService implements IOpenShiftService {
 
 	protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames)
 			throws MalformedURLException {
-		String userAgent = MessageFormat.format(USERAGENT_FORMAT, version, id);
+		String userAgent = MessageFormat.format(USERAGENT_FORMAT, getVersion(), id);
 		return new UrlConnectionHttpClient(userAgent, new URL(url), verifyHostnames);
 	}
 	
-	public static String getVersion() throws IOException {
+	public static String getVersion() {
 		if (version == null){
 			InputStream is = null;
 			try {
@@ -446,9 +446,13 @@ public class OpenShiftService implements IOpenShiftService {
 				is = OpenShiftService.class.getClassLoader().getResourceAsStream("version.properties");
 				props.load(is);
 				version = props.getProperty("version");
+			} catch (IOException e) {
+				version = "Unknown";
 			} finally {
 				if (is != null)
-					is.close();
+					try {
+						is.close();
+					} catch (IOException e){}
 			}
 		}
 		
