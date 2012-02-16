@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface IUser {
 
-	public String getRhlogin() throws OpenShiftException;
+	public String getRhlogin();
 
 	public String getPassword();
 	
