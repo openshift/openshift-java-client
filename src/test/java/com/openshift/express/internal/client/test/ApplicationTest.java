@@ -16,7 +16,6 @@ import static com.openshift.express.internal.client.test.utils.ApplicationAssert
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -216,17 +215,12 @@ public class ApplicationTest {
 		}
 	}
 	
-	@Test
+	@Test(expected=InvalidNameOpenShiftException.class)
 	public void createApplicationWithInvalidName() throws Exception {
-		try {
 			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 			user = new TestUser(service);
 			service.createApplication("invalid_name", ICartridge.JBOSSAS_7, user);
-			fail("Expected OpenShiftException");
-		} catch (OpenShiftException e){
-			
-		}
 	}
 	
 	@Test(expected=InvalidNameOpenShiftException.class)
