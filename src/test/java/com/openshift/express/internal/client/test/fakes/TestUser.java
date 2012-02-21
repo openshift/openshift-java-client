@@ -16,7 +16,6 @@ import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.OpenShiftException;
-import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.User;
 import com.openshift.express.client.configuration.OpenShiftConfiguration;
 import com.openshift.express.internal.client.test.utils.ApplicationUtils;
@@ -26,6 +25,8 @@ import com.openshift.express.internal.client.test.utils.ApplicationUtils;
  */
 public class TestUser extends User {
 
+	private static final String SYSPROPERTY_PASSWORD = "PASSWORD";
+
 	public static final String ID = "com.openshift.express.client.test ";
 	
 	 public static final String RHLOGIN_USER_WITHOUT_DOMAIN = "toolsjboss+unittests_nodomain@gmail.com";
@@ -33,7 +34,7 @@ public class TestUser extends User {
 
 	public TestUser(IOpenShiftService service) throws OpenShiftException, IOException {
 //		super(System.getProperty("RHLOGIN"), System.getProperty("PASSWORD"), ID, service);
-		super(new OpenShiftConfiguration().getRhlogin(), System.getProperty("PASSWORD"), ID, service);
+		super(new OpenShiftConfiguration().getRhlogin(), System.getProperty(SYSPROPERTY_PASSWORD), ID, service);
 	}
 
 	public TestUser(String password, IOpenShiftService service) throws OpenShiftException, IOException {
