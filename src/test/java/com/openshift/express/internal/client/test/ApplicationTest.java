@@ -30,6 +30,7 @@ import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.IUser;
+import com.openshift.express.client.InvalidNameOpenShiftException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.configuration.DefaultConfiguration;
@@ -228,8 +229,8 @@ public class ApplicationTest {
 		}
 	}
 	
-	@Test(expected=OpenShiftException.class)
-	public void createDomainWithInvalidName() throws Exception {
+	@Test(expected=InvalidNameOpenShiftException.class)
+	public void createDomainWithInvalidNameThrowsOpenShiftException() throws Exception {
 			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 			user = new TestUser(service);

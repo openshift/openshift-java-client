@@ -50,10 +50,10 @@ import com.openshift.express.internal.client.response.unmarshalling.ApplicationR
 import com.openshift.express.internal.client.response.unmarshalling.ApplicationStatusResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.DomainResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.EmbedResponseUnmarshaller;
-import com.openshift.express.internal.client.response.unmarshalling.NakedResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.JsonSanitizer;
 import com.openshift.express.internal.client.response.unmarshalling.ListCartridgesResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.ListEmbeddableCartridgesResponseUnmarshaller;
+import com.openshift.express.internal.client.response.unmarshalling.NakedResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.UserInfoResponseUnmarshaller;
 
 /**
@@ -202,7 +202,7 @@ public class OpenShiftService implements IOpenShiftService {
 
 		for (int i = 0; i < name.length(); ++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
-				throw new OpenShiftException("Application name '" + name + "' contains non-alphanumeric characters!");
+				throw new InvalidNameOpenShiftException("Application name \"{0}\" contains non-alphanumeric characters.", name);
 			}
 		}
 	}
@@ -212,7 +212,7 @@ public class OpenShiftService implements IOpenShiftService {
 
 		for (int i = 0; i < name.length(); ++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
-				throw new OpenShiftException(MessageFormat.format("Domain name \"{0}\' contains non-alphanumeric characters", name));
+				throw new InvalidNameOpenShiftException("Domain name \"{0}\" contains non-alphanumeric characters", name);
 			}
 		}
 	}
