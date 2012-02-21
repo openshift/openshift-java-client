@@ -62,6 +62,11 @@ import com.openshift.express.internal.client.utils.StreamUtils;
  */
 public class OpenShiftService implements IOpenShiftService {
 
+	private static final String SYSPROPERTY_ENABLE_SNI_EXTENSION = "jsse.enableSNIExtension";
+	private static final String SYSPROPERTY_PROXY_PORT = "proxyPort";
+	private static final String SYSPROPERTY_PROXY_HOST = "proxyHost";
+	private static final String SYSPROPERTY_PROXY_SET = "proxySet";
+	
 	// TODO extract to properties file
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
 	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
@@ -79,7 +84,7 @@ public class OpenShiftService implements IOpenShiftService {
 		this.baseUrl = baseUrl;
 
 		// JDK7 bug workaround
-		System.setProperty("jsse.enableSNIExtension", "false");
+		System.setProperty(SYSPROPERTY_ENABLE_SNI_EXTENSION, "false");
 	}
 
 	public void setEnableSSLCertChecks(boolean doSSLChecks) {
@@ -88,18 +93,18 @@ public class OpenShiftService implements IOpenShiftService {
 
 	public void setProxySet(boolean proxySet) {
 		if (proxySet) {
-			System.setProperty("proxySet", "true");
+			System.setProperty(SYSPROPERTY_PROXY_SET, "true");
 		} else {
-			System.setProperty("proxySet", "false");
+			System.setProperty(SYSPROPERTY_PROXY_SET, "false");
 		}
 	}
 
 	public void setProxyHost(String proxyHost) {
-		System.setProperty("proxyHost", proxyHost);
+		System.setProperty(SYSPROPERTY_PROXY_HOST, proxyHost);
 	}
 
 	public void setProxyPort(String proxyPort) {
-		System.setProperty("proxyPort", proxyPort);
+		System.setProperty(SYSPROPERTY_PROXY_PORT, proxyPort);
 	}
 
 	public String getServiceUrl() {
