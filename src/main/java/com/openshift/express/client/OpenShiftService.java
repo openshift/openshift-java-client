@@ -50,6 +50,7 @@ import com.openshift.express.internal.client.response.unmarshalling.ApplicationR
 import com.openshift.express.internal.client.response.unmarshalling.ApplicationStatusResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.DomainResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.EmbedResponseUnmarshaller;
+import com.openshift.express.internal.client.response.unmarshalling.NakedResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.JsonSanitizer;
 import com.openshift.express.internal.client.response.unmarshalling.ListCartridgesResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.ListEmbeddableCartridgesResponseUnmarshaller;
@@ -426,10 +427,14 @@ public class OpenShiftService implements IOpenShiftService {
 		} catch (NotFoundException e) {
 			throw new NotFoundOpenShiftException(url, e);
 		} catch (HttpClientException e) {
-			throw new OpenShiftEndpointException(url, e, errorMessage);
+			throw new OpenShiftEndpointException(url, e, createNakedResponse(e.getMessage()), errorMessage);
 		}
 	}
 
+	private OpenShiftResponse<Object> createNakedResponse(String response) throws OpenShiftException {
+		return new NakedResponseUnmarshaller().unmarshall(response);
+	}
+	
 	protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames)
 			throws MalformedURLException {
 		String userAgent = MessageFormat.format(USERAGENT_FORMAT, getVersion(), id);
