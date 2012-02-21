@@ -12,7 +12,6 @@ package com.openshift.express.internal.client.response.unmarshalling;
 
 import org.jboss.dmr.ModelNode;
 
-import com.openshift.express.client.Cartridge;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IUser;
@@ -47,6 +46,7 @@ public class ApplicationResponseUnmarshaller extends AbstractOpenShiftJsonRespon
 		String creationLog = getString(IOpenShiftJsonConstants.PROPERTY_RESULT, node);
 		String healthCheckPath = getDataNodeProperty(IOpenShiftJsonConstants.PROPERTY_HEALTH_CHECK_PATH, node);
 		String uuid = getDataNodeProperty(IOpenShiftJsonConstants.PROPERTY_UUID, node);
+
 		if (cartridge instanceof JBossCartridge) {
 			return new JBossASApplication(applicationName, uuid, creationLog, healthCheckPath, cartridge, user, service);
 		} else if (cartridge instanceof RubyCartridge) {
