@@ -212,7 +212,7 @@ public class OpenShiftService implements IOpenShiftService {
 
 		for (int i = 0; i < name.length(); ++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
-				throw new OpenShiftException("Domain name '" + name + "' contains non-alphanumeric characters!");
+				throw new OpenShiftException(MessageFormat.format("Domain name \"{0}\' contains non-alphanumeric characters", name));
 			}
 		}
 	}
