@@ -16,8 +16,10 @@ import static com.openshift.express.internal.client.test.utils.ApplicationAssert
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 
@@ -27,12 +29,16 @@ import com.openshift.express.client.ApplicationLogReader;
 import com.openshift.express.client.IApplication;
 import com.openshift.express.client.ICartridge;
 import com.openshift.express.client.IDomain;
+import com.openshift.express.client.IHttpClient;
 import com.openshift.express.client.IOpenShiftService;
 import com.openshift.express.client.IUser;
 import com.openshift.express.client.InvalidNameOpenShiftException;
+import com.openshift.express.client.OpenShiftEndpointException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.configuration.DefaultConfiguration;
+import com.openshift.express.client.configuration.IOpenShiftConfiguration;
+import com.openshift.express.client.configuration.OpenShiftConfiguration;
 import com.openshift.express.client.configuration.SystemConfiguration;
 import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.Application;
@@ -40,6 +46,7 @@ import com.openshift.express.internal.client.ApplicationInfo;
 import com.openshift.express.internal.client.Domain;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
+import com.openshift.express.internal.client.httpclient.HttpClientException;
 import com.openshift.express.internal.client.request.ApplicationAction;
 import com.openshift.express.internal.client.request.ApplicationRequest;
 import com.openshift.express.internal.client.request.OpenShiftEnvelopeFactory;
@@ -214,21 +221,75 @@ public class ApplicationTest {
 					characterToMatch, character);
 		}
 	}
-	
-	@Test(expected=InvalidNameOpenShiftException.class)
+
+	@Test(expected = InvalidNameOpenShiftException.class)
 	public void createApplicationWithInvalidName() throws Exception {
-			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
-			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
-			user = new TestUser(service);
-			service.createApplication("invalid_name", ICartridge.JBOSSAS_7, user);
+		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
+		IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+		user = new TestUser(service);
+		service.createApplication("invalid_name", ICartridge.JBOSSAS_7, user);
 	}
-	
-	@Test(expected=InvalidNameOpenShiftException.class)
+
+	@Test(expected = InvalidNameOpenShiftException.class)
 	public void createDomainWithInvalidNameThrowsOpenShiftException() throws Exception {
-			UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
-			IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
+		IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+		user = new TestUser(service);
+		service.createDomain("invalid_name", null, user);
+	}
+
+	@Test
+	public void responseWithErrorIsReported() throws Exception {
+		final String result = "user@redhat.com has already reached the application limit of 5";
+		final int exitCode = 1;
+		try {
+			IOpenShiftConfiguration configuration = new OpenShiftConfiguration();
+			OpenShiftService service = new OpenShiftService(TestUser.ID, configuration.getLibraServer()) {
+
+				protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames)
+						throws MalformedURLException {
+					return new IHttpClient() {
+
+						public String post(String data) throws HttpClientException {
+							String quotaReachedMessage = "{"
+									+ "	\"data\":\"\","
+									+ "	\"result\":\"" + result + "\","
+									+ "	\"exit_code\":" + exitCode + ","
+									+ "	\"debug\":\"\","
+									+ "	\"broker_c\":[\"namespace\","
+									+ "	\"rhlogin\","
+									+ "	\"ssh\","
+									+ "	\"app_uuid\","
+									+ "	\"debug\","
+									+ "	\"alter\","
+									+ "	\"cartridge\","
+									+ "	\"cart_type\","
+									+ "	\"action\","
+									+ "	\"app_name\","
+									+ "	\"api\"],"
+									+ "	\"api\":\"1.1.2\","
+									+ "	\"messages\":\"\","
+									+ "	\"api_c\":[\"placeholder\"]"
+									+ "}";
+							throw new HttpClientException(quotaReachedMessage);
+						}
+
+						public String get() throws HttpClientException {
+							throw new UnsupportedOperationException();
+						}
+					};
+				}
+			};
+
 			user = new TestUser(service);
-			service.createDomain("invalid_name", null, user);
+			service.createApplication("dummyName", ICartridge.JBOSSAS_7, user);
+			fail("No exception thrown");
+		} catch (OpenShiftEndpointException e) {
+			String responseResult = e.getResponseResult();
+			assertNotNull(responseResult);
+			assertTrue(responseResult.indexOf("user@redhat.com has already reached the application limit of 5") >= 0);
+			assertEquals(exitCode, e.getResponseExitCode());
+		}
 	}
 
 	private IApplication createApplication(OpenShiftService userInfoService, UserFake user) {
