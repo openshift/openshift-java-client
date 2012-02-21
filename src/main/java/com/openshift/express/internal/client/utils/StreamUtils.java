@@ -93,6 +93,14 @@ public class StreamUtils {
 		}
 	}
 
+	public static void quietlyClose(InputStream inputStream) {
+		try {
+			close(inputStream);
+		} catch (IOException e) {
+			// ignore
+		}
+	}
+
 	public static void close(OutputStream outputStream) throws IOException {
 		if (outputStream != null) {
 			outputStream.close();

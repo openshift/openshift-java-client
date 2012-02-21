@@ -55,6 +55,7 @@ import com.openshift.express.internal.client.response.unmarshalling.ListCartridg
 import com.openshift.express.internal.client.response.unmarshalling.ListEmbeddableCartridgesResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.NakedResponseUnmarshaller;
 import com.openshift.express.internal.client.response.unmarshalling.UserInfoResponseUnmarshaller;
+import com.openshift.express.internal.client.utils.StreamUtils;
 
 /**
  * @author André Dietisheim
@@ -452,10 +453,7 @@ public class OpenShiftService implements IOpenShiftService {
 			} catch (IOException e) {
 				version = "Unknown";
 			} finally {
-				if (is != null)
-					try {
-						is.close();
-					} catch (IOException e){}
+				StreamUtils.quietlyClose(is);
 			}
 		}
 		
