@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package com.openshift.express.internal.client.test;
+package com.openshift.express.internal.client.test.fakes;
 
 import com.openshift.express.client.IOpenShiftService;
 
