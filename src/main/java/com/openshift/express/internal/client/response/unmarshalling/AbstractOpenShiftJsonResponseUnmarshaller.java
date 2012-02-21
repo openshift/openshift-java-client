@@ -52,8 +52,8 @@ public abstract class AbstractOpenShiftJsonResponseUnmarshaller<OPENSHIFTOBJECT>
 	}
 
 	protected String getDataNodeProperty(String property, ModelNode node) {
-		ModelNode dataNode = node.get(IOpenShiftJsonConstants.PROPERTY_DATA);
-		if (!isSet(node)) {
+		ModelNode dataNode = getChild(IOpenShiftJsonConstants.PROPERTY_DATA, node);
+		if (dataNode == null) {
 			return null;
 		}
 		
