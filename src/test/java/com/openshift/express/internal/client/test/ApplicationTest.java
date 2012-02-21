@@ -37,8 +37,6 @@ import com.openshift.express.client.OpenShiftEndpointException;
 import com.openshift.express.client.OpenShiftException;
 import com.openshift.express.client.OpenShiftService;
 import com.openshift.express.client.configuration.DefaultConfiguration;
-import com.openshift.express.client.configuration.IOpenShiftConfiguration;
-import com.openshift.express.client.configuration.OpenShiftConfiguration;
 import com.openshift.express.client.configuration.SystemConfiguration;
 import com.openshift.express.client.configuration.UserConfiguration;
 import com.openshift.express.internal.client.Application;
@@ -243,8 +241,7 @@ public class ApplicationTest {
 		final String result = "user@redhat.com has already reached the application limit of 5";
 		final int exitCode = 1;
 		try {
-			IOpenShiftConfiguration configuration = new OpenShiftConfiguration();
-			OpenShiftService service = new OpenShiftService(TestUser.ID, configuration.getLibraServer()) {
+			OpenShiftService service = new OpenShiftService(TestUser.ID, "dummy") {
 
 				protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames)
 						throws MalformedURLException {
@@ -281,7 +278,7 @@ public class ApplicationTest {
 				}
 			};
 
-			user = new TestUser(service);
+			user = new TestUser("dummyRhLogin", "dummyPassword", service);
 			service.createApplication("dummyName", ICartridge.JBOSSAS_7, user);
 			fail("No exception thrown");
 		} catch (OpenShiftEndpointException e) {
