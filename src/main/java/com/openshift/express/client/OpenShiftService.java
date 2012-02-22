@@ -13,6 +13,7 @@ package com.openshift.express.client;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
@@ -69,7 +70,6 @@ public class OpenShiftService implements IOpenShiftService {
 	
 	// TODO extract to properties file
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
-	private static final String MALFORMED_URL_EXCEPTION_MSG = "Application URL {0} is invalid";
 	private static final long APPLICATION_WAIT_DELAY = 2;
 	private static final String HEALTH_RESPONSE_OK = "1";
 
@@ -372,7 +372,9 @@ public class OpenShiftService implements IOpenShiftService {
 		} catch (InterruptedException e) {
 			return false;
 		} catch (MalformedURLException e) {
-			throw new OpenShiftException(e, MALFORMED_URL_EXCEPTION_MSG, healthCheckUrl);
+			throw new OpenShiftException(e, "Application URL {0} is invalid", healthCheckUrl);
+		} catch (SocketTimeoutException e) {
+			throw new OpenShiftException(e, "Could not reach {0}, connection timeouted", healthCheckUrl);
 		}
 	}
 
@@ -388,7 +390,7 @@ public class OpenShiftService implements IOpenShiftService {
 		} catch (InterruptedException e) {
 			return false;
 		} catch (MalformedURLException e) {
-			throw new OpenShiftException(e, MALFORMED_URL_EXCEPTION_MSG, url);
+			throw new OpenShiftException(e, "Application URL {0} is invalid", url);
 		}
 	}
 
@@ -432,6 +434,8 @@ public class OpenShiftService implements IOpenShiftService {
 			throw new InvalidCredentialsOpenShiftException(url, e);
 		} catch (NotFoundException e) {
 			throw new NotFoundOpenShiftException(url, e);
+		} catch(SocketTimeoutException e) {
+			throw new OpenShiftEndpointException(url, e, errorMessage);
 		} catch (HttpClientException e) {
 			throw new OpenShiftEndpointException(url, e, createNakedResponse(e.getMessage()), errorMessage);
 		}

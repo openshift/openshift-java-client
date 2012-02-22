@@ -13,6 +13,7 @@ package com.openshift.express.internal.client.httpclient;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -57,7 +58,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 	
 	
-	public String post(String data) throws HttpClientException {
+	public String post(String data) throws HttpClientException, SocketTimeoutException {
 		HttpURLConnection connection = null;
 		try {
 			connection = createConnection(userAgent, url);
@@ -76,7 +77,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		}
 	}
 
-	public String get() throws HttpClientException {
+	public String get() throws HttpClientException, SocketTimeoutException {
 		HttpURLConnection connection = null;
 		try {
 			connection = createConnection(userAgent, url);
@@ -93,7 +94,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		}
 	}
 	
-	private HttpClientException createException(IOException ioe, HttpURLConnection connection) {
+	private HttpClientException createException(IOException ioe, HttpURLConnection connection) throws SocketTimeoutException {
 		try {
 			int responseCode = connection.getResponseCode();
 			String errorMessage = StreamUtils.readToString(connection.getErrorStream());
@@ -109,6 +110,8 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			default:
 				return new HttpClientException(errorMessage, ioe);
 			}
+		} catch(SocketTimeoutException e) {
+			throw e;
 		} catch (IOException e) {
 			return new HttpClientException(e);
 		}
