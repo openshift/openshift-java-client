@@ -34,7 +34,6 @@ import javax.net.ssl.X509TrustManager;
 import com.openshift.express.client.IHttpClient;
 import com.openshift.express.internal.client.utils.StreamUtils;
 
-
 /**
  * @author André Dietisheim
  */
@@ -42,11 +41,13 @@ public class UrlConnectionHttpClient implements IHttpClient {
 
 	private static final String PROPERTY_CONTENT_TYPE = "Content-Type";
 	private static final int TIMEOUT = 10 * 1024;
-
+	private static final String SYSPROP_OPENSHIFT_CONNECT_TIMEOUT = "com.openshift.express.httpclient.timeout";
+	private static final String SYSPROP_DEFAULT_CONNECT_TIMEOUT = "sun.net.client.defaultConnectTimeout";
+	
 	private URL url;
 	private String userAgent;
 	private boolean doSSLChecks;
-	
+
 	public UrlConnectionHttpClient(String userAgent, URL url) {
 		this(userAgent, url, false);
 	}
@@ -56,8 +57,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		this.url = url;
 		this.doSSLChecks = verifyHostNames;
 	}
-	
-	
+
 	public String post(String data) throws HttpClientException, SocketTimeoutException {
 		HttpURLConnection connection = null;
 		try {
@@ -93,8 +93,9 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			}
 		}
 	}
-	
-	private HttpClientException createException(IOException ioe, HttpURLConnection connection) throws SocketTimeoutException {
+
+	private HttpClientException createException(IOException ioe, HttpURLConnection connection)
+			throws SocketTimeoutException {
 		try {
 			int responseCode = connection.getResponseCode();
 			String errorMessage = StreamUtils.readToString(connection.getErrorStream());
@@ -110,7 +111,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			default:
 				return new HttpClientException(errorMessage, ioe);
 			}
-		} catch(SocketTimeoutException e) {
+		} catch (SocketTimeoutException e) {
 			throw e;
 		} catch (IOException e) {
 			return new HttpClientException(e);
@@ -128,13 +129,32 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		connection.setUseCaches(false);
 		connection.setDoInput(true);
 		connection.setAllowUserInteraction(false);
-		connection.setConnectTimeout(TIMEOUT);
+		connection.setConnectTimeout(getTimeout());
 		connection.setRequestProperty(PROPERTY_CONTENT_TYPE, "application/x-www-form-urlencoded");
 		connection.setInstanceFollowRedirects(true);
 		connection.setRequestProperty(USER_AGENT, userAgent);
 		return connection;
 	}
 
+	private int getTimeout() {
+		int timeout = getSystemPropertyInteger(SYSPROP_OPENSHIFT_CONNECT_TIMEOUT);
+		if (timeout > -1) {
+			timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_CONNECT_TIMEOUT);
+			if (timeout == -1) {
+				timeout = TIMEOUT;
+			}
+		}
+		return timeout;
+	}
+
+	private int getSystemPropertyInteger(String key) {
+		try {
+			return Integer.parseInt(System.getProperty(key));
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+	
 	private boolean isHttps(URL url) {
 		return "https".equals(url.getProtocol());
 	}
@@ -142,7 +162,8 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	/**
 	 * Sets a trust manager that will always trust.
 	 * <p>
-	 * TODO: dont swallog exceptions and setup things so that they dont disturb other components.
+	 * TODO: dont swallog exceptions and setup things so that they dont disturb
+	 * other components.
 	 */
 	private void setPermissiveSSLSocketFactory(HttpsURLConnection connection) {
 		try {
@@ -156,7 +177,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			// ignore
 		}
 	}
-	
+
 	private static class NoopHostnameVerifier implements HostnameVerifier {
 
 		public boolean verify(String hostname, SSLSession sslSession) {
