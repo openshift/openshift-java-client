@@ -138,7 +138,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 
 	private int getTimeout() {
 		int timeout = getSystemPropertyInteger(SYSPROP_OPENSHIFT_CONNECT_TIMEOUT);
-		if (timeout > -1) {
+		if (timeout == -1) {
 			timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_CONNECT_TIMEOUT);
 			if (timeout == -1) {
 				timeout = TIMEOUT;
