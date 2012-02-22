@@ -41,7 +41,8 @@ import com.openshift.express.internal.client.utils.StreamUtils;
 public class UrlConnectionHttpClient implements IHttpClient {
 
 	private static final String PROPERTY_CONTENT_TYPE = "Content-Type";
-	private static final int TIMEOUT = 10 * 1024;
+	private static final int DEFAULT_CONNECT_TIMEOUT = 10 * 1024;
+	private static final int DEFAULT_READ_TIMEOUT = 60 * 1024;
 	private static final String SYSPROP_OPENSHIFT_CONNECT_TIMEOUT = "com.openshift.express.httpclient.timeout";
 	private static final String SYSPROP_DEFAULT_CONNECT_TIMEOUT = "sun.net.client.defaultConnectTimeout";
 	private static final String SYSPROP_DEFAULT_READ_TIMEOUT = "sun.net.client.defaultReadTimeout";
@@ -147,14 +148,14 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		}
 		timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_CONNECT_TIMEOUT);
 		if (timeout == -1) {
-			connection.setConnectTimeout(TIMEOUT);
+			connection.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT);
 		}
 	}
 
 	private void setReadTimeout(URLConnection connection) {
 		int timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_READ_TIMEOUT);
 		if (timeout == -1) {
-			connection.setReadTimeout(TIMEOUT);
+			connection.setReadTimeout(DEFAULT_READ_TIMEOUT);
 		}
 	}
 
