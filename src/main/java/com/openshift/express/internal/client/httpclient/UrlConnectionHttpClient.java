@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -43,6 +44,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	private static final int TIMEOUT = 10 * 1024;
 	private static final String SYSPROP_OPENSHIFT_CONNECT_TIMEOUT = "com.openshift.express.httpclient.timeout";
 	private static final String SYSPROP_DEFAULT_CONNECT_TIMEOUT = "sun.net.client.defaultConnectTimeout";
+	private static final String SYSPROP_DEFAULT_READ_TIMEOUT = "sun.net.client.defaultReadTimeout";
 	
 	private URL url;
 	private String userAgent;
@@ -129,22 +131,31 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		connection.setUseCaches(false);
 		connection.setDoInput(true);
 		connection.setAllowUserInteraction(false);
-		connection.setConnectTimeout(getTimeout());
+		setConnectTimeout(connection);
+		setReadTimeout(connection);
 		connection.setRequestProperty(PROPERTY_CONTENT_TYPE, "application/x-www-form-urlencoded");
 		connection.setInstanceFollowRedirects(true);
 		connection.setRequestProperty(USER_AGENT, userAgent);
 		return connection;
 	}
 
-	private int getTimeout() {
+	private void setConnectTimeout(URLConnection connection) {
 		int timeout = getSystemPropertyInteger(SYSPROP_OPENSHIFT_CONNECT_TIMEOUT);
-		if (timeout == -1) {
-			timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_CONNECT_TIMEOUT);
-			if (timeout == -1) {
-				timeout = TIMEOUT;
-			}
+		if (timeout > -1) {
+			connection.setConnectTimeout(timeout);
+			return;
 		}
-		return timeout;
+		timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_CONNECT_TIMEOUT);
+		if (timeout == -1) {
+			connection.setConnectTimeout(TIMEOUT);
+		}
+	}
+
+	private void setReadTimeout(URLConnection connection) {
+		int timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_READ_TIMEOUT);
+		if (timeout == -1) {
+			connection.setReadTimeout(TIMEOUT);
+		}
 	}
 
 	private int getSystemPropertyInteger(String key) {
