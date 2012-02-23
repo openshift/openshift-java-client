@@ -67,7 +67,7 @@ public class OpenShiftService implements IOpenShiftService {
 	private static final String SYSPROPERTY_PROXY_PORT = "proxyPort";
 	private static final String SYSPROPERTY_PROXY_HOST = "proxyHost";
 	private static final String SYSPROPERTY_PROXY_SET = "proxySet";
-	
+
 	// TODO extract to properties file
 	private static final String USERAGENT_FORMAT = "Java OpenShift/{0} ({1})";
 	private static final long APPLICATION_WAIT_DELAY = 2;
@@ -76,7 +76,7 @@ public class OpenShiftService implements IOpenShiftService {
 	private String baseUrl;
 	private String id;
 	private boolean doSSLChecks = false;
-	
+
 	protected static String version = null;
 
 	public OpenShiftService(String id, String baseUrl) {
@@ -166,9 +166,9 @@ public class OpenShiftService implements IOpenShiftService {
 	}
 
 	public void destroyDomain(final String name, final IUser user) throws OpenShiftException {
-	    requestDomainAction(new DestroyDomainRequest(name, user.getSshKey(), user.getRhlogin()), user);
+		requestDomainAction(new DestroyDomainRequest(name, user.getSshKey(), user.getRhlogin()), user);
 	}
-	
+
 	public IDomain changeDomain(final String newName, final ISSHPublicKey sshKey, final IUser user)
 			throws OpenShiftException {
 		return requestDomainAction(new ChangeDomainRequest(newName, sshKey, user.getRhlogin(), true), user);
@@ -382,6 +382,8 @@ public class OpenShiftService implements IOpenShiftService {
 			throw new OpenShiftException(e, "Application URL {0} is invalid", healthCheckUrl);
 		} catch (SocketTimeoutException e) {
 			throw new OpenShiftException(e, "Could not reach {0}, connection timeouted", healthCheckUrl);
+		} catch (IOException e) {
+			throw new OpenShiftException(e, "Could not reach {0}, connection problems", healthCheckUrl);
 		}
 	}
 
@@ -441,28 +443,35 @@ public class OpenShiftService implements IOpenShiftService {
 			throw new InvalidCredentialsOpenShiftException(url, e);
 		} catch (NotFoundException e) {
 			throw new NotFoundOpenShiftException(url, e);
-		} catch(SocketTimeoutException e) {
+		} catch (SocketTimeoutException e) {
+			throw new OpenShiftEndpointException(url, e, errorMessage);
+		} catch (IOException e) {
 			throw new OpenShiftEndpointException(url, e, errorMessage);
 		} catch (HttpClientException e) {
 			throw new OpenShiftEndpointException(url, e, createNakedResponse(e.getMessage()), errorMessage);
 		}
 	}
 
-	private OpenShiftResponse<Object> createNakedResponse(String response) throws OpenShiftException {
-		if (response == null) {
+	private OpenShiftResponse<Object> createNakedResponse(String response) {
+		try {
+			if (response == null) {
+				return null;
+			}
+			return new NakedResponseUnmarshaller().unmarshall(response);
+		} catch (OpenShiftException e) {
+			// could not parse response
 			return null;
 		}
-		return new NakedResponseUnmarshaller().unmarshall(response);
 	}
-	
+
 	protected IHttpClient createHttpClient(final String id, final String url, final boolean verifyHostnames)
 			throws MalformedURLException {
 		String userAgent = MessageFormat.format(USERAGENT_FORMAT, getVersion(), id);
 		return new UrlConnectionHttpClient(userAgent, new URL(url), verifyHostnames);
 	}
-	
+
 	public static String getVersion() {
-		if (version == null){
+		if (version == null) {
 			InputStream is = null;
 			try {
 				Properties props = new Properties();
@@ -475,7 +484,7 @@ public class OpenShiftService implements IOpenShiftService {
 				StreamUtils.quietlyClose(is);
 			}
 		}
-		
+
 		return version;
 	}
 

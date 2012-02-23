@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -61,7 +62,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		this.doSSLChecks = verifyHostNames;
 	}
 
-	public String post(String data) throws HttpClientException, SocketTimeoutException {
+	public String post(String data) throws HttpClientException, SocketTimeoutException, UnknownHostException {
 		HttpURLConnection connection = null;
 		try {
 			connection = createConnection(userAgent, url);
@@ -80,7 +81,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		}
 	}
 
-	public String get() throws HttpClientException, SocketTimeoutException {
+	public String get() throws HttpClientException, SocketTimeoutException, UnknownHostException {
 		HttpURLConnection connection = null;
 		try {
 			connection = createConnection(userAgent, url);
@@ -98,7 +99,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 
 	private HttpClientException createException(IOException ioe, HttpURLConnection connection)
-			throws SocketTimeoutException {
+			throws SocketTimeoutException, UnknownHostException {
 		try {
 			int responseCode = connection.getResponseCode();
 			String errorMessage = StreamUtils.readToString(connection.getErrorStream());
@@ -115,6 +116,8 @@ public class UrlConnectionHttpClient implements IHttpClient {
 				return new HttpClientException(errorMessage, ioe);
 			}
 		} catch (SocketTimeoutException e) {
+			throw e;
+		} catch (UnknownHostException e) {
 			throw e;
 		} catch (IOException e) {
 			return new HttpClientException(e);
