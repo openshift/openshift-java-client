@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
@@ -373,6 +374,8 @@ public class OpenShiftService implements IOpenShiftService {
 					response = client.get();
 				} catch (HttpClientException e) {
 					// not available yet
+				} catch (UnknownHostException e) {
+					// not available yet
 				}
 			}
 			return HEALTH_RESPONSE_OK.equals(response);
@@ -383,7 +386,7 @@ public class OpenShiftService implements IOpenShiftService {
 		} catch (SocketTimeoutException e) {
 			throw new OpenShiftException(e, "Could not reach {0}, connection timeouted", healthCheckUrl);
 		} catch (IOException e) {
-			throw new OpenShiftException(e, "Could not reach {0}, connection problems", healthCheckUrl);
+			throw new OpenShiftException(e, "Could not reach {0}: {1}", healthCheckUrl, e.getMessage());
 		}
 	}
 
