@@ -45,6 +45,7 @@ import com.openshift.express.internal.client.ApplicationInfo;
 import com.openshift.express.internal.client.EmbeddableCartridgeInfo;
 import com.openshift.express.internal.client.InternalUser;
 import com.openshift.express.internal.client.UserInfo;
+import com.openshift.express.internal.client.test.fakes.ApplicationResponseFake;
 import com.openshift.express.internal.client.test.fakes.CartridgeResponseFake;
 import com.openshift.express.internal.client.test.fakes.UserInfoResponseFake;
 
@@ -179,7 +180,9 @@ public class UserTest {
 				, UserInfoResponseFake.RHC_DOMAIN
 				, UserInfoResponseFake.NAMESPACE
 				, applicationInfos
-				, UserInfoResponseFake.SSH_KEY_TYPE);
+				, UserInfoResponseFake.SSH_KEY_TYPE,
+				ApplicationResponseFake.MAX_GEARS,
+				ApplicationResponseFake.CONSUMED_GEARS);
 	}
 
 }

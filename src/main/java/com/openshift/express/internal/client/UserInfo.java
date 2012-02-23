@@ -27,15 +27,19 @@ public class UserInfo {
 	private String rhcDomain;
 	private String namespace;
 	private List<ApplicationInfo> applicationInfos;
+	private long maxGears;
+	private long consumedGears;
 
 	public UserInfo(String rhLogin, String uuid, String sshPublicKey, String rhcDomain, String namespace,
-			List<ApplicationInfo> applicationInfos, String sshKeyType) throws OpenShiftUnknonwSSHKeyTypeException {
+			List<ApplicationInfo> applicationInfos, String sshKeyType, long maxGears, long consumedGears) throws OpenShiftUnknonwSSHKeyTypeException {
 		this.rhLogin = rhLogin;
 		this.uuid = uuid;
 		this.sshPublicKey = new SSHPublicKey(sshPublicKey, sshKeyType);
 		this.rhcDomain = rhcDomain;
 		this.namespace = namespace;
 		this.applicationInfos = applicationInfos;
+		this.maxGears = maxGears;
+		this.consumedGears = consumedGears;
 	}
 
 	public String getUuid() {
@@ -86,6 +90,14 @@ public class UserInfo {
 
 	public String getRhcDomain() {
 		return rhcDomain;
+	}
+	
+	public long getMaxGears() {
+		return maxGears;
+	}
+	
+	public long getConsumedGears() {
+		return consumedGears;
 	}
 
 	protected void clearNameSpace() {

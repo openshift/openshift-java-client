@@ -348,7 +348,9 @@ public class ApplicationTest {
 						ApplicationResponseFake.RHC_DOMAIN,
 						ApplicationResponseFake.NAMESPACE,
 						Arrays.asList(new ApplicationInfo[] { applicationInfo }),
-						ApplicationResponseFake.SSHKEYTYPE);
+						ApplicationResponseFake.SSHKEYTYPE,
+						ApplicationResponseFake.MAX_GEARS,
+						ApplicationResponseFake.CONSUMED_GEARS);
 			}
 		};
 		return userInfoService;
