@@ -221,7 +221,7 @@ public class ApplicationTest {
 	}
 
 	@Test(expected = InvalidNameOpenShiftException.class)
-	public void createApplicationWithInvalidName() throws Exception {
+	public void cannotCreateApplicationWithNonAlphanumericName() throws Exception {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 		user = new TestUser(service);
@@ -229,11 +229,27 @@ public class ApplicationTest {
 	}
 
 	@Test(expected = InvalidNameOpenShiftException.class)
-	public void createDomainWithInvalidNameThrowsOpenShiftException() throws Exception {
+	public void cannotCreateApplicationWithUppercaseName() throws Exception {
+		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
+		IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+		user = new TestUser(service);
+		service.createApplication("NameWithUppercaseCharacters", ICartridge.JBOSSAS_7, user);
+	}
+
+	@Test(expected = InvalidNameOpenShiftException.class)
+	public void cannotCreateDomainWithNonAlphanumericName() throws Exception {
 		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
 		IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
 		user = new TestUser(service);
 		service.createDomain("invalid_name", null, user);
+	}
+
+	@Test(expected = InvalidNameOpenShiftException.class)
+	public void cannotCreateDomainWithUppercaseName() throws Exception {
+		UserConfiguration userConfiguration = new UserConfiguration(new SystemConfiguration(new DefaultConfiguration()));
+		IOpenShiftService service = new OpenShiftService(TestUser.ID, userConfiguration.getLibraServer());
+		user = new TestUser(service);
+		service.createDomain("NameWithUppercaseCharacters", null, user);
 	}
 
 	@Test
@@ -279,7 +295,7 @@ public class ApplicationTest {
 			};
 
 			user = new TestUser("dummyRhLogin", "dummyPassword", service);
-			service.createApplication("dummyName", ICartridge.JBOSSAS_7, user);
+			service.createApplication("dummyname", ICartridge.JBOSSAS_7, user);
 			fail("No exception thrown");
 		} catch (OpenShiftEndpointException e) {
 			String responseResult = e.getResponseResult();

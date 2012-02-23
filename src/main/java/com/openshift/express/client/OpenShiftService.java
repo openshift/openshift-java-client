@@ -208,17 +208,24 @@ public class OpenShiftService implements IOpenShiftService {
 
 		for (int i = 0; i < name.length(); ++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
-				throw new InvalidNameOpenShiftException("Application name \"{0}\" contains non-alphanumeric characters.", name);
+				throw new InvalidNameOpenShiftException(
+						"Application name \"{0}\" contains non-alphanumeric characters.", name);
+			} else if (Character.isUpperCase(name.charAt(i))) {
+				throw new InvalidNameOpenShiftException(
+						"Application name \"{0}\" contains uppercase letters (only lowercase allowed)", name);
 			}
 		}
 	}
 
-	protected void validateDomainName(final String name)
-			throws OpenShiftException {
+	protected void validateDomainName(final String name) throws OpenShiftException {
 
 		for (int i = 0; i < name.length(); ++i) {
 			if (!Character.isLetterOrDigit(name.charAt(i))) {
-				throw new InvalidNameOpenShiftException("Domain name \"{0}\" contains non-alphanumeric characters", name);
+				throw new InvalidNameOpenShiftException(
+						"Domain name \"{0}\" contains non-alphanumeric characters", name);
+			} else if (Character.isUpperCase(name.charAt(i))) {
+				throw new InvalidNameOpenShiftException(
+						"Domain name \"{0}\" contains uppercase letters (only lowercase allowed)", name);
 			}
 		}
 	}
