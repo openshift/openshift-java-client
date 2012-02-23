@@ -442,6 +442,9 @@ public class OpenShiftService implements IOpenShiftService {
 	}
 
 	private OpenShiftResponse<Object> createNakedResponse(String response) throws OpenShiftException {
+		if (response == null) {
+			return null;
+		}
 		return new NakedResponseUnmarshaller().unmarshall(response);
 	}
 	
