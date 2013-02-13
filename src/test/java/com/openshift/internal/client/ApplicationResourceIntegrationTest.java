@@ -11,10 +11,8 @@
 package com.openshift.internal.client;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -63,28 +61,9 @@ public class ApplicationResourceIntegrationTest {
 	}
 	
 	@Test
-	public void testLog() throws Exception {
-		
-		try {
-		
-			ApplicationTestUtils.silentlyDestroy1Application(domain);
-			String applicationName =
-					ApplicationTestUtils.createRandomApplicationName();
-			IApplication application = 
-					domain.createApplication(applicationName, ICartridge.JBOSSAS_7);
-						
-			assertEquals(application.getLogDirEnvName("jbossas-7"), "OPENSHIFT_JBOSSAS_LOG_DIR");
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-	
-	@Test
 	public void shouldCreateNonScalableApplication() throws Exception {
 	
-		ApplicationTestUtils.silentlyDestroy1Application(domain);
+		ApplicationTestUtils.silentlyDestroyApplications(1, domain);
 		String applicationName =
 				ApplicationTestUtils.createRandomApplicationName();
 		IApplication application = 
@@ -103,7 +82,7 @@ public class ApplicationResourceIntegrationTest {
 
 	@Test
 	public void shouldCreateNonScalableApplicationWithSmallGear() throws Exception {
-		ApplicationTestUtils.silentlyDestroy1Application(domain);
+		ApplicationTestUtils.silentlyDestroyApplications(1, domain);
 		String applicationName =
 				ApplicationTestUtils.createRandomApplicationName();
 		IApplication application = domain.createApplication(

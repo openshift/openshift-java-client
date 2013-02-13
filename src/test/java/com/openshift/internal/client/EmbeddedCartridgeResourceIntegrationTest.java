@@ -10,24 +10,27 @@
  ******************************************************************************/
 package com.openshift.internal.client;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.openshift.client.IApplication;
+import com.openshift.client.ICartridge;
 import com.openshift.client.IDomain;
 import com.openshift.client.IEmbeddableCartridge;
+import com.openshift.client.IEmbeddableCartridgeConstraint;
 import com.openshift.client.IOpenShiftConnection;
 import com.openshift.client.IUser;
 import com.openshift.client.OpenShiftConnectionFactory;
 import com.openshift.client.OpenShiftException;
+import com.openshift.client.utils.ApplicationAssert;
 import com.openshift.client.utils.ApplicationTestUtils;
 import com.openshift.client.utils.DomainTestUtils;
 import com.openshift.client.utils.EmbeddableCartridgeAsserts;
@@ -39,11 +42,10 @@ import com.openshift.client.utils.OpenShiftTestConfiguration;
  */
 public class EmbeddedCartridgeResourceIntegrationTest {
 
-	// private static final int WAIT_FOR_APPLICATION = 10 * 1000;
+	private static final int WAIT_FOR_APPLICATION = 180 * 1000;
 
-	private IUser user;
 	private IApplication application;
-	private static IDomain domain;
+	private IDomain domain;
 
 	@Before
 	public void setUp() throws OpenShiftException, IOException {
@@ -54,21 +56,18 @@ public class EmbeddedCartridgeResourceIntegrationTest {
 						configuration.getRhlogin(),
 						configuration.getPassword(),
 						configuration.getLibraServer());
-		this.user = connection.getUser();
-		domain = DomainTestUtils.getFirstDomainOrCreate(user);
+		IUser user = connection.getUser();
+		this.domain = DomainTestUtils.getFirstDomainOrCreate(user);
 		this.application = ApplicationTestUtils.getOrCreateApplication(domain);
 	}
 
-	@AfterClass
-	public static void cleanup() {
-		ApplicationTestUtils.silentlyDestroyAllApplications(domain);
-	}
-
+	@Ignore("temporary")
 	@Test
 	public void shouldReturnEmbeddedCartridges() throws SocketTimeoutException, OpenShiftException {
 		assertNotNull(application.getEmbeddedCartridges());
 	}
 
+	@Ignore("temporary")
 	@Test
 	public void shouldAddMySQLEmbeddedCartridge() throws SocketTimeoutException, OpenShiftException {
 		// pre-conditions
@@ -85,154 +84,93 @@ public class EmbeddedCartridgeResourceIntegrationTest {
 				IEmbeddableCartridge.MYSQL_51.getName(), application.getEmbeddedCartridges());
 	}
 
+	@Ignore("temporary")
 	@Test
 	public void shouldReturnThatContainsEmbeddedCartridge() throws SocketTimeoutException, OpenShiftException {
 		// pre-conditions
 		EmbeddedCartridgeTestUtils.silentlyDestroy(IEmbeddableCartridge.MYSQL_51, application);
 
 		// operation
-		application.addEmbeddableCartridge(IEmbeddableCartridge.MYSQL_51);
+		application.addEmbeddableCartridge(IEmbeddableCartridgeConstraint.MYSQL);
 
 		// verification
 		assertNotNull(application.getEmbeddedCartridges());
 		assertTrue(application.hasEmbeddedCartridge(IEmbeddableCartridge.MYSQL_51));
 	}
 
-	@Ignore
+//	@Ignore("temporary")
 	@Test
 	public void canEmbedMongo() throws Exception {
-		// MongoEmbeddableCartridge mongo = new
-		// MongoEmbeddableCartridge(service, user);
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), mongo, user);
-		// assertEquals(mongo.getName(), cartridge.getName());
-		// assertThatContainsCartridge(mongo.getName(),
-		// application.getEmbeddedCartridges());
+		// pre-conditions
+		EmbeddedCartridgeTestUtils.silentlyDestroy(IEmbeddableCartridge.MONGODB_22, application);
+		assertThat(new ApplicationAssert(application)
+				.hasNotEmbeddableCartridges(IEmbeddableCartridge.MONGODB_22.toString()));
+
+		// operation
+		application.addEmbeddableCartridge(IEmbeddableCartridgeConstraint.MONGODB);
+
+		// verification
+		assertThat(new ApplicationAssert(application)
+				.hasEmbeddableCartridges(IEmbeddableCartridge.MONGODB_22.getName()));
 	}
 
-	@Ignore
+	@Ignore("temporary")
 	@Test
 	public void canEmbedRockMongo() throws Exception {
-		// MongoEmbeddableCartridge mongo = new
-		// MongoEmbeddableCartridge(service, user);
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), mongo, user);
-		// assertEquals(mongo.getName(), cartridge.getName());
-		// assertThatContainsCartridge(mongo.getName(),
-		// application.getEmbeddedCartridges());
-		//
-		// RockMongoEmbeddableCartridge rockmongo = new
-		// RockMongoEmbeddableCartridge(service, user);
-		// cartridge = service.addEmbeddedCartridge(application.getName(),
-		// rockmongo, user);
-		// assertEquals(rockmongo.getName(), cartridge.getName());
-		// assertThatContainsCartridge(rockmongo.getName(),
-		// application.getEmbeddedCartridges());
+		// pre-conditions
+		EmbeddedCartridgeTestUtils.silentlyDestroy(IEmbeddableCartridge.MONGODB_22, application);
+		EmbeddedCartridgeTestUtils.silentlyDestroy(IEmbeddableCartridge.ROCKMONGO_11, application);
+		assertThat(new ApplicationAssert(application)
+			.hasNotEmbeddableCartridges(IEmbeddableCartridge.MONGODB_22.toString())
+			.hasNotEmbeddableCartridges(IEmbeddableCartridge.ROCKMONGO_11.toString()));
+
+		// operation
+		application.addEmbeddableCartridge(IEmbeddableCartridgeConstraint.MONGODB);
+		application.addEmbeddableCartridge(IEmbeddableCartridgeConstraint.ROCKMONGO);
+
+		// verification
+		assertThat(new ApplicationAssert(application)
+				.hasEmbeddableCartridges(IEmbeddableCartridge.MONGODB_22.getName())
+				.hasEmbeddableCartridges(IEmbeddableCartridge.ROCKMONGO_11.getName()));
 	}
 
-	@Ignore
-	@Test
-	public void canEmbedCron() throws Exception {
-		// CronEmbeddableCartridge cron = new CronEmbeddableCartridge(service,
-		// user);
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), cron, user);
-		// assertEquals(cron.getName(), cartridge.getName());
-		// assertThatContainsCartridge(cron.getName(),
-		// application.getEmbeddedCartridges());
-	}
-
-	@Ignore
-	@Test
-	public void canEmbedGenMMSAgent() throws Exception {
-		// MongoEmbeddableCartridge mongo = new
-		// MongoEmbeddableCartridge(service, user);
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), mongo, user);
-		// assertEquals(mongo.getName(), cartridge.getName());
-		// assertThatContainsCartridge(mongo.getName(),
-		// application.getEmbeddedCartridges());
-		//
-		// GenMMSAgentEmbeddableCartridge mms = new
-		// GenMMSAgentEmbeddableCartridge(service, user);
-		// cartridge = service.addEmbeddedCartridge(application.getName(), mms,
-		// user);
-		// assertEquals(mms.getName(), cartridge.getName());
-		// assertThatContainsCartridge(mms.getName(),
-		// application.getEmbeddedCartridges());
-	}
-
-	@Ignore
-	@Test(expected = OpenShiftException.class)
-	public void canEmbedBogusGeneric() throws Exception {
-		// List<IEmbeddableCartridge> cartridges =
-		// service.getEmbeddableCartridges(user);
-		//
-		// Iterator<IEmbeddableCartridge> i = cartridges.iterator();
-		// while (i.hasNext()){
-		// IEmbeddableCartridge cartridge = i.next();
-		// System.out.println("embeddable " + cartridge.getName());
-		// }
-		// EmbeddableCartridge bogus = new EmbeddableCartridge("bogus-1.0");
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), bogus, user);
-	}
-
-	@Ignore
-	@Test
-	public void canEmbedGeneric() throws Exception {
-		// EmbeddableCartridge mysql = new EmbeddableCartridge("mysql-5.1");
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), mysql, user);
-		// assertEquals(mysql.getName(), cartridge.getName());
-		// assertThatContainsCartridge(mysql.getName(),
-		// application.getEmbeddedCartridges());
-	}
-
-	@Test
-	public void canEmbedMetrics() throws Exception {
-		// MetricsEmbeddableCartridge metrics = new
-		// MetricsEmbeddableCartridge(service, user);
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), metrics, user);
-		// assertEquals(metrics.getName(), cartridge.getName());
-		// assertThatContainsCartridge(metrics.getName(),
-		// application.getEmbeddedCartridges());
-	}
-
-	@Ignore
+	@Ignore("temporary")
 	@Test
 	public void canEmbedPhpMyAdmin() throws Exception {
-		// MySqlEmbeddableCartridge mysql = new
-		// MySqlEmbeddableCartridge(service, user);
-		// IEmbeddableCartridge cartridge =
-		// service.addEmbeddedCartridge(application.getName(), mysql, user);
-		// assertEquals(mysql.getName(), cartridge.getName());
-		//
-		// PHPMyAdminEmbeddableCartridge myadmin = new
-		// PHPMyAdminEmbeddableCartridge(service, user);
-		// cartridge = service.addEmbeddedCartridge(application.getName(),
-		// myadmin, user);
-		// assertEquals(myadmin.getName(), cartridge.getName());
-		// assertThatContainsCartridge(myadmin.getName(),
-		// application.getEmbeddedCartridges());
+		// pre-conditions
+		EmbeddedCartridgeTestUtils.silentlyDestroy(IEmbeddableCartridge.MYSQL_51, application);
+		EmbeddedCartridgeTestUtils.silentlyDestroy(IEmbeddableCartridge.PHPMYADMIN_34, application);
+		assertThat(new ApplicationAssert(application)
+				.hasNotEmbeddableCartridges(IEmbeddableCartridge.MYSQL_51.toString()))
+				.hasNotEmbeddableCartridges(IEmbeddableCartridge.PHPMYADMIN_34.toString());
+
+		// operation
+		application.addEmbeddableCartridge(IEmbeddableCartridgeConstraint.MYSQL);
+		application.addEmbeddableCartridge(IEmbeddableCartridgeConstraint.PHPMYADMIN);
+
+		// verification
+		assertThat(new ApplicationAssert(application)
+				.hasEmbeddableCartridges(IEmbeddableCartridge.MYSQL_51.getName()))
+				.hasEmbeddableCartridges(IEmbeddableCartridge.PHPMYADMIN_34.getName());
 	}
 
-	@Ignore
+	@Ignore("temporary")
 	@Test
-	public void canEmbedJenkins() throws Exception {
-		// ApplicationTestUtils.silentlyDestroyAnyJenkinsApplication(user);
-		// String jenkinsAppName = "jenkins";
-		// IJenkinsApplication jenkins = null;
-		// try {
-		// jenkins = service.createJenkinsApplication(jenkinsAppName, user);
-		// assertTrue(jenkins.waitForAccessible(WAIT_FOR_APPLICATION * 10));
-		// service.addEmbeddedCartridge(application.getName(), new
-		// JenkinsClientEmbeddableCartridge(service, user), user);
-		// } finally {
-		// ApplicationTestUtils.silentlyDestroyApplication(jenkinsAppName,
-		// jenkins.getCartridge(), user, service);
-		// }
+	public void shouldEmbedJenkinsClient() throws Exception {
+		// pre-conditions
+		// need 2 free gears; jenkins + builder
+		ApplicationTestUtils.silentlyDestroyAllApplicationsByCartridge(ICartridge.JENKINS_14, domain);
+		ApplicationTestUtils.silentlyEnsureHasMaxApplication(1, domain);
+		IApplication application = domain.getApplications().get(0);
+		IApplication jenkins = domain.createApplication("j", ICartridge.JENKINS_14);
+		assertTrue(jenkins.waitForAccessible(WAIT_FOR_APPLICATION * 10));
+
+		// operation
+		application.addEmbeddableCartridge(IEmbeddableCartridgeConstraint.JENKINS_CLIENT);
+
+		// verification
+		assertThat(new ApplicationAssert(application)
+				.hasEmbeddableCartridges(IEmbeddableCartridge.JENKINS_14.toString()));
 	}
 
 	@Ignore
@@ -257,6 +195,7 @@ public class EmbeddedCartridgeResourceIntegrationTest {
 		// }
 	}
 
+	@Ignore("temporary")
 	@Test
 	public void loadWithOtherUserReportsIdenticalResults() throws Exception {
 		// MySqlEmbeddableCartridge mysql = new
@@ -283,6 +222,7 @@ public class EmbeddedCartridgeResourceIntegrationTest {
 		// assertThatContainsCartridge(myadmin.getName(), embeddedCartridges);
 	}
 
+	@Ignore("temporary")
 	@Test
 	public void shouldRemoveEmbeddedCartridge() throws Exception {
 		// pre-conditions
@@ -298,13 +238,14 @@ public class EmbeddedCartridgeResourceIntegrationTest {
 		EmbeddableCartridgeAsserts.assertThatContainsCartridge(
 				IEmbeddableCartridge.MYSQL_51.getName(), application.getEmbeddedCartridges());
 	}
-	
-	 @Test
-	 public void cannotRemoveEmbeddedCartridgeThatWasNotAdded() throws SocketTimeoutException, OpenShiftException {
+
+	@Ignore("temporary")
+	@Test
+	public void cannotRemoveEmbeddedCartridgeThatWasNotAdded() throws SocketTimeoutException, OpenShiftException {
 		// pre-conditions
 		EmbeddedCartridgeTestUtils.silentlyDestroy(IEmbeddableCartridge.MYSQL_51, application);
 		int numOfEmbeddedCartridges = application.getEmbeddedCartridges().size();
-		
+
 		// operation
 		application.removeEmbeddedCartridge(IEmbeddableCartridge.MYSQL_51);
 
@@ -313,6 +254,6 @@ public class EmbeddedCartridgeResourceIntegrationTest {
 		assertTrue(application.getEmbeddedCartridges().size() == numOfEmbeddedCartridges);
 		EmbeddableCartridgeAsserts.assertThatDoesntContainsCartridge(
 				IEmbeddableCartridge.MYSQL_51.getName(), application.getEmbeddedCartridges());
-	 }
+	}
 
 }
