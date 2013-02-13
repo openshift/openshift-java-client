@@ -119,4 +119,8 @@ public class SSHKeyTestUtils {
 			e.printStackTrace();
 		}
 	}
+
+	public static String createRandomKeyName() {
+		return String.valueOf(System.currentTimeMillis());
+	}
 }
