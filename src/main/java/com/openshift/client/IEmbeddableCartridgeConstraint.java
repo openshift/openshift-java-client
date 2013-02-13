@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2012 Red Hat, Inc. 
+ * Copyright (c) 2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -12,7 +12,7 @@ package com.openshift.client;
 
 import java.util.List;
 
-import com.openshift.internal.client.EmbeddableCartridge;
+import com.openshift.internal.client.EmbeddableCartridgeNameConstraint;
 
 /**
  * @author Andre Dietisheim
@@ -20,21 +20,21 @@ import com.openshift.internal.client.EmbeddableCartridge;
  */
 public interface IEmbeddableCartridgeConstraint {
 
-	public static final IEmbeddableCartridge MYSQL = new EmbeddableCartridge("mysql");
+	public static final IEmbeddableCartridgeConstraint MYSQL = new EmbeddableCartridgeNameConstraint("mysql");
 
-	public static final IEmbeddableCartridge PHPMYADMIN = new EmbeddableCartridge("phpmyadmin");
+	public static final IEmbeddableCartridgeConstraint PHPMYADMIN = new EmbeddableCartridgeNameConstraint("phpmyadmin");
 
-	public static final IEmbeddableCartridge POSTGRESQL = new EmbeddableCartridge("postgresql");
+	public static final IEmbeddableCartridgeConstraint POSTGRESQL = new EmbeddableCartridgeNameConstraint("postgresql");
 
-	public static final IEmbeddableCartridge MONGODB = new EmbeddableCartridge("mongodb");
+	public static final IEmbeddableCartridgeConstraint MONGODB = new EmbeddableCartridgeNameConstraint("mongodb");
 
-	public static final IEmbeddableCartridge ROCKMONGO = new EmbeddableCartridge("rockmongo");
+	public static final IEmbeddableCartridgeConstraint ROCKMONGO = new EmbeddableCartridgeNameConstraint("rockmongo");
 
-	public static final IEmbeddableCartridge _10GEN_MMS_AGENT = new EmbeddableCartridge("10gen-mms-agent");
+	public static final IEmbeddableCartridgeConstraint _10GEN_MMS_AGENT = new EmbeddableCartridgeNameConstraint("10gen-mms-agent");
 
-	public static final IEmbeddableCartridge JENKINS = new EmbeddableCartridge("jenkins-client");
+	public static final IEmbeddableCartridgeConstraint JENKINS_CLIENT = new EmbeddableCartridgeNameConstraint("jenkins-client");
 
-	public static final IEmbeddableCartridge METRICS = new EmbeddableCartridge("metrics");
+	public static final IEmbeddableCartridgeConstraint METRICS = new EmbeddableCartridgeNameConstraint("metrics");
 
 	/**
 	 * Returns the cartridge that matches this constraint.

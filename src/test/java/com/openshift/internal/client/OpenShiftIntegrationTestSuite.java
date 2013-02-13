@@ -19,10 +19,10 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	SSHKeyIntegrationTest.class,
 	UserResourceIntegrationTest.class,
-//	DomainResourceIntegrationTest.class,
-//	ApplicationResourceIntegrationTest.class,
-//	CartridgesIntegrationTest.class,
-//	EmbeddedCartridgeResourceIntegrationTest.class
+	DomainResourceIntegrationTest.class,
+	ApplicationResourceIntegrationTest.class,
+	CartridgesIntegrationTest.class,
+	EmbeddedCartridgeResourceIntegrationTest.class
 })
 /**
  * @author André Dietisheim
