@@ -33,7 +33,7 @@ public class ApplicationTestUtils {
 			}
 			application.destroy();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
@@ -47,7 +47,7 @@ public class ApplicationTestUtils {
 				application.destroy();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
@@ -62,7 +62,7 @@ public class ApplicationTestUtils {
 				it.next().destroy();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 

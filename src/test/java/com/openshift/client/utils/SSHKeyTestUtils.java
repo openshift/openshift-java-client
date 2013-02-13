@@ -116,7 +116,7 @@ public class SSHKeyTestUtils {
 		try {
 			key.destroy();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
