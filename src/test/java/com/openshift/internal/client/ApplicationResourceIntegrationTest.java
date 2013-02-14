@@ -11,7 +11,6 @@
 package com.openshift.internal.client;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -59,25 +58,6 @@ public class ApplicationResourceIntegrationTest {
 	@AfterClass
 	public static void cleanup() {
 		ApplicationTestUtils.silentlyDestroyAllApplications(domain);
-	}
-	
-	@Test
-	public void testLog() throws Exception {
-		
-		try {
-		
-			ApplicationTestUtils.silentlyDestroy1Application(domain);
-			String applicationName =
-					ApplicationTestUtils.createRandomApplicationName();
-			IApplication application = 
-					domain.createApplication(applicationName, ICartridge.JBOSSAS_7);
-						
-			assertEquals(application.getLogDirEnvName("jbossas-7"), "OPENSHIFT_JBOSSAS_LOG_DIR");
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
 	}
 	
 	@Test
