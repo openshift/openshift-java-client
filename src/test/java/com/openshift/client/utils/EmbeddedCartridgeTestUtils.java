@@ -10,9 +10,16 @@
  ******************************************************************************/
 package com.openshift.client.utils;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Collection;
+import java.util.List;
+
 import com.openshift.client.IApplication;
+import com.openshift.client.ICartridgeConstraint;
 import com.openshift.client.IEmbeddableCartridge;
 import com.openshift.client.IEmbeddedCartridge;
+import com.openshift.client.IUser;
 import com.openshift.client.OpenShiftException;
 
 /**
@@ -22,6 +29,19 @@ public class EmbeddedCartridgeTestUtils {
 
 	public static String createRandomApplicationName() {
 		return String.valueOf(System.currentTimeMillis());
+	}
+
+	public static void silentlyDestroy(ICartridgeConstraint<IEmbeddableCartridge> cartridgeConstraint,
+			IApplication application) {
+		try {
+			if (cartridgeConstraint == null
+					|| application == null) {
+				return;
+			}
+			application.removeEmbeddedCartridges(cartridgeConstraint);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void silentlyDestroy(IEmbeddableCartridge cartridge, IApplication application) {
@@ -40,7 +60,7 @@ public class EmbeddedCartridgeTestUtils {
 		if (application == null) {
 			return;
 		}
-		
+
 		try {
 			for (IEmbeddedCartridge cartridge : application.getEmbeddedCartridges()) {
 				silentlyDestroy(cartridge, application);
@@ -56,12 +76,23 @@ public class EmbeddedCartridgeTestUtils {
 				|| application == null) {
 			return;
 		}
-		
+
 		if (application.hasEmbeddedCartridge(cartridge)) {
 			return;
 		}
-		
+
 		application.addEmbeddableCartridge(cartridge);
 	}
 
+	public static Collection<IEmbeddableCartridge> getEmbeddableCartridges(ICartridgeConstraint<IEmbeddableCartridge> constraint, IUser user) {
+		List<IEmbeddableCartridge> allCartridges =
+				user.getConnection().getEmbeddableCartridges();
+		return constraint.getMatching(allCartridges);
+	}
+
+	public static IEmbeddableCartridge getEmbeddableCartridge(ICartridgeConstraint<IEmbeddableCartridge> constraint, IUser user) {
+		Collection<IEmbeddableCartridge> embeddableCartridges = getEmbeddableCartridges(constraint, user);
+		assertEquals(1, embeddableCartridges.size());
+		return embeddableCartridges.iterator().next();
+	}
 }
