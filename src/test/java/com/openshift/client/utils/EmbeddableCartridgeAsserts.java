@@ -13,11 +13,14 @@ package com.openshift.client.utils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.List;
 
+import com.openshift.client.IEmbeddableCartridge;
 import com.openshift.client.IEmbeddedCartridge;
 import com.openshift.client.OpenShiftException;
 
@@ -40,12 +43,12 @@ public class EmbeddableCartridgeAsserts {
 		assertEquals(creationLog, cartridge.getCreationLog());
 	}
 
-	public static void assertThatContainsCartridge(String applicationName, List<IEmbeddedCartridge> cartridges) {
-		assertNotNull(getEmbeddableCartridge(applicationName, cartridges));
+	public static void assertThatContainsCartridge(String name, List<IEmbeddedCartridge> cartridges) {
+		assertNotNull(getEmbeddableCartridge(name, cartridges));
 	}
 
-	public static void assertThatDoesntContainsCartridge(String applicationName, List<IEmbeddedCartridge> cartridges) {
-		assertNull(getEmbeddableCartridge(applicationName, cartridges));
+	public static void assertThatDoesntContainsCartridge(String name, List<IEmbeddedCartridge> cartridges) {
+		assertNull(getEmbeddableCartridge(name, cartridges));
 	}
 
 	private static IEmbeddedCartridge getEmbeddableCartridge(String name, List<IEmbeddedCartridge> cartridges) {
@@ -57,6 +60,12 @@ public class EmbeddableCartridgeAsserts {
 			}
 		}
 		return matchingCartridge;
+	}
+
+	public static void assertThatContainsCartridges(Collection<IEmbeddableCartridge> shouldBeContained, List<IEmbeddedCartridge> cartridgesToCheck) {
+		for (IEmbeddableCartridge cartridge : shouldBeContained) {
+			assertTrue(cartridgesToCheck.contains(cartridge));
+		}
 	}
 
 }
