@@ -11,9 +11,11 @@
 package com.openshift.client.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +23,11 @@ import org.fest.assertions.AssertExtension;
 
 import com.openshift.client.IApplication;
 import com.openshift.client.ICartridge;
+import com.openshift.client.ICartridgeConstraint;
 import com.openshift.client.IDomain;
+import com.openshift.client.IEmbeddableCartridge;
+import com.openshift.client.IOpenShiftConnection;
+import com.openshift.client.IUser;
 import com.openshift.client.OpenShiftException;
 
 /**
@@ -122,17 +128,43 @@ public class ApplicationAssert implements AssertExtension {
 		return this;
 	}
 	
+	public ApplicationAssert hasEmbeddableCartridges(ICartridgeConstraint constraint) throws OpenShiftException {
+		List<IEmbeddableCartridge> embeddableCartridges = getConnection(application).getEmbeddableCartridges();
+		for (IEmbeddableCartridge cartridge : constraint.getMatching(embeddableCartridges)) {
+			assertTrue(application.hasEmbeddedCartridge(cartridge));
+		}
+
+		return this;
+	}
+
 	public ApplicationAssert hasEmbeddableCartridges(String... embeddableCartridgeNames) throws OpenShiftException {
 		if (embeddableCartridgeNames.length == 0) {
 			assertEquals(0, application.getEmbeddedCartridges().size());
 		}
 
 		for (String cartridgeName : embeddableCartridgeNames) {
-			application.hasEmbeddedCartridge(cartridgeName);
+			assertTrue(application.hasEmbeddedCartridge(cartridgeName));
 		}
 
 		return this;
 	}
+		
+	public ApplicationAssert hasNotEmbeddableCartridges(String... embeddableCartridgeNames) throws OpenShiftException {		
+		for (String cartridgeName : embeddableCartridgeNames) {
+			assertFalse(application.hasEmbeddedCartridge(cartridgeName));
+		}
+
+		return this;
+	}
+
+	public ApplicationAssert hasNotEmbeddableCartridges(ICartridgeConstraint... constraints) throws OpenShiftException {		
+		for (ICartridgeConstraint constraint : constraints) {
+			assertTrue(application.getEmbeddedCartridges(constraint).isEmpty());
+		}
+
+		return this;
+	}
+
 
 	public ApplicationAssert hasAlias(String... aliasNames) {
 		if (aliasNames.length == 0) {
@@ -144,5 +176,15 @@ public class ApplicationAssert implements AssertExtension {
 		}
 
 		return this;
+	}
+	
+	private IOpenShiftConnection getConnection(IApplication application) {
+		IDomain domain = application.getDomain();
+		assertNotNull(domain);
+		IUser user = domain.getUser();
+		assertNotNull(user);
+		IOpenShiftConnection connection = user.getConnection();
+		assertNotNull(connection);
+		return connection;
 	}
 }

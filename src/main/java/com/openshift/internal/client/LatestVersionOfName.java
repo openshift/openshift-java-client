@@ -42,8 +42,11 @@ public class LatestVersionOfName extends AbstractCartridgeConstraint {
 	
 	@Override
 	public <C extends IEmbeddableCartridge> Collection<C> getMatching(Collection<C> cartridges) {
-		List<C> matchingCartridges = new ArrayList<C>(super.getMatching(cartridges));
-		return Collections.singletonList(getLatest(matchingCartridges));
+		C cartridge = getLatest(new ArrayList<C>(super.getMatching(cartridges)));
+		if (cartridge == null) {
+			return Collections.emptyList();
+		}
+		return Collections.singletonList(cartridge);
 	}
 
 	@Override
@@ -52,6 +55,10 @@ public class LatestVersionOfName extends AbstractCartridgeConstraint {
 	}
 
 	protected <C extends IEmbeddableCartridge> C getLatest(List<C> matchingCartridges) {
+		if (matchingCartridges.isEmpty()) {
+			return null;
+		}
+		
 		if (matchingCartridges.size() == 1) {
 			return matchingCartridges.get(0);
 		}
