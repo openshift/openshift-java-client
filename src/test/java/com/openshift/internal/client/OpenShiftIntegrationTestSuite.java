@@ -21,7 +21,6 @@ import org.junit.runners.Suite;
 	UserResourceIntegrationTest.class,
 	DomainResourceIntegrationTest.class,
 	ApplicationResourceIntegrationTest.class,
-	CartridgesIntegrationTest.class,
 	EmbeddedCartridgeResourceIntegrationTest.class
 })
 /**
