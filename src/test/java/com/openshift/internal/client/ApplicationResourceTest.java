@@ -22,8 +22,6 @@ import static com.openshift.client.utils.Samples.GET_APPLICATIONS_WITH2APPS_JSON
 import static com.openshift.client.utils.Samples.GET_APPLICATIONS_WITHNOAPP_JSON;
 import static com.openshift.client.utils.Samples.GET_APPLICATION_CARTRIDGES_WITH1ELEMENT_JSON;
 import static com.openshift.client.utils.Samples.GET_APPLICATION_CARTRIDGES_WITH2ELEMENTS_JSON;
-import static com.openshift.client.utils.Samples.GET_APPLICATION_GEARS_WITH1ELEMENT_JSON;
-import static com.openshift.client.utils.Samples.GET_APPLICATION_GEARS_WITH2ELEMENTS_JSON;
 import static com.openshift.client.utils.Samples.GET_APPLICATION_WITH1CARTRIDGE1ALIAS_JSON;
 import static com.openshift.client.utils.Samples.GET_APPLICATION_WITH2CARTRIDGES2ALIASES_JSON;
 import static com.openshift.client.utils.Samples.GET_DOMAINS_1EXISTING;
@@ -54,7 +52,6 @@ import org.junit.Test;
 import com.openshift.client.ApplicationScale;
 import com.openshift.client.EmbeddableCartridge;
 import com.openshift.client.IApplication;
-import com.openshift.client.IApplicationGear;
 import com.openshift.client.ICartridge;
 import com.openshift.client.IDomain;
 import com.openshift.client.IEmbeddedCartridge;
@@ -586,50 +583,6 @@ public class ApplicationResourceTest {
 				urlEndsWith("/domains/foobar/applications/sample/cartridges/mysql-5.1"));
 		assertThat(embeddedCartridge).isNotNull();
 		assertThat(application.getEmbeddedCartridges()).hasSize(2).contains(embeddedCartridge);
-	}
-
-	@Test
-	public void shouldListExistingGears() throws Throwable {
-		// pre-conditions
-		when(mockClient.get(urlEndsWith("/domains/foobar/applications"))).thenReturn(
-				GET_APPLICATIONS_WITH2APPS_JSON.getContentAsString());
-		when(mockClient.get(urlEndsWith("/domains/foobar/applications/sample"))).thenReturn(
-				GET_APPLICATION_WITH2CARTRIDGES2ALIASES_JSON.getContentAsString());
-		when(mockClient.get(urlEndsWith("/domains/foobar/applications/sample/gears"))).thenReturn(
-				GET_APPLICATION_GEARS_WITH2ELEMENTS_JSON.getContentAsString());
-		final IApplication app = domain.getApplicationByName("sample");
-		// operation
-		final List<IApplicationGear> gears = app.getGears();
-		// verifications
-		assertThat(gears).hasSize(2).onProperty("uuid").isNotNull();
-		assertThat(gears).onProperty("components").satisfies(new Condition<List<?>>() {
-
-			@Override
-			public boolean matches(List<?> value) {
-				return value.size() == 2 || value.size() == 3;
-			}
-		});
-	}
-
-	@Test
-	public void shouldReloadExistingGears() throws Throwable {
-		// pre-conditions
-		when(mockClient.get(urlEndsWith("/domains/foobar/applications"))).thenReturn(
-				GET_APPLICATIONS_WITH2APPS_JSON.getContentAsString());
-		when(mockClient.get(urlEndsWith("/domains/foobar/applications/sample"))).thenReturn(
-				GET_APPLICATION_WITH1CARTRIDGE1ALIAS_JSON.getContentAsString());
-		when(mockClient.get(urlEndsWith("/domains/foobar/applications/sample/gears"))).thenReturn(
-				GET_APPLICATION_GEARS_WITH1ELEMENT_JSON.getContentAsString());
-		final IApplication app = domain.getApplicationByName("sample");
-		assertThat(app.getGears()).hasSize(1);
-		// simulate new content on openshift, that should be grabbed while doing
-		// a refresh()
-		when(mockClient.get(urlEndsWith("/domains/foobar/applications/sample/gears"))).thenReturn(
-				GET_APPLICATION_GEARS_WITH2ELEMENTS_JSON.getContentAsString());
-		// operation
-		app.refresh();
-		assertThat(app.getGears()).hasSize(2);
-		verify(mockClient, times(2)).get(urlEndsWith("/domains/foobar/applications/sample/gears"));
 	}
 
 	@Test
