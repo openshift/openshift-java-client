@@ -81,7 +81,7 @@ public class DomainResourceIntegrationTest {
 	}
 
 	@Test
-	public void shouldNotDeleteDomainWithApplications() throws OpenShiftException, SocketTimeoutException {
+	public void shouldNotDeleteDomainWithApplications() throws OpenShiftException {
 		IDomain domain = null;
 		try {
 			// pre-condition
