@@ -180,7 +180,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			throws SocketTimeoutException {
 		try {
 			int responseCode = connection.getResponseCode();
-			String errorMessage = createErrorMessage(connection);
+			String errorMessage = StreamUtils.readToString(connection.getErrorStream());
 			switch (responseCode) {
 			case STATUS_INTERNAL_SERVER_ERROR:
 				return new InternalServerErrorException(errorMessage, ioe);
@@ -199,21 +199,6 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			return new HttpClientException(e);
 		}
 	}
-
-	protected String createErrorMessage(HttpURLConnection connection) throws IOException {
-		StringBuilder builder = new StringBuilder("Connection to ")
-			.append(connection.getURL());
-		String reason = connection.getResponseMessage();
-		if (!StringUtils.isEmpty(reason)) {
-			builder.append(": ").append(reason);
-		}
-		String errorMessage = StreamUtils.readToString(connection.getErrorStream());
-		if (!StringUtils.isEmpty(errorMessage)) {
-			builder.append(", ").append(errorMessage);
-		}
-		return builder.toString();
-	}
-
 
 	private boolean isHttps(URL url) {
 		return "https".equals(url.getProtocol());
