@@ -32,11 +32,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import biz.source_code.base64Coder.Base64Coder;
+
 import com.openshift.client.IHttpClient;
 import com.openshift.client.OpenShiftException;
 import com.openshift.client.fakes.HttpClientFake;
 import com.openshift.client.fakes.HttpServerFake;
-import com.openshift.client.utils.Base64Coder;
 import com.openshift.internal.client.httpclient.HttpClientException;
 import com.openshift.internal.client.httpclient.NotFoundException;
 import com.openshift.internal.client.httpclient.UrlConnectionHttpClientBuilder;
