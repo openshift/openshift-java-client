@@ -35,9 +35,10 @@ import javax.net.ssl.X509TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import biz.source_code.base64Coder.Base64Coder;
+
 import com.openshift.client.HttpMethod;
 import com.openshift.client.IHttpClient;
-import com.openshift.client.utils.Base64Coder;
 import com.openshift.internal.client.utils.StreamUtils;
 import com.openshift.internal.client.utils.StringUtils;
 

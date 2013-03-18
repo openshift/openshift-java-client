@@ -13,7 +13,7 @@ package com.openshift.client;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
-import com.openshift.client.utils.Base64Coder;
+import biz.source_code.base64Coder.Base64Coder;
 import com.openshift.internal.client.ssh.AbstractSSHKey;
 import com.openshift.internal.client.utils.Assert;
 
