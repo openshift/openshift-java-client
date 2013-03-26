@@ -83,13 +83,13 @@ public interface IDomain extends IOpenShiftResource {
 	 * @return
 	 * @throws OpenShiftException
 	 */
-	public IApplication createApplication(final String name, final ICartridge cartridge, final ApplicationScale scale, final IGearProfile gearProfile) throws OpenShiftException;
+	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge, final ApplicationScale scale, final IGearProfile gearProfile) throws OpenShiftException;
 
-	public IApplication createApplication(final String name, final ICartridge cartridge, final ApplicationScale scale) throws OpenShiftException ;
+	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge, final ApplicationScale scale) throws OpenShiftException ;
 
-	public IApplication createApplication(final String name, final ICartridge cartridge, final IGearProfile gearProfile) throws OpenShiftException;
+	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge, final IGearProfile gearProfile) throws OpenShiftException;
 
-	public IApplication createApplication(final String name, final ICartridge cartridge) throws OpenShiftException ;
+	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge) throws OpenShiftException;
 
 	public List<IApplication> getApplications() throws OpenShiftException;
 	
@@ -116,9 +116,9 @@ public interface IDomain extends IOpenShiftResource {
 	 */
 	public boolean hasApplicationByName(String name) throws OpenShiftException;
 
-	public List<IApplication> getApplicationsByCartridge(ICartridge cartridge) throws OpenShiftException;
+	public List<IApplication> getApplicationsByCartridge(IStandaloneCartridge cartridge) throws OpenShiftException;
 
-	public boolean hasApplicationByCartridge(ICartridge cartridge) throws OpenShiftException;
+	public boolean hasApplicationByCartridge(IStandaloneCartridge cartridge) throws OpenShiftException;
 	
 	/**
 	 * Returns the list of available gear size that the user can choose when creating a new application (application's gear size can't be changed after creation).

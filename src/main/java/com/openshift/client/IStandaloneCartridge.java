@@ -13,9 +13,16 @@ package com.openshift.client;
 /**
  * @author André Dietisheim
  */
-public interface ICartridge {
+public interface IStandaloneCartridge extends ICartridge {
 
-	public static final char NAME_VERSION_DELIMITER = '-';
+	public static final String NAME_EWS = "ews";
+	public static final String NAME_JBOSSAS = "jbossas";
+	public static final String NAME_JBOSSEAP = "jbosseap";
+	public static final String NAME_JENKINS = "jenkins";
+	public static final String NAME_PERL = "perl";
+	public static final String NAME_PHP = "php";
+	public static final String NAME_PYTHON = "python";
+	public static final String NAME_RUBY = "ruby";
+	public static final String NAME_ZEND = "zend";
 
-	public abstract String getName();
 }

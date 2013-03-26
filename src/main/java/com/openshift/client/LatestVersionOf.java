@@ -10,7 +10,8 @@
  ******************************************************************************/
 package com.openshift.client;
 
-import com.openshift.internal.client.LatestVersionOfName;
+import com.openshift.internal.client.LatestEmbeddableCartridge;
+import com.openshift.internal.client.LatestStandaloneCartridge;
 
 /**
  * @author Andre Dietisheim
@@ -18,40 +19,75 @@ import com.openshift.internal.client.LatestVersionOfName;
  */
 public class LatestVersionOf {
 
-	public static ICartridgeConstraint mySQL() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_MYSQL);
+	public static LatestEmbeddableCartridge mySQL() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_MYSQL);
 	}
 
-	public static ICartridgeConstraint phpMyAdmin() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_PHPMYADMIN);
+	public static LatestEmbeddableCartridge phpMyAdmin() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_PHPMYADMIN);
 	}
 
-	public static  ICartridgeConstraint postgreSQL() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_POSTGRESQL);
+	public static  LatestEmbeddableCartridge postgreSQL() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_POSTGRESQL);
 	}
 	
-	public static  ICartridgeConstraint mongoDB() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_MONGODB);
+	public static  LatestEmbeddableCartridge mongoDB() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_MONGODB);
 	}
 
-	public static  ICartridgeConstraint rockMongo() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_ROCKMONGO);
+	public static  LatestEmbeddableCartridge rockMongo() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_ROCKMONGO);
 	}
 
-	public static  ICartridgeConstraint mmsAgent() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_10GEN_MMS_AGENT);
+	public static  LatestEmbeddableCartridge mmsAgent() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_10GEN_MMS_AGENT);
 	}
 
-	public static  ICartridgeConstraint jenkinsClient() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_JENKINS_CLIENT);
+	public static  LatestEmbeddableCartridge jenkinsClient() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_JENKINS_CLIENT);
 	}
 
-	public static  ICartridgeConstraint metrics() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_METRICS);
+	public static  LatestEmbeddableCartridge metrics() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_METRICS);
 	}
 
-	public static  ICartridgeConstraint haProxy() {
-		return new LatestVersionOfName(IEmbeddableCartridge.NAME_HAPROXY);
+	public static  LatestEmbeddableCartridge haProxy() {
+		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_HAPROXY);
 	}
 
+	public static LatestStandaloneCartridge ews(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_EWS);
+	}
+
+	public static LatestStandaloneCartridge jbossEap(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_JBOSSEAP);
+	}
+
+	public static LatestStandaloneCartridge jbossAs(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_JBOSSAS);
+	}
+
+	public static LatestStandaloneCartridge jenkins(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_JENKINS);
+	}
+	
+	public static LatestStandaloneCartridge perl(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_PERL);
+	}
+
+	public static LatestStandaloneCartridge php(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_PHP);
+	}
+
+	public static LatestStandaloneCartridge python(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_PYTHON);
+	}
+
+	public static LatestStandaloneCartridge ruby(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_RUBY);
+	}
+
+	public static LatestStandaloneCartridge zend(){
+		return new LatestStandaloneCartridge(IStandaloneCartridge.NAME_ZEND);
+	}
 }

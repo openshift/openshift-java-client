@@ -21,9 +21,9 @@ import java.net.SocketTimeoutException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.openshift.client.ICartridge;
 import com.openshift.client.IDomain;
 import com.openshift.client.IUser;
+import com.openshift.client.LatestVersionOf;
 import com.openshift.client.OpenShiftEndpointException;
 import com.openshift.client.OpenShiftException;
 import com.openshift.client.utils.ApplicationTestUtils;
@@ -139,7 +139,7 @@ public class DomainResourceIntegrationTest {
 
 		// operation
 		String applicationName = StringUtils.createRandomString();
-		otherDomain.createApplication(applicationName, ICartridge.PHP_53);
+		otherDomain.createApplication(applicationName, LatestVersionOf.php().get(otherUser));
 		assertThat(domain.getApplications().size()).isEqualTo(numOfApplications);
 		domain.refresh();
 

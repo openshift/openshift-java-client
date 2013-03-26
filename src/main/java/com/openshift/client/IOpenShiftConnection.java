@@ -50,7 +50,7 @@ public interface IOpenShiftConnection {
 	 * @return the available standalone cartridges
 	 * @throws OpenShiftException
 	 */
-	public List<ICartridge> getStandaloneCartridges() throws OpenShiftException;
+	public List<IStandaloneCartridge> getStandaloneCartridges() throws OpenShiftException;
 
 	/**
 	 * Returns the available embeddable cartridges associated with the current
