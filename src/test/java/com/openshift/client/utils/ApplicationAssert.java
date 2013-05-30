@@ -94,6 +94,21 @@ public class ApplicationAssert implements AssertExtension {
 		return this;
 	}
 
+	public ApplicationAssert hasInitialGitUrl() {
+		assertThat(application.getInitialGitUrl()).isNotEmpty();
+		return this;
+	}
+
+	public ApplicationAssert hasNoInitialGitUrl() {
+		assertThat(application.getInitialGitUrl()).isNull();
+		return this;
+	}
+
+	public ApplicationAssert hasInitialGitUrl(String initialGitUrl) {
+		assertThat(application.getInitialGitUrl()).isEqualTo(initialGitUrl);
+		return this;
+	}
+
 	public ApplicationAssert hasApplicationUrl(String applicationUrl) {
 		assertEquals(applicationUrl, application.getApplicationUrl());
 		return this;
