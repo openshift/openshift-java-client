@@ -42,6 +42,8 @@ import com.openshift.client.utils.TestConnectionFactory;
  */
 public class DomainResourceIntegrationTest {
 
+	private static final String QUICKSTART_SPRING_EAP6_GITURL = "git://github.com/openshift/spring-eap6-quickstart.git"; 
+	
 	private IUser user;
 	private IDomain domain;
 
@@ -51,13 +53,14 @@ public class DomainResourceIntegrationTest {
 		this.domain = DomainTestUtils.ensureHasDomain(user);
 	}
 	
-	@Ignore
 	@Test
 	public void shouldSetNamespace() throws Exception {
 		// pre-condition
 		IDomain domain = DomainTestUtils.ensureHasDomain(user);
 		String namespace = DomainTestUtils.createRandomName();
-
+		// cannot set namespace if there are applications
+		ApplicationTestUtils.destroyAllApplications(domain);
+		
 		// operation
 		domain.rename(namespace);
 
@@ -66,13 +69,12 @@ public class DomainResourceIntegrationTest {
 		assertThat(domainByNamespace.getId()).isEqualTo(namespace);
 	}
 
-	@Ignore
 	@Test
 	public void shouldDeleteDomainWithoutApplications() throws Exception {
 		// pre-condition
 		IDomain domain = DomainTestUtils.ensureHasDomain(user);
 		String id = domain.getId();
-		ApplicationTestUtils.silentlyDestroyAllApplications(domain);
+		ApplicationTestUtils.destroyAllApplications(domain);
 		assertThat(domain.getApplications()).isEmpty();
 		
 		// operation
@@ -83,7 +85,6 @@ public class DomainResourceIntegrationTest {
 		assertThat(domainByNamespace).isNull();
 	}
 
-	@Ignore
 	@Test
 	public void shouldNotDeleteDomainWithApplications() throws OpenShiftException {
 		IDomain domain = null;
@@ -104,7 +105,7 @@ public class DomainResourceIntegrationTest {
 
 	@Ignore
 	@Test
-	public void shouldReportErrorCode128() throws OpenShiftException {
+	public void shouldContainErrorMessageAndContainErrorCode128() throws OpenShiftException {
 		IDomain domain = null;
 		try {
 			// pre-condition
@@ -124,7 +125,6 @@ public class DomainResourceIntegrationTest {
 		}
 	}
 
-	@Ignore
 	@Test
 	public void shouldDeleteDomainWithApplications() throws OpenShiftException, SocketTimeoutException {
 		// pre-condition
@@ -140,7 +140,6 @@ public class DomainResourceIntegrationTest {
 		domain = null;
 	}
 
-	@Ignore
 	@Test
 	public void shouldSeeNewApplicationAfterRefresh() throws OpenShiftException, FileNotFoundException, IOException {
 		// pre-condition
@@ -201,6 +200,7 @@ public class DomainResourceIntegrationTest {
 				.hasCartridge(jbossas)
 				.hasValidApplicationUrl()
 				.hasValidGitUrl()
+				.hasNoInitialGitUrl()
 				.hasEmbeddableCartridges()
 				.hasAlias();
 	}
@@ -214,8 +214,7 @@ public class DomainResourceIntegrationTest {
 		String applicationName =
 				ApplicationTestUtils.createRandomApplicationName();
 		IStandaloneCartridge jbossas = LatestVersionOf.jbossAs().get(user);
-		IApplication application = domain.createApplication(
-				applicationName, jbossas, IGearProfile.SMALL);
+		IApplication application = domain.createApplication(applicationName, jbossas, IGearProfile.SMALL);
 
 		// verification
 		assertThat(new ApplicationAssert(application))
@@ -225,14 +224,41 @@ public class DomainResourceIntegrationTest {
 				.hasCartridge(jbossas)
 				.hasValidApplicationUrl()
 				.hasValidGitUrl()
+				.hasNoInitialGitUrl()
 				.hasEmbeddableCartridges()
 				.hasAlias();
 	}
 
 	@Test
+	public void shouldCreateNonScalableApplicationWithInitialGitUrl() throws Exception {
+		// pre-conditions
+		
+		ApplicationTestUtils.destroyIfMoreThan(2, domain);
+
+		// operation
+		String applicationName =
+				ApplicationTestUtils.createRandomApplicationName();
+		IStandaloneCartridge jbosseap = LatestVersionOf.jbossEap().get(user);
+		IApplication application =
+				domain.createApplication(applicationName, jbosseap, QUICKSTART_SPRING_EAP6_GITURL);
+
+		// verification
+		assertThat(new ApplicationAssert(application))
+				.hasName(applicationName)
+				.hasUUID()
+				.hasCreationTime()
+				.hasCartridge(jbosseap)
+				.hasValidApplicationUrl()
+				.hasValidGitUrl()
+				.hasInitialGitUrl(QUICKSTART_SPRING_EAP6_GITURL)
+				.hasEmbeddableCartridges()
+				.hasAlias();
+	}
+	
+	@Test
 	public void shouldCreateScalableApplication() throws Exception {
 		// pre-conditions
-		ApplicationTestUtils.silentlyDestroyAllApplications(domain);
+		ApplicationTestUtils.destroyAllApplications(domain);
 
 		// operation
 		String applicationName =
@@ -249,15 +275,41 @@ public class DomainResourceIntegrationTest {
 				.hasCartridge(jbossas)
 				.hasValidApplicationUrl()
 				.hasValidGitUrl()
+				.hasNoInitialGitUrl()
 				// scalable apps always have ha-proxy embedded automatically
 				.hasEmbeddedCartridge(LatestVersionOf.haProxy())
 				.hasAlias();
 	}
 
 	@Test
+	public void shouldCreateNonScalableApplicationWithSmallGearAndGitUrl() throws Exception {
+		// pre-conditions
+		ApplicationTestUtils.destroyAllApplications(domain);
+
+		// operation
+		String applicationName =
+				ApplicationTestUtils.createRandomApplicationName();
+		IStandaloneCartridge jbosseap = LatestVersionOf.jbossEap().get(user);
+		IApplication application = domain.createApplication(
+				applicationName, jbosseap, ApplicationScale.NO_SCALE, GearProfile.SMALL, QUICKSTART_SPRING_EAP6_GITURL);
+
+		// verification
+		assertThat(new ApplicationAssert(application))
+				.hasName(applicationName)
+				.hasUUID()
+				.hasCreationTime()
+				.hasCartridge(jbosseap)
+				.hasValidApplicationUrl()
+				.hasValidGitUrl()
+				.hasInitialGitUrl(QUICKSTART_SPRING_EAP6_GITURL)
+				.hasEmbeddedCartridges()
+				.hasAlias();
+	}
+
+	@Test
 	public void shouldCreateJenkinsApplication() throws Exception {
 		// pre-conditions
-		ApplicationTestUtils.silentlyDestroyAllApplications(domain);
+		ApplicationTestUtils.destroyAllApplications(domain);
 
 		// operation
 		String applicationName =
@@ -274,6 +326,7 @@ public class DomainResourceIntegrationTest {
 				.hasCartridge(jenkins)
 				.hasValidApplicationUrl()
 				.hasValidGitUrl()
+				.hasNoInitialGitUrl()
 				.hasEmbeddableCartridges()
 				.hasAlias();
 	}
