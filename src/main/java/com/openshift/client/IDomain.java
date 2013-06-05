@@ -16,6 +16,7 @@ import com.openshift.client.cartridge.IStandaloneCartridge;
 
 /**
  * @author André Dietisheim
+ * @author Nicolas Spano
  */
 public interface IDomain extends IOpenShiftResource {
 	
@@ -78,14 +79,21 @@ public interface IDomain extends IOpenShiftResource {
 			throws OpenShiftException;
 
 	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
-			final ApplicationScale scale) throws OpenShiftException;
+			final ApplicationScale scale)
+			throws OpenShiftException;
 
 	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
-			final IGearProfile gearProfile) throws OpenShiftException;
+			final IGearProfile gearProfile)
+			throws OpenShiftException;
 
 	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
-			final ApplicationScale scale, final IGearProfile gearProfile) throws OpenShiftException;
+			final ApplicationScale scale, final IGearProfile gearProfile)
+			throws OpenShiftException;
 
+	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
+			final ApplicationScale scale, final IGearProfile gearProfile, String initialGitUrl, int timeout)
+			throws OpenShiftException;
+	
 	/**
 	 * Creates a new application with the given name and the given
 	 * cartridge/framework. Optionally, adds scalability and a specific gear
