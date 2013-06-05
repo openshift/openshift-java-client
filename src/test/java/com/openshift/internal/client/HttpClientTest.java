@@ -10,11 +10,14 @@
  ******************************************************************************/
 package com.openshift.internal.client;
 
+import static com.openshift.client.utils.UrlEndsWithMatcher.urlEndsWith;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyMapOf;
+import static org.mockito.Mockito.when;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,24 +26,27 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.openshift.client.*;
+import com.openshift.internal.client.httpclient.InternalServerErrorException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.openshift.client.IHttpClient;
-import com.openshift.client.OpenShiftException;
 import com.openshift.client.fakes.HttpClientFake;
 import com.openshift.client.fakes.HttpServerFake;
 import com.openshift.client.utils.Base64Coder;
 import com.openshift.internal.client.httpclient.HttpClientException;
 import com.openshift.internal.client.httpclient.NotFoundException;
 import com.openshift.internal.client.httpclient.UrlConnectionHttpClientBuilder;
+import org.mockito.Mockito;
 
 /**
  * @author Andre Dietisheim
@@ -182,7 +188,7 @@ public class HttpClientTest {
 		IHttpClient httpClient = new HttpClientFake(IHttpClient.MEDIATYPE_APPLICATION_JSON, version) {
 
 			@Override
-			protected String write(String data, String requestMethod, URL url)
+			protected String write(String data, String requestMethod, URL url, int timeout)
 					throws SocketTimeoutException, HttpClientException {
 				try {
 					HttpURLConnection connection = createConnection("dummyUser", "dummyPassword", "dummyUserAgent", url);
@@ -264,6 +270,117 @@ public class HttpClientTest {
 		}
 	}
 
+    @Test
+    public void shouldRespectGivenTimeoutPOST() throws Throwable{
+
+        final int timeout = 1000;
+        final int serverDelay = timeout * 4;
+
+        // pre-conditions
+        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
+        Map<String, Object> dummyMap = Collections.emptyMap();
+
+        long startTime = System.currentTimeMillis();
+        // operations
+        try{
+            httpClient.post(dummyMap, serverFake.getUrl(), timeout);
+            fail("Timeout expected.");
+        }catch(SocketTimeoutException e){
+
+            //assert
+            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+                    .isLessThan(serverDelay)
+                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        }finally{
+            serverFake.stop();
+        }
+
+    }
+
+    @Test
+    public void shouldRespectGivenTimeoutDELETE() throws Throwable{
+
+        final int timeout = 1000;
+        final int serverDelay = timeout * 4;
+
+        // pre-conditions
+        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
+        Map<String, Object> dummyMap = Collections.emptyMap();
+
+        long startTime = System.currentTimeMillis();
+        // operations
+        try{
+            httpClient.delete(dummyMap, serverFake.getUrl(), timeout);
+            fail("Timeout expected.");
+        }catch(SocketTimeoutException e){
+
+            //assert
+            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+                    .isLessThan(serverDelay)
+                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        }finally{
+            serverFake.stop();
+        }
+
+    }
+
+    @Test
+    public void shouldRespectGivenTimeoutPUT() throws Throwable{
+
+        final int timeout = 1000;
+        final int serverDelay = timeout * 4;
+
+        // pre-conditions
+        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
+        Map<String, Object> dummyMap = Collections.emptyMap();
+
+        long startTime = System.currentTimeMillis();
+        // operations
+        try{
+            httpClient.put(dummyMap, serverFake.getUrl(), timeout);
+            fail("Timeout expected.");
+        }catch(SocketTimeoutException e){
+
+            //assert
+            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+                    .isLessThan(serverDelay)
+                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        }finally{
+            serverFake.stop();
+        }
+
+    }
+
+    @Test
+    public void shouldRespectGivenTimeoutGET() throws Throwable{
+
+        final int timeout = 1000;
+        final int serverDelay = timeout * 4;
+
+        // pre-conditions
+        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
+
+        long startTime = System.currentTimeMillis();
+        // operations
+        try{
+            httpClient.get(serverFake.getUrl(), timeout);
+            fail("Timeout expected.");
+        }catch(SocketTimeoutException e){
+
+            //assert
+            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+                    .isLessThan(serverDelay)
+                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+        }finally{
+            serverFake.stop();
+        }
+
+    }
+
 	protected HttpServerFake startHttServerFake(String statusLine) throws IOException {
 		int port = new Random().nextInt(9 * 1024) + 1024;
 		HttpServerFake serverFake = null;
@@ -275,4 +392,11 @@ public class HttpClientTest {
 		serverFake.start();
 		return serverFake;
 	}
+
+    protected WaitingHttpServerFake startWaitingHttpServerFake(int delay) throws IOException{
+
+        WaitingHttpServerFake serverFake = new WaitingHttpServerFake(delay);
+        serverFake.start();
+        return serverFake;
+    }
 }

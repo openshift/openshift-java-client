@@ -43,6 +43,7 @@ import com.openshift.client.IApplication;
 import com.openshift.client.IApplicationPortForwarding;
 import com.openshift.client.IDomain;
 import com.openshift.client.IField;
+import com.openshift.client.IGearProfile;
 import com.openshift.client.IHttpClient;
 import com.openshift.client.IOpenShiftConnection;
 import com.openshift.client.IUser;
@@ -51,6 +52,7 @@ import com.openshift.client.OpenShiftEndpointException;
 import com.openshift.client.OpenShiftTimeoutException;
 import com.openshift.client.cartridge.EmbeddableCartridge;
 import com.openshift.client.cartridge.IEmbeddedCartridge;
+import com.openshift.client.cartridge.IStandaloneCartridge;
 import com.openshift.client.utils.EmbeddedCartridgeAssert;
 import com.openshift.client.utils.MessageAssert;
 import com.openshift.client.utils.Samples;
@@ -514,5 +516,7 @@ public class ApplicationResourceTest {
 			.onProperty("remoteAddress").containsExactly("127.7.233.2", "127.7.233.3", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "5190d701500446506a0000e4-foobarz.rhcloud.com");
 		assertThat(forwardablePorts)
 			.onProperty("remotePort").containsExactly(8080, 8080, 3528, 4447, 5445, 5455, 8080, 9990, 9999, 56756);
-	}	
+	}
+    
+
 }
