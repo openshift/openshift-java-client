@@ -36,6 +36,7 @@ import com.openshift.internal.client.utils.StreamUtils;
 
 /**
  * @author André Dietisheim
+ * @author Nicolas Spano
  */
 public class HttpServerFake {
 

@@ -12,10 +12,8 @@ package com.openshift.client.fakes;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.util.Map;
 
 import com.openshift.client.OpenShiftException;
 import com.openshift.client.utils.OpenShiftTestConfiguration;
@@ -25,6 +23,7 @@ import com.openshift.internal.client.httpclient.UrlConnectionHttpClient;
 
 /**
  * @author Andre Dietisheim
+ * @author Nicolas Spano
  */
 public class HttpClientFake extends UrlConnectionHttpClient {
 
