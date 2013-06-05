@@ -514,5 +514,7 @@ public class ApplicationResourceTest {
 			.onProperty("remoteAddress").containsExactly("127.7.233.2", "127.7.233.3", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "127.7.233.1", "5190d701500446506a0000e4-foobarz.rhcloud.com");
 		assertThat(forwardablePorts)
 			.onProperty("remotePort").containsExactly(8080, 8080, 3528, 4447, 5445, 5455, 8080, 9990, 9999, 56756);
-	}	
+	}
+    
+
 }
