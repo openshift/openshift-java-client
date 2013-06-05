@@ -145,7 +145,14 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 		return application;
 	}
 
-	public boolean hasApplicationByName(String name) throws OpenShiftException {
+    @Override
+    public IApplication createApplication(String name, IStandaloneCartridge cartridge, ApplicationScale scale, IGearProfile gearProfile, String initialGitUrl, long timeout) throws OpenShiftException {
+        //TODO
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean hasApplicationByName(String name) throws OpenShiftException {
 		return getApplicationByName(name) != null;
 	}
 
