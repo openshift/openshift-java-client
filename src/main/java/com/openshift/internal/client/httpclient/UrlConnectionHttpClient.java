@@ -50,12 +50,15 @@ public class UrlConnectionHttpClient implements IHttpClient {
 
 	private static final int DEFAULT_CONNECT_TIMEOUT = 10 * 	1000;
 	private static final int DEFAULT_READ_TIMEOUT = 2 * 60 * 1000;
+    private static final int NO_TIMEOUT = -1;
+
 	private static final String SYSPROP_OPENSHIFT_CONNECT_TIMEOUT = "com.openshift.httpclient.timeout";
 	private static final String SYSPROP_DEFAULT_CONNECT_TIMEOUT = "sun.net.client.defaultConnectTimeout";
 	private static final String SYSPROP_DEFAULT_READ_TIMEOUT = "sun.net.client.defaultReadTimeout";
 	private static final String SYSPROP_ENABLE_SNI_EXTENSION = "jsse.enableSNIExtension";
 
 	private static final String USERAGENT_FOR_KEYAUTH = "OpenShift";
+
 
 	private String userAgent;
 	private boolean sslChecks;
@@ -106,17 +109,26 @@ public class UrlConnectionHttpClient implements IHttpClient {
 
 
 	public String get(URL url) throws HttpClientException, SocketTimeoutException {
-		HttpURLConnection connection = null;
-		try {			
-			return write(null, HttpMethod.GET.toString(), url);
-		} catch (IOException e) {
-			throw createException(e, connection);
-		} finally {
-			disconnect(connection);
-		}
+		return this.get(url, NO_TIMEOUT);
 	}
 
-	public void setUserAgent(String userAgent) {
+    @Override
+    public String get(URL url, int timeout) throws HttpClientException, SocketTimeoutException {
+
+        HttpURLConnection connection = null;
+        try {
+            return write(null, HttpMethod.GET.toString(), url, timeout);
+        } catch (SocketTimeoutException e){
+            throw e;
+        }
+        catch (IOException e) {
+            throw createException(e, connection);
+        } finally {
+            disconnect(connection);
+        }
+    }
+
+    public void setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
 	}
 
@@ -137,8 +149,13 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		return put(requestMediaType.encodeParameters(parameters), url);
 	}
 
-	protected String put(String data, URL url) throws HttpClientException, SocketTimeoutException {
-		return write(data, HttpMethod.PUT.toString(), url);
+    @Override
+    public String put(Map<String, Object> parameters, URL url, int timeout) throws HttpClientException, SocketTimeoutException, UnsupportedEncodingException {
+        return write(requestMediaType.encodeParameters(parameters), HttpMethod.PUT.toString(), url, timeout);
+    }
+
+    protected String put(String data, URL url) throws HttpClientException, SocketTimeoutException {
+		return write(data, HttpMethod.PUT.toString(), url, NO_TIMEOUT);
 	}
 
 	public String post(Map<String, Object> parameters, URL url)
@@ -147,28 +164,39 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 
 	protected String post(String data, URL url) throws HttpClientException, SocketTimeoutException {
-		return write(data, HttpMethod.POST.toString(), url);
+		return write(data, HttpMethod.POST.toString(), url, NO_TIMEOUT);
 	}
+
+    public String post(Map<String, Object> data, URL url, int timeout) throws HttpClientException, SocketTimeoutException,
+            UnsupportedEncodingException {
+        return write(requestMediaType.encodeParameters(data), HttpMethod.POST.toString(), url, timeout);
+    }
 
 	public String delete(Map<String, Object> parameters, URL url)
 			throws HttpClientException, SocketTimeoutException, UnsupportedEncodingException {
 		return delete(requestMediaType.encodeParameters(parameters), url);
 	}
 
-	public String delete(URL url)
+    @Override
+    public String delete(Map<String, Object> parameters, URL url, int timeout) throws HttpClientException, SocketTimeoutException,
+            UnsupportedEncodingException {
+        return write(requestMediaType.encodeParameters(parameters), HttpMethod.DELETE.toString(), url, timeout);
+    }
+
+    public String delete(URL url)
 			throws HttpClientException, SocketTimeoutException, UnsupportedEncodingException {
 		return delete((String) null, url);
 	}
 
 	protected String delete(String data, URL url) throws HttpClientException, SocketTimeoutException {
-		return write(data, HttpMethod.DELETE.toString(), url);
+		return write(data, HttpMethod.DELETE.toString(), url, NO_TIMEOUT);
 	}
 
-	protected String write(String data, String requestMethod, URL url)
+	protected String write(String data, String requestMethod, URL url, int timeout)
 			throws SocketTimeoutException, HttpClientException {
 		HttpURLConnection connection = null;
 		try {
-			connection = createConnection(username, password, authKey, authIV, userAgent, url);
+			connection = createConnection(username, password, authKey, authIV, userAgent, url, timeout);
 			connection.setRequestMethod(requestMethod);
 			connection.setDoOutput(true);
 			if (data != null) {
@@ -176,7 +204,11 @@ public class UrlConnectionHttpClient implements IHttpClient {
 				StreamUtils.writeTo(data.getBytes(), connection.getOutputStream());
 			}
 			return StreamUtils.readToString(connection.getInputStream());
-		} catch (IOException e) {
+		} 
+        catch (SocketTimeoutException e){
+            throw e;
+        }
+        catch (IOException e) {
 			throw createException(e, connection);
 		} finally {
 			disconnect(connection);
@@ -255,11 +287,11 @@ public class UrlConnectionHttpClient implements IHttpClient {
 
 	protected HttpURLConnection createConnection(String username, String password, String userAgent, URL url)
 			throws IOException {
-		return createConnection(username, password, null, null, userAgent, url);
+		return createConnection(username, password, null, null, userAgent, url, NO_TIMEOUT);
 	}
 	
-	protected HttpURLConnection createConnection(String username, String password, String authKey, String authIV, String userAgent, URL url)
-			throws IOException {
+	protected HttpURLConnection createConnection(String username, String password, String authKey, String authIV,
+            String userAgent, URL url, int timeout) throws IOException {
 		LOGGER.trace(
 				"creating connection to {} using username \"{}\" and password \"{}\"", new Object[] { url, username,
 						password });
@@ -270,7 +302,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 		connection.setDoInput(true);
 		connection.setAllowUserInteraction(false);
 		setConnectTimeout(connection);
-		setReadTimeout(connection);
+		setReadTimeout(timeout, connection);
 		// wont work when switching http->https
 		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4620571
 		connection.setInstanceFollowRedirects(true);
@@ -330,19 +362,26 @@ public class UrlConnectionHttpClient implements IHttpClient {
 
 	private void setConnectTimeout(URLConnection connection) {
 		int timeout = getSystemPropertyInteger(SYSPROP_OPENSHIFT_CONNECT_TIMEOUT);
-		if (timeout > -1) {
+		if (timeout > NO_TIMEOUT) {
 			connection.setConnectTimeout(timeout);
 			return;
 		}
 		timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_CONNECT_TIMEOUT);
-		if (timeout == -1) {
+		if (timeout == NO_TIMEOUT) {
 			connection.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT);
 		}
 	}
 
-	private void setReadTimeout(URLConnection connection) {
-		int timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_READ_TIMEOUT);
-		if (timeout == -1) {
+	private void setReadTimeout(int timeout, URLConnection connection) {
+
+        if(timeout > NO_TIMEOUT){
+            connection.setReadTimeout(timeout);
+            return;
+        }
+
+		timeout = getSystemPropertyInteger(SYSPROP_DEFAULT_READ_TIMEOUT);
+
+        if (timeout == NO_TIMEOUT) {
 			connection.setReadTimeout(DEFAULT_READ_TIMEOUT);
 		}
 	}

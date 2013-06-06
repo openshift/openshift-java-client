@@ -110,6 +110,9 @@ public class HttpServerFake {
 		}
 	}
 
+    protected void write(byte[] bytes, OutputStream outputStream) throws IOException{
+        outputStream.write(bytes);
+    }
 	
 	private class ServerFakeSocket implements Runnable {
 
@@ -121,7 +124,7 @@ public class HttpServerFake {
 				String response = getResponse(socket);
 				outputStream = socket.getOutputStream();
 				writeResponseHeader(outputStream);
-				outputStream.write(response.getBytes());
+				write(response.getBytes(), outputStream);
 				outputStream.flush();
 			} catch (IOException e) {
 				// e.printStackTrace();

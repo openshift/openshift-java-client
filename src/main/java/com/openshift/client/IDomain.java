@@ -110,6 +110,33 @@ public interface IDomain extends IOpenShiftResource {
 			final ApplicationScale scale, final IGearProfile gearProfile, String initialGitUrl)
 			throws OpenShiftException;
 
+    /**
+     * Creates a new application with the given name and the given
+     * cartridge/framework. Optionally, adds scalability, a specific gear
+     * profile, a git url to use for the initial template and the timeout value.
+     *
+     * @param name
+     *            the name of the application
+     * @param cartridge
+     *            the cartridge (the application type, ex. jbossas-7,
+     *            jbossews-2, php.5.2, etc.
+     * @param scale
+     *            or null (will use default on openshift, ie, false)
+     * @param gearProfile
+     *            ("small", "micro", "medium", "large", "exlarge", "jumbo") or
+     *            null (will use default on openshift, ie, 'small')
+     * @param initialGitUrl
+     *            the git url for the initial template app to be used
+     * @param timeout
+     *             the timeout value in milliseconds
+     * @return IApplication created
+     * @throws OpenShiftException
+     */
+    public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
+            final ApplicationScale scale, final IGearProfile gearProfile, String initialGitUrl,
+            final long timeout)
+            throws OpenShiftException;
+
 	public List<IApplication> getApplications() throws OpenShiftException;
 	
 	/**

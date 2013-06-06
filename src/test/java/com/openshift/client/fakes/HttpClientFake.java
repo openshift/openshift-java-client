@@ -12,8 +12,10 @@ package com.openshift.client.fakes;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.Map;
 
 import com.openshift.client.OpenShiftException;
 import com.openshift.client.utils.OpenShiftTestConfiguration;
@@ -31,7 +33,7 @@ public class HttpClientFake extends UrlConnectionHttpClient {
 	}
 	
 	@Override
-	protected String write(String data, String requestMethod, URL url)
+	protected String write(String data, String requestMethod, URL url, int timeout)
 			throws SocketTimeoutException, HttpClientException {
 		return data;
 	}
@@ -45,5 +47,6 @@ public class HttpClientFake extends UrlConnectionHttpClient {
 				mediaType,
 				version);
 	}
+
 
 }
