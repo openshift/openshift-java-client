@@ -19,6 +19,7 @@ import com.openshift.internal.client.httpclient.HttpClientException;
 
 /**
  * @author André Dietisheim
+ * @author Nicolas Spano
  */
 public interface IHttpClient {
 
@@ -52,9 +53,8 @@ public interface IHttpClient {
 
     public static final int DEFAULT_CONNECT_TIMEOUT = 10 * 	1000;
     public static final int DEFAULT_READ_TIMEOUT = 2 * 60 * 1000;
+	public static final int NO_TIMEOUT = -1;
 
-    final long timeout = 1000;
-	
 	public void setUserAgent(String userAgent);
 	
 	public String getUserAgent();

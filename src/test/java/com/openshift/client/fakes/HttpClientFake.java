@@ -25,6 +25,7 @@ import com.openshift.internal.client.httpclient.UrlConnectionHttpClient;
 
 /**
  * @author Andre Dietisheim
+ * @author Nicolas Spano
  */
 public class HttpClientFake extends UrlConnectionHttpClient {
 

@@ -10,14 +10,11 @@
  ******************************************************************************/
 package com.openshift.internal.client;
 
-import static com.openshift.client.utils.UrlEndsWithMatcher.urlEndsWith;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyMapOf;
-import static org.mockito.Mockito.when;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,28 +25,28 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.openshift.client.*;
-import com.openshift.internal.client.httpclient.InternalServerErrorException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.openshift.client.IHttpClient;
+import com.openshift.client.OpenShiftException;
 import com.openshift.client.fakes.HttpClientFake;
 import com.openshift.client.fakes.HttpServerFake;
+import com.openshift.client.fakes.WaitingHttpServerFake;
 import com.openshift.client.utils.Base64Coder;
 import com.openshift.internal.client.httpclient.HttpClientException;
 import com.openshift.internal.client.httpclient.NotFoundException;
 import com.openshift.internal.client.httpclient.UrlConnectionHttpClientBuilder;
-import org.mockito.Mockito;
 
 /**
  * @author Andre Dietisheim
+ * @author Nicolas Spano
  */
 public class HttpClientTest {
 
@@ -120,7 +117,8 @@ public class HttpClientTest {
 		assertEquals(1, matcher.groupCount());
 		String credentials = matcher.group(1);
 		String cleartextCredentials = Base64Coder.decode(credentials);
-		assertThat(credentials).describedAs("credentials were not encoded in httpClient").isNotEqualTo(cleartextCredentials);
+		assertThat(credentials).describedAs("credentials were not encoded in httpClient").isNotEqualTo(
+				cleartextCredentials);
 		assertEquals(username + ":" + password, cleartextCredentials);
 	}
 
@@ -206,7 +204,7 @@ public class HttpClientTest {
 
 		// operation
 		httpClient.get(serverFake.getUrl());
-		
+
 		// verification
 		assertThat(verified.get()).as("The protocol version sent by the client was not verified").isTrue();
 	}
@@ -263,123 +261,101 @@ public class HttpClientTest {
 			// operation
 			httpClient.get(server.getUrl());
 			fail("Expected NotFoundException not thrown");
-		} catch(NotFoundException e) {
+		} catch (NotFoundException e) {
 			assertTrue(e.getMessage().contains(server.getUrl().toString()));
 		} finally {
 			server.stop();
 		}
 	}
 
-    @Test
-    public void shouldRespectGivenTimeoutPOST() throws Throwable{
+	@Test
+	public void shouldRespectGivenTimeoutPOST() throws Throwable {
+		// pre-conditions
+		final int timeout = 1000;
+		final int serverDelay = timeout * 4;
+		assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
+		long startTime = System.currentTimeMillis();
+		// operations
+		try {
+			httpClient.post(Collections.<String, Object>emptyMap(), serverFake.getUrl(), timeout);
+			fail("Timeout expected.");
+		} catch (SocketTimeoutException e) {
+			// assert
+			assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+					.isLessThan(serverDelay)
+					.isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		} finally {
+			serverFake.stop();
+		}
+	}
 
-        final int timeout = 1000;
-        final int serverDelay = timeout * 4;
+	@Test
+	public void shouldRespectGivenTimeoutDELETE() throws Throwable {
+		// pre-conditions
+		final int timeout = 1000;
+		final int serverDelay = timeout * 4;
+		assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
+		long startTime = System.currentTimeMillis();
+		// operations
+		try {
+			httpClient.delete(Collections.<String, Object>emptyMap(), serverFake.getUrl(), timeout);
+			fail("Timeout expected.");
+		} catch (SocketTimeoutException e) {
+			// assert
+			assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+					.isLessThan(serverDelay)
+					.isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		} finally {
+			serverFake.stop();
+		}
+	}
 
-        // pre-conditions
-        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
-        Map<String, Object> dummyMap = Collections.emptyMap();
+	@Test
+	public void shouldRespectGivenTimeoutPUT() throws Throwable {
+		// pre-conditions
+		final int timeout = 1000;
+		final int serverDelay = timeout * 4;
+		assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
+		long startTime = System.currentTimeMillis();
+		// operations
+		try {
+			httpClient.put(Collections.<String, Object>emptyMap(), serverFake.getUrl(), timeout);
+			fail("Timeout expected.");
+		} catch (SocketTimeoutException e) {
+			// assert
+			assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+					.isLessThan(serverDelay)
+					.isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		} finally {
+			serverFake.stop();
+		}
+	}
 
-        long startTime = System.currentTimeMillis();
-        // operations
-        try{
-            httpClient.post(dummyMap, serverFake.getUrl(), timeout);
-            fail("Timeout expected.");
-        }catch(SocketTimeoutException e){
+	@Test
+	public void shouldRespectGivenTimeoutGET() throws Throwable {
+		// pre-conditions
+		final int timeout = 1000;
+		final int serverDelay = timeout * 4;
+		assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
 
-            //assert
-            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
-                    .isLessThan(serverDelay)
-                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        }finally{
-            serverFake.stop();
-        }
-
-    }
-
-    @Test
-    public void shouldRespectGivenTimeoutDELETE() throws Throwable{
-
-        final int timeout = 1000;
-        final int serverDelay = timeout * 4;
-
-        // pre-conditions
-        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
-        Map<String, Object> dummyMap = Collections.emptyMap();
-
-        long startTime = System.currentTimeMillis();
-        // operations
-        try{
-            httpClient.delete(dummyMap, serverFake.getUrl(), timeout);
-            fail("Timeout expected.");
-        }catch(SocketTimeoutException e){
-
-            //assert
-            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
-                    .isLessThan(serverDelay)
-                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        }finally{
-            serverFake.stop();
-        }
-
-    }
-
-    @Test
-    public void shouldRespectGivenTimeoutPUT() throws Throwable{
-
-        final int timeout = 1000;
-        final int serverDelay = timeout * 4;
-
-        // pre-conditions
-        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
-        Map<String, Object> dummyMap = Collections.emptyMap();
-
-        long startTime = System.currentTimeMillis();
-        // operations
-        try{
-            httpClient.put(dummyMap, serverFake.getUrl(), timeout);
-            fail("Timeout expected.");
-        }catch(SocketTimeoutException e){
-
-            //assert
-            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
-                    .isLessThan(serverDelay)
-                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        }finally{
-            serverFake.stop();
-        }
-
-    }
-
-    @Test
-    public void shouldRespectGivenTimeoutGET() throws Throwable{
-
-        final int timeout = 1000;
-        final int serverDelay = timeout * 4;
-
-        // pre-conditions
-        assertThat(timeout).isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        WaitingHttpServerFake serverFake = this.startWaitingHttpServerFake(serverDelay);
-
-        long startTime = System.currentTimeMillis();
-        // operations
-        try{
-            httpClient.get(serverFake.getUrl(), timeout);
-            fail("Timeout expected.");
-        }catch(SocketTimeoutException e){
-
-            //assert
-            assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
-                    .isLessThan(serverDelay)
-                    .isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
-        }finally{
-            serverFake.stop();
-        }
-
-    }
+		long startTime = System.currentTimeMillis();
+		// operations
+		try {
+			httpClient.get(serverFake.getUrl(), timeout);
+			fail("Timeout expected.");
+		} catch (SocketTimeoutException e) {
+			// assert
+			assertThat(System.currentTimeMillis() - startTime).isGreaterThan(timeout)
+					.isLessThan(serverDelay)
+					.isLessThan(IHttpClient.DEFAULT_READ_TIMEOUT);
+		} finally {
+			serverFake.stop();
+		}
+	}
 
 	protected HttpServerFake startHttServerFake(String statusLine) throws IOException {
 		int port = new Random().nextInt(9 * 1024) + 1024;
@@ -393,10 +369,9 @@ public class HttpClientTest {
 		return serverFake;
 	}
 
-    protected WaitingHttpServerFake startWaitingHttpServerFake(int delay) throws IOException{
-
-        WaitingHttpServerFake serverFake = new WaitingHttpServerFake(delay);
-        serverFake.start();
-        return serverFake;
-    }
+	protected WaitingHttpServerFake startWaitingHttpServerFake(int delay) throws IOException {
+		WaitingHttpServerFake serverFake = new WaitingHttpServerFake(delay);
+		serverFake.start();
+		return serverFake;
+	}
 }
