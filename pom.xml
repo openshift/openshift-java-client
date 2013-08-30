@@ -17,7 +17,11 @@
 	<!-- Artifact Information -->
 	<groupId>com.openshift</groupId>
 	<artifactId>openshift-java-client</artifactId>
+<<<<<<< Updated upstream
 	<version>2.3.1-SNAPSHOT</version>
+=======
+	<version>2.3.0.Final</version>
+>>>>>>> Stashed changes
 	<packaging>jar</packaging>
 	<name>OpenShift Java Client</name>
 	<url>http://openshift.redhat.com</url>
