@@ -46,7 +46,9 @@ public abstract class AbstractOpenShiftResource implements IOpenShiftResource {
 
 	/** The links. Null means collection is not loaded yet. */
 	private Map<String, Link> links;
+	
 
+   
 	/** The service. */
 	private final IRestService service;
 

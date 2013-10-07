@@ -13,6 +13,7 @@ package com.openshift.client;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import com.jcraft.jsch.JSchException;
@@ -407,4 +408,32 @@ public interface IApplication extends IOpenShiftResource {
 	 * @throws OpenShiftSSHOperationException
 	 */
 	public List<String> getEnvironmentProperties() throws OpenShiftSSHOperationException;
+	/**
+	 * Retrieves the list of environment variables
+	 * @return the list of environment variables 
+	 * @throws OpenShiftSSHOperationException
+	 */
+	public List<IEnvironmentVariable> getEnvironmentVariables() throws OpenShiftSSHOperationException;
+	/**
+	 * Checks if the environment variable is present in the application.
+	 * @param name Name of the environment variable
+	 * @return 
+	 * @throws OpenShiftSSHOperationException
+	 */
+	public boolean hasEnvironmentVariableByName(String name) throws OpenShiftSSHOperationException;
+	/**
+	 * Adds an environment variable
+	 * @param name name of the variable to add
+	 * @param value value of the new variable
+	 * @throws OpenShiftSSHOperationException
+	 */
+	public void addEnvironmentVariable(String name,String value) throws OpenShiftSSHOperationException;
+	/**
+	 * Return the environment variable for the specified name
+	 * @param name Name of the environment variable
+	 * @return environment variable
+	 * @throws OpenShiftSSHOperationException
+	 */
+	public IEnvironmentVariable getEnvironmentVariableByName(String name) throws OpenShiftSSHOperationException;
+
 }

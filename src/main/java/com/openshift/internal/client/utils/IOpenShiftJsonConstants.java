@@ -86,7 +86,7 @@ public class IOpenShiftJsonConstants {
 	public static final String PROPERTY_UUID = "uuid";
 	public static final String PROPERTY_VALID_OPTIONS = "valid_options";
 	public static final String PROPERTY_VALUE = "value";
-
+    
 	public static final String VALUE_STATUS_OK = "ok";
 	public static final String VALUE_STATUS_CREATED = "created";
 	public static final String VALUE_ADD_ALIAS = "add-alias";
