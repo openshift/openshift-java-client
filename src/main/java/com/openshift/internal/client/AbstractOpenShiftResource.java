@@ -26,6 +26,7 @@ import com.openshift.client.cartridge.IEmbeddableCartridge;
 import com.openshift.client.cartridge.IStandaloneCartridge;
 import com.openshift.internal.client.httpclient.request.IMediaType;
 import com.openshift.internal.client.httpclient.request.Parameter;
+import com.openshift.internal.client.httpclient.request.ParameterValue;
 import com.openshift.internal.client.httpclient.request.ParameterValueArray;
 import com.openshift.internal.client.httpclient.request.ParameterValueMap;
 import com.openshift.internal.client.httpclient.request.StringParameter;
@@ -194,6 +195,32 @@ public abstract class AbstractOpenShiftResource implements IOpenShiftResource {
 			}
 
 			return add(new Parameter(IOpenShiftJsonConstants.PROPERTY_CARTRIDGES, parameters));
+		}
+		
+		protected Parameters addEnvironmentVariables(Map<String,String> environmentVariables){
+			ParameterValueArray parameters = new ParameterValueArray();
+			if(environmentVariables!=null&&!environmentVariables.isEmpty()){
+				parameters.addAll(createEnvironmentVariableParameters(environmentVariables));
+			}
+			return add(new Parameter(IOpenShiftJsonConstants.PROPERTY_ENVIRONMENT_VARIABLES, parameters));
+		}
+		
+		
+		private List<ParameterValueMap> createEnvironmentVariableParameters(Map<String,String> environmentVariables){
+			List<ParameterValueMap> parameters = new ArrayList<ParameterValueMap>();
+			if(environmentVariables==null ||environmentVariables.isEmpty()){
+				return parameters;
+			}
+			for(Map.Entry<String, String> environmentVariable : environmentVariables.entrySet()){
+				parameters.add(createEnvironmentVariableParameter(environmentVariable.getKey(),environmentVariable.getValue()));
+			}
+			return parameters;
+		}
+		private ParameterValueMap createEnvironmentVariableParameter(String name,String value){
+            ParameterValueMap parameters = new ParameterValueMap();
+			parameters.add(IOpenShiftJsonConstants.PROPERTY_NAME,name)
+			.add(IOpenShiftJsonConstants.PROPERTY_VALUE, value);
+			return parameters;
 		}
 
 		/**

@@ -11,6 +11,7 @@ package com.redhat.openshift.examples.domaininfo;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,17 +72,17 @@ public class Main {
 			   String environmentName = "SixKey";
 			   String environmentValue = "SIX_VALUE";
 			   String updatedEnvironmentValue="UPDATED_SIX_VALUE";
-			   boolean stop = false;
-			   boolean deleteAllApp = false;
-			   boolean createAllApp=false;
-			   IApplication application = domain.getApplicationByName("myjbossapp");
-			   
+			   boolean stop = true;
+			   boolean deleteAllVariables = false;
+			   boolean createAllVariables=false;
+			   IApplication application = domain.getApplicationByName("test");
+			  addEnvironmentVariableMapToApplications(application);
 			   printAllEnvironmentVariable(application);
-			   if(deleteAllApp){
+			   if(deleteAllVariables){
 			   deleteAllVariables(application);
 			   printAllEnvironmentVariable(application);
 			   }
-			   if(createAllApp){
+			   if(createAllVariables){
 			   createEnvironmentVariables(application);
 			   printAllEnvironmentVariable(application);
 			   }
@@ -116,7 +117,11 @@ public class Main {
 	}
 	private static void  printAllEnvironmentVariable(IApplication application){
 		List<IEnvironmentVariable> environmentVariables = application.getEnvironmentVariables();
-		   System.out.println("Getting all environment variables for application"+application.getName());
+		if(environmentVariables.isEmpty()){
+			System.out.println("No environment variables present in "+application.getName());
+			return;
+		}
+		   System.out.println("Getting all environment variables for application "+application.getName());
 		   for(IEnvironmentVariable environmentVariable : environmentVariables){
 			   printEnvironmentVariable(environmentVariable);
 		   }
@@ -139,6 +144,22 @@ public class Main {
 		for(IEnvironmentVariable environmentVariable :tempList){
 			environmentVariable.delete();
 		}
+	}
+	
+	private static Map<String,String> createEnvironmentVariablesMap(){
+		Map<String,String> envMap = new HashMap<String,String>();
+		envMap.put("M_OneKey","M_ONE_VALUE");
+		envMap.put("M_TwoKey","M_TWO_VALUE");
+		envMap.put("M_ThreeKey","M_THREE_VALUE");
+		envMap.put("M_FourKey","M_FOUR_VALUE");
+		envMap.put("M_FiveKey","M_FIVE_VALUE");
+		envMap.put("M_SixKey","M_SIX_VALUE");
+		return envMap;
+		
+	}
+	
+	private static void addEnvironmentVariableMapToApplications(IApplication applications){
+		applications.addEnvironmentVariables(createEnvironmentVariablesMap());
 	}
 
 }

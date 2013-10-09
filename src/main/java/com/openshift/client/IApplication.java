@@ -429,6 +429,12 @@ public interface IApplication extends IOpenShiftResource {
 	 */
 	public void addEnvironmentVariable(String name,String value) throws OpenShiftSSHOperationException;
 	/**
+	 * Adds a map of environment variables to the application
+	 * @param environmentVariables map of environment variables
+	 * @throws OpenShiftSSHOperationException
+	 */
+	public void addEnvironmentVariables(Map<String,String> environmentVariables) throws OpenShiftSSHOperationException;
+	/**
 	 * Return the environment variable for the specified name
 	 * @param name Name of the environment variable
 	 * @return environment variable

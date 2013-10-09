@@ -550,5 +550,23 @@ public class ApplicationResourceTest {
 		assertThat(forwardablePorts)
 				.onProperty("remotePort").containsExactly(8080, 8080, 3528, 4447, 5445, 5455, 8080, 9990, 9999, 56756);
 	}
+	
+	/*public void shouldAddEnvironmentVariableToApplication(){
+		
+	}
+	public void shouldGetEnvironmentVariableByNameFromApplicatin(){
+		
+	}
+	public void shouldNotAddExistingEnvironmentVariableToApplication(){
+		
+	}
+	public void shouldNotAddEnvironmentVariableToApplication(){
+		
+	}
+	public void shouldListAllEnvironmentVariablesFromApplication(){
+		
+	}*/
+	
+	
 
 }

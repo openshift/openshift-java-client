@@ -98,6 +98,8 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 			throws OpenShiftException {
 		return createApplication(name, cartridge, (String) null);
 	}
+	
+	
 
 	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
 			final ApplicationScale scale) throws OpenShiftException {

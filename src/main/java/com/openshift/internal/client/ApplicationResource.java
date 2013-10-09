@@ -614,12 +614,32 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
     IEnvironmentVariable environmentVariable = new EnvironmentVariableResource(environmentVariableResourceDTO, this);
     updateEnvironmentVariables(environmentVariable);
     }
+	@Override
+    public void addEnvironmentVariables(Map<String,String> environmentVariablesMap) throws OpenShiftSSHOperationException{
+    
+    List<EnvironmentVariableResourceDTO> environmentVariableResourceDTOs = new AddEnvironmentVariablesRequest().execute(environmentVariablesMap);
+    List<IEnvironmentVariable> environmentVariables = new ArrayList<IEnvironmentVariable>();
+    for(EnvironmentVariableResourceDTO dto : environmentVariableResourceDTOs){
+    IEnvironmentVariable environmentVariable = new EnvironmentVariableResource(dto, this);
+    environmentVariables.add(environmentVariable);
+    }
+   
+    updateEnvironmentVariables(environmentVariables);
+    }
     
     private void updateEnvironmentVariables(IEnvironmentVariable environmentVariable) throws OpenShiftSSHOperationException{
     	if(environmentVariables==null){
     	environmentVariables = loadEnvironmentVariables();
     	}else{
     	environmentVariables.add(environmentVariable);
+    	}
+    }
+    
+    private void updateEnvironmentVariables(List<IEnvironmentVariable> environmentVariables) throws OpenShiftSSHOperationException{
+    	if(this.environmentVariables==null){
+    	this.environmentVariables = loadEnvironmentVariables();
+    	}else{
+    	this.environmentVariables.addAll(environmentVariables);
     	}
     }
     @Override
@@ -994,6 +1014,17 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 			Parameters parameters = new Parameters()
 			.add(IOpenShiftJsonConstants.PROPERTY_NAME,name)
 			.add(IOpenShiftJsonConstants.PROPERTY_VALUE, value);
+		return	super.execute(parameters.toArray());
+		}
+	}
+	
+	private class AddEnvironmentVariablesRequest extends ServiceRequest {
+		protected AddEnvironmentVariablesRequest() {
+			super(LINK_SET_UNSET_ENVIRONMENT_VARIABLES);
+		}
+		protected List<EnvironmentVariableResourceDTO> execute(Map<String,String> environmentVariables){
+			Parameters parameters = new Parameters()
+			.addEnvironmentVariables(environmentVariables);
 		return	super.execute(parameters.toArray());
 		}
 	}
