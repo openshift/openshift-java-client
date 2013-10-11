@@ -427,13 +427,13 @@ public interface IApplication extends IOpenShiftResource {
 	 * @param value value of the new variable
 	 * @throws OpenShiftSSHOperationException
 	 */
-	public void addEnvironmentVariable(String name,String value) throws OpenShiftSSHOperationException;
+	public IEnvironmentVariable addEnvironmentVariable(String name,String value) throws OpenShiftSSHOperationException;
 	/**
 	 * Adds a map of environment variables to the application
 	 * @param environmentVariables map of environment variables
 	 * @throws OpenShiftSSHOperationException
 	 */
-	public void addEnvironmentVariables(Map<String,String> environmentVariables) throws OpenShiftSSHOperationException;
+	public List<IEnvironmentVariable> addEnvironmentVariables(Map<String,String> environmentVariables) throws OpenShiftSSHOperationException;
 	/**
 	 * Return the environment variable for the specified name
 	 * @param name Name of the environment variable

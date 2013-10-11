@@ -599,7 +599,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	}
 	
 	@Override
-    public void addEnvironmentVariable(String name,String value) throws OpenShiftSSHOperationException{
+    public IEnvironmentVariable addEnvironmentVariable(String name,String value) throws OpenShiftSSHOperationException{
     if(name==null){
     	throw new OpenShiftException("Environment variable name is mandatory but none was given.");
     }
@@ -613,9 +613,10 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
     EnvironmentVariableResourceDTO environmentVariableResourceDTO = new AddEnvironmentVariableRequest().execute(name, value);
     IEnvironmentVariable environmentVariable = new EnvironmentVariableResource(environmentVariableResourceDTO, this);
     updateEnvironmentVariables(environmentVariable);
+    return environmentVariable;
     }
 	@Override
-    public void addEnvironmentVariables(Map<String,String> environmentVariablesMap) throws OpenShiftSSHOperationException{
+    public List<IEnvironmentVariable> addEnvironmentVariables(Map<String,String> environmentVariablesMap) throws OpenShiftSSHOperationException{
     
     List<EnvironmentVariableResourceDTO> environmentVariableResourceDTOs = new AddEnvironmentVariablesRequest().execute(environmentVariablesMap);
     List<IEnvironmentVariable> environmentVariables = new ArrayList<IEnvironmentVariable>();
@@ -625,13 +626,15 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
     }
    
     updateEnvironmentVariables(environmentVariables);
+    return environmentVariables;
     }
     
     private void updateEnvironmentVariables(IEnvironmentVariable environmentVariable) throws OpenShiftSSHOperationException{
     	if(environmentVariables==null){
     	environmentVariables = loadEnvironmentVariables();
     	}else{
-    	environmentVariables.add(environmentVariable);
+    	environmentVariables.clear();
+    	environmentVariables.addAll(loadEnvironmentVariables());
     	}
     }
     
