@@ -595,7 +595,7 @@ public class ApplicationResourceTest {
     }
     
     @Test
- 	public void shouldGetEnvironmentVariableByNameFromApplicatin() throws Throwable{
+ 	public void shouldGetEnvironmentVariableByNameFromApplication() throws Throwable{
     	//precondition
 		mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
 		//operation

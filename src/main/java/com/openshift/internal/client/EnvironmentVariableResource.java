@@ -58,10 +58,7 @@ public class EnvironmentVariableResource  extends AbstractOpenShiftResource impl
 	}
 	@Override
 	public void update(String value) throws OpenShiftException{
-		 if(name==null){
-	        	throw new OpenShiftException("Environment variable name is mandatory but none was given.");
-	      }
-	      if(value==null){
+		 if(value==null){
 	        	throw new OpenShiftException("Value for environment variable \"{0}\" not given.",name);
 	      }
 	      EnvironmentVariableResourceDTO environmentVariableResourceDTO = new UpdateEnvironmentVariableRequest().execute(value);
