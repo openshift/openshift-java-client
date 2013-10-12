@@ -610,7 +610,6 @@ public class ApplicationResourceTest {
     @Test
 	public void shouldNotAddExistingEnvironmentVariableToApplication() throws Throwable{
 		//precondition
-		//precondition
 		mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
 		//operation
 		final IApplication app = domain.getApplicationByName("springeap6");
@@ -625,9 +624,7 @@ public class ApplicationResourceTest {
 		}
 		assertThat(app.getEnvironmentVariables()).hasSize(1);
 	}
-	public void shouldNotAddEnvironmentVariableToApplication(){
-		
-	}
+
 	@Test
 	public void shouldListAllEnvironmentVariablesFromApplication() throws Throwable{
 	//preconditions
@@ -641,7 +638,15 @@ public class ApplicationResourceTest {
 	
 		
 	}
-	
-	
+	@Test
+	public void shouldLoadEmptyListOfEnvironmentVariables() throws Throwable{
+		//precondition
+		mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
+		//operation
+		final IApplication application = domain.getApplicationByName("springeap6");
+		List<IEnvironmentVariable> environmentVariables = application.getEnvironmentVariables();
+		//verifications
+		assertThat(environmentVariables).isEmpty();
+	}
 
 }

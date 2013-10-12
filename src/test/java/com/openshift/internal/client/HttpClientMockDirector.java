@@ -484,5 +484,11 @@ public class HttpClientMockDirector {
 		return this;
 	}
 	
-	
+	public HttpClientMockDirector mockUpdateEnvironmentVariableValue(String domainId,String applicationName,String environmentName,Samples updateEnvironmentVariableValue)
+			throws SocketTimeoutException, HttpClientException, EncodingException {
+		when(client.put(urlEndsWith("/domains/" + domainId + "/applications/" + applicationName + "/environment-variables/"+ environmentName),
+				any(IMediaType.class),anyInt(),Matchers.<Parameter[]>anyVararg()))
+		.thenReturn(updateEnvironmentVariableValue.getContentAsString());
+		return this;
+	}
 }
