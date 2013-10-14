@@ -24,6 +24,7 @@ import com.openshift.client.cartridge.IStandaloneCartridge;
 
 /**
  * @author André Dietisheim
+ * @author Syed Iqbal
  */
 public interface IApplication extends IOpenShiftResource {
 

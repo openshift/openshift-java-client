@@ -42,6 +42,7 @@ import com.openshift.internal.client.utils.UrlUtils;
  * 
  * @author Xavier Coulon
  * @author Andre Dietisheim
+ * @author Syed Iqbal
  */
 public abstract class AbstractOpenShiftResource implements IOpenShiftResource {
 

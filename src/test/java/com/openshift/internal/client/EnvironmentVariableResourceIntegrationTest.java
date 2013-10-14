@@ -1,8 +1,4 @@
 package com.openshift.internal.client;
-
-import static com.openshift.client.utils.Samples.GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6;
-import static com.openshift.client.utils.Samples.GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6;
-import static com.openshift.client.utils.Samples.PUT_FOO_ENVIRONMENT_VARIABLE_FOOBARZ_SPRINGEAP6;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Before;

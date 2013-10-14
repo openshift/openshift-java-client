@@ -19,6 +19,7 @@ import com.openshift.client.cartridge.IStandaloneCartridge;
 /**
  * @author André Dietisheim
  * @author Nicolas Spano
+ * @author Syed Iqbal
  */
 public interface IDomain extends IOpenShiftResource {
 	

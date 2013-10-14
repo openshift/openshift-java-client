@@ -2,7 +2,7 @@ package com.openshift.client;
 
 /**
  * 
- * @author siqbal
+ * @author Syed Iqbal
  *
  */
 public interface IEnvironmentVariable extends IOpenShiftResource{
