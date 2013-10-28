@@ -28,6 +28,7 @@ import com.openshift.client.cartridge.selector.LatestVersionOf;
 
 /**
  * @author André Dietisheim
+ * @author Martes G Wigglesworth
  */
 public class ApplicationTestUtils {
 
@@ -229,7 +230,7 @@ public class ApplicationTestUtils {
 	}
 	
 	public static IApplication destroyAllEnvironmentVariables(IApplication application) {
-		for (String name : application.getEnvironmentVariables().keySet()) {
+		for (String name : application.getEnvironmentVariablesMap().keySet()) {
 			application.removeEnvironmentVariable(name);;
 		}
 		return application;

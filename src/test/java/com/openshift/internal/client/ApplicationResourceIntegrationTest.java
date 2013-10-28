@@ -341,13 +341,13 @@ public class ApplicationResourceIntegrationTest {
     	IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
 		ApplicationTestUtils.destroyAllEnvironmentVariables(application);
     	IEnvironmentVariable environmentVariable = application.addEnvironmentVariable("FOOBAR","123");
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(1);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(1);
     	
     	//operation
     	environmentVariable.destroy();
     	
     	//verification
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(0);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(0);
     	assertThat(application.hasEnvironmentVariable("FOOBAR")).isFalse();
     }
 
@@ -357,13 +357,13 @@ public class ApplicationResourceIntegrationTest {
     	IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
 		ApplicationTestUtils.destroyAllEnvironmentVariables(application);
     	IEnvironmentVariable environmentVariable = application.addEnvironmentVariable("FOOBAR","123");
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(1);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(1);
     	
     	//operation
     	application.removeEnvironmentVariable(environmentVariable.getName());
     	
     	//verification
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(0);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(0);
     	assertThat(application.hasEnvironmentVariable("FOOBAR")).isFalse();
     }
 
@@ -395,7 +395,7 @@ public class ApplicationResourceIntegrationTest {
 		application.addEnvironmentVariables(environmentVariableMap);
 
 		// operation
-		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariables();
+		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesMap();
 
 		// verifications
 		assertThat(environmentVariables).hasSize(3);
@@ -408,7 +408,7 @@ public class ApplicationResourceIntegrationTest {
 		IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
 
 		//operation
-		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariables();
+		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesMap();
 
 		//verifications
 		assertThat(environmentVariables).isEmpty();

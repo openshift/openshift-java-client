@@ -638,13 +638,13 @@ public class ApplicationResourceTest {
 				.mockGetEnvironmentVariables("foobarz", "springeap6",
 						GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6, GET_2_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
 		final IApplication app = domain.getApplicationByName("springeap6");
-		Map<String, IEnvironmentVariable> environmentVariables = app.getEnvironmentVariables();
+		Map<String, IEnvironmentVariable> environmentVariables = app.getEnvironmentVariablesMap();
 		assertThat(environmentVariables).hasSize(1);
 		// operation
 		app.refresh();
 		
 		// verification
-		assertThat(app.getEnvironmentVariables()).hasSize(2);
+		assertThat(app.getEnvironmentVariablesMap()).hasSize(2);
 	}
 	
 	@Test
@@ -667,8 +667,8 @@ public class ApplicationResourceTest {
 		mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",
 				GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
 		final IApplication app = domain.getApplicationByName("springeap6");
-		assertThat(app.getEnvironmentVariables()).hasSize(1);
-		IEnvironmentVariable existingEnvironmentVariable = app.getEnvironmentVariables().get("FOO");
+		assertThat(app.getEnvironmentVariablesMap()).hasSize(1);
+		IEnvironmentVariable existingEnvironmentVariable = app.getEnvironmentVariablesMap().get("FOO");
 		assertThat(existingEnvironmentVariable.getName()).isEqualTo("FOO");
 
 		// operation
@@ -680,7 +680,7 @@ public class ApplicationResourceTest {
 		}
 		
 		// verification
-		assertThat(app.getEnvironmentVariables()).hasSize(1);
+		assertThat(app.getEnvironmentVariablesMap()).hasSize(1);
 	}
 
 	@Test
@@ -689,15 +689,15 @@ public class ApplicationResourceTest {
 		mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",
 				GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6, GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
 		final IApplication app = domain.getApplicationByName("springeap6");
-		assertThat(app.getEnvironmentVariables()).hasSize(1);
-		IEnvironmentVariable existingEnvironmentVariable = app.getEnvironmentVariables().get("FOO");
+		assertThat(app.getEnvironmentVariablesMap()).hasSize(1);
+		IEnvironmentVariable existingEnvironmentVariable = app.getEnvironmentVariablesMap().get("FOO");
 		assertThat(existingEnvironmentVariable.getName()).isEqualTo("FOO");
 
 		// operation
 		existingEnvironmentVariable.destroy();
 		
 		// verification
-		assertThat(app.getEnvironmentVariables()).hasSize(0);
+		assertThat(app.getEnvironmentVariablesMap()).hasSize(0);
 		assertThat(app.hasEnvironmentVariable("FOO")).isFalse();
 	}
 
@@ -709,7 +709,7 @@ public class ApplicationResourceTest {
 
 		// operation
 		final IApplication app = domain.getApplicationByName("springeap6");
-		Map<String, IEnvironmentVariable> environmentVariables = app.getEnvironmentVariables();
+		Map<String, IEnvironmentVariable> environmentVariables = app.getEnvironmentVariablesMap();
 
 		// verifications
 		assertThat(environmentVariables).isNotEmpty();
@@ -724,7 +724,7 @@ public class ApplicationResourceTest {
 				GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
 		// operation
 		final IApplication application = domain.getApplicationByName("springeap6");
-		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariables();
+		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesMap();
 		// verifications
 		assertThat(environmentVariables).isEmpty();
 	}

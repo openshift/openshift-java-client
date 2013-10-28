@@ -26,6 +26,7 @@ import com.openshift.internal.client.ApplicationResource;
 /**
  * @author André Dietisheim
  * @author Syed Iqbal
+ * @author Martes G Wigglesworth
  */
 public interface IApplication extends IOpenShiftResource {
 
@@ -426,8 +427,23 @@ public interface IApplication extends IOpenShiftResource {
 	 * @return the list of environment variables
 	 * @throws OpenShiftSSHOperationException
 	 */
-	public Map<String, IEnvironmentVariable> getEnvironmentVariables() throws OpenShiftSSHOperationException;
+	public List<IEnvironmentVariable> getEnvironmentVariables() throws OpenShiftSSHOperationException;
 
+	/**
+	 * Returns Collection of IEnvironmentVariable instances that represent the variables for the current instance of IApplication.
+	 * @return java.util.List<IEnvironmentVariable> - List representation of the current instances of IEnvironmentVariable
+	 * @throws OpenShiftSSHOperationException
+	 */
+	public List<IEnvironmentVariable> getEnvironmentVariablesList() throws OpenShiftSSHOperationException;
+	
+	
+	/**
+	 * Used to get a Map of all currently instantiated instances of IEnvironmentVariable
+	 * @return Map<String,IEnvironmentVariable> map of variables from this instance of IApplication
+	 * @throws OpenShiftSSHOperationException
+	 */
+	public Map<String, IEnvironmentVariable> getEnvironmentVariablesMap() throws OpenShiftSSHOperationException;
+	
 	/**
 	 * Checks if the environment variable is present in the application.
 	 * 
@@ -442,10 +458,8 @@ public interface IApplication extends IOpenShiftResource {
 	 * Adds an environment variable to this application. If the environment
 	 * variable exists already, then an OpenShift exception is thrown.
 	 * 
-	 * @param name
-	 *            name of the variable to add
-	 * @param value
-	 *            value of the new variable
+	 * @param name  key of the variable to add
+	 * @param value value of the new variable
 	 * @throws OpenShiftSSHOperationException
 	 */
 	public IEnvironmentVariable addEnvironmentVariable(String name, String value) throws OpenShiftException;
@@ -480,13 +494,12 @@ public interface IApplication extends IOpenShiftResource {
 	public void removeEnvironmentVariable(String name) throws OpenShiftException;
 
 	/**
-	 * Returns <code>true</code> if this application can list its environment
-	 * variables. Returns <code>false</code> if it cant. Internally this
-	 * translates to the presence of the link to list environment variables.
+	 * Used to determine if environment variable exist and are available to be retrieved 
 	 * 
-	 * @return true if this application can list its envirnoment variables
+	 * @return Returns <code>true</code> if this application can list its environment variables. 
+	 *         Returns <code>false</code> if it cannot. Internally this translates to the presence of the link to list environment variables.
 	 * 
-	 * @see #getEnvironmentVariables()
+	 * @see #getEnvironmentVariablesMap()
 	 * @see #getEnvironmentVariable(String)
 	 * @see ApplicationResource#LINK_LIST_ENVIRONMENT_VARIABLES
 	 */
