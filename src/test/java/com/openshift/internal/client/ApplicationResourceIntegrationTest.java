@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -43,6 +44,7 @@ import com.openshift.client.utils.TestConnectionFactory;
 /**
  * @author André Dietisheim
  * @author Syed Iqbal
+ * @author Martes G Wigglesworth 
  */
 public class ApplicationResourceIntegrationTest {
 
@@ -341,13 +343,13 @@ public class ApplicationResourceIntegrationTest {
     	IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
 		ApplicationTestUtils.destroyAllEnvironmentVariables(application);
     	IEnvironmentVariable environmentVariable = application.addEnvironmentVariable("FOOBAR","123");
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(1);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(1);
     	
     	//operation
     	environmentVariable.destroy();
     	
     	//verification
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(0);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(0);
     	assertThat(application.hasEnvironmentVariable("FOOBAR")).isFalse();
     }
 
@@ -357,13 +359,13 @@ public class ApplicationResourceIntegrationTest {
     	IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
 		ApplicationTestUtils.destroyAllEnvironmentVariables(application);
     	IEnvironmentVariable environmentVariable = application.addEnvironmentVariable("FOOBAR","123");
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(1);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(1);
     	
     	//operation
     	application.removeEnvironmentVariable(environmentVariable.getName());
     	
     	//verification
-    	assertThat(application.getEnvironmentVariables().size()).isEqualTo(0);
+    	assertThat(application.getEnvironmentVariablesMap().size()).isEqualTo(0);
     	assertThat(application.hasEnvironmentVariable("FOOBAR")).isFalse();
     }
 
@@ -382,7 +384,10 @@ public class ApplicationResourceIntegrationTest {
 			// success
 		}
 	}
-
+    
+    /*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
 	@Test
 	public void shouldListAllEnvironmentVariables() throws Throwable {
 		// preconditions
@@ -395,12 +400,15 @@ public class ApplicationResourceIntegrationTest {
 		application.addEnvironmentVariables(environmentVariableMap);
 
 		// operation
-		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariables();
+		List<IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesList();
 
 		// verifications
 		assertThat(environmentVariables).hasSize(3);
 	}
 	
+	/*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
 	@Test
 	public void shouldLoadEmptyListOfEnvironmentVariables() throws Throwable{
 		//precondition
@@ -408,12 +416,49 @@ public class ApplicationResourceIntegrationTest {
 		IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
 
 		//operation
-		Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariables();
+		List<IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesList();
 
 		//verifications
 		assertThat(environmentVariables).isEmpty();
 	}
 	
+	/*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
+	@Test
+    public void shouldGetMapOfAllEnvironmentVariables() throws Throwable {
+        // preconditions
+        ApplicationTestUtils.silentlyDestroyAllApplications(domain);
+        IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
+        Map<String, String> environmentVariableMap = new HashMap<String, String>();
+        environmentVariableMap.put("X_NAME", "X_VALUE");
+        environmentVariableMap.put("Y_NAME", "Y_VALUE");
+        environmentVariableMap.put("Z_NAME", "Z_VALUE");
+        application.addEnvironmentVariables(environmentVariableMap);
+
+        // operation
+        Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesMap();
+
+        // verifications
+        assertThat(environmentVariables).hasSize(3);
+    }
+    
+	/*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
+    @Test
+    public void shouldLoadEmptyMapOfEnvironmentVariables() throws Throwable{
+        //precondition
+        ApplicationTestUtils.silentlyDestroyAllApplications(domain);
+        IApplication application = ApplicationTestUtils.getOrCreateApplication(domain);
+
+        //operation
+        Map<String, IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesMap();
+
+        //verifications
+        assertThat(environmentVariables).isEmpty();
+    }
+
 	@Test
 	public void shouldCanGetCanUpdateEnvironmentVariables() throws Throwable {
 		// pre-conditions

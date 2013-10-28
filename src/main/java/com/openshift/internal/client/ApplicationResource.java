@@ -71,6 +71,7 @@ import com.openshift.internal.client.utils.StringUtils;
  * 
  * @author André Dietisheim
  * @author Syed Iqbal
+ * @author Martes G Wigglesworth
  */
 public class ApplicationResource extends AbstractOpenShiftResource implements IApplication {
 
@@ -149,7 +150,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	/**
 	 * The environment variables for this application
 	 */
-	private Map<String, IEnvironmentVariable> environmentVariableByName;
+	private Map<String, IEnvironmentVariable> environmentVariablesMap;
 
 
 	protected ApplicationResource(ApplicationResourceDTO dto, DomainResource domain) {
@@ -606,16 +607,42 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		return openshiftProps;
 	}
 	
+	    
+	/* (non-Javadoc)
+	 * @see com.openshift.client.IApplication#getEnvironmentVariables()
+	 */
 	@Override
-	public Map<String, IEnvironmentVariable> getEnvironmentVariables() throws OpenShiftException {
-		return Collections.unmodifiableMap(new LinkedHashMap<String, IEnvironmentVariable>(getOrLoadEnvironmentVariables()));
+	public List<IEnvironmentVariable> getEnvironmentVariables()
+	    throws OpenShiftSSHOperationException
+	{
+	  return getEnvironmentVariablesList();
 	}
+		
+	/* (non-Javadoc)
+	 * @see com.openshift.client.IApplication#getEnvironmentVariableList()
+	 */
+	@Override
+	public List<IEnvironmentVariable> getEnvironmentVariablesList()
+	     throws OpenShiftSSHOperationException
+	{
+	 List<IEnvironmentVariable> tempList = new ArrayList<IEnvironmentVariable>();
+	 tempList.addAll(getOrLoadEnvironmentVariables().values());
+	 return tempList;
+	}
+	
+	/* (non-Javadoc)
+     * @see com.openshift.client.IApplication#getEnvironmentVariablesMap()
+     */
+    @Override
+    public Map<String, IEnvironmentVariable> getEnvironmentVariablesMap() throws OpenShiftException {
+        return Collections.unmodifiableMap(new LinkedHashMap<String, IEnvironmentVariable>(getOrLoadEnvironmentVariables()));
+    }
 
 	protected Map<String, IEnvironmentVariable> getOrLoadEnvironmentVariables() throws OpenShiftException {
-		if (environmentVariableByName == null) {
-			this.environmentVariableByName = loadEnvironmentVariables();
+		if (environmentVariablesMap == null) {
+			this.environmentVariablesMap = loadEnvironmentVariables();
 		}
-		return environmentVariableByName;
+		return environmentVariablesMap;
 	}
 	
 	private Map<String, IEnvironmentVariable> loadEnvironmentVariables() throws OpenShiftException {
@@ -624,13 +651,13 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 			return new LinkedHashMap<String, IEnvironmentVariable>();
 		}
 
-		Map<String, IEnvironmentVariable> environmentVariablesByName = new LinkedHashMap<String, IEnvironmentVariable>();
+		Map<String, IEnvironmentVariable> environmentVariablesMap = new LinkedHashMap<String, IEnvironmentVariable>();
 		for (EnvironmentVariableResourceDTO environmentVariableResourceDTO : environmentVariableDTOs) {
 			final IEnvironmentVariable environmentVariable = 
 					new EnvironmentVariableResource(environmentVariableResourceDTO, this);
-			environmentVariablesByName.put(environmentVariable.getName(), environmentVariable);
+			environmentVariablesMap.put(environmentVariable.getName(), environmentVariable);
 		}
-		return environmentVariablesByName;
+		return environmentVariablesMap;
 	}
 
 	@Override
@@ -689,17 +716,17 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	}
     
 	protected void updateEnvironmentVariables() throws OpenShiftException {
-		if (environmentVariableByName == null) {
-			environmentVariableByName = loadEnvironmentVariables();
+		if (environmentVariablesMap == null) {
+			environmentVariablesMap = loadEnvironmentVariables();
 		} else {
-			environmentVariableByName.clear();
-			environmentVariableByName.putAll(loadEnvironmentVariables());
+			environmentVariablesMap.clear();
+			environmentVariablesMap.putAll(loadEnvironmentVariables());
 		}
 	}
     
 	@Override
 	public IEnvironmentVariable getEnvironmentVariable(String name) {
-		return getEnvironmentVariables().get(name);
+		return getEnvironmentVariablesMap().get(name);
 	}
     
 	@Override
@@ -1077,5 +1104,4 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		}
 	}
 
-
-}
+ }
