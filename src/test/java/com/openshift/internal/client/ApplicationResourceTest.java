@@ -702,7 +702,7 @@ public class ApplicationResourceTest {
 	}
 
 	@Test
-	public void shouldListAllEnvironmentVariablesFromApplication() throws Throwable {
+	public void shouldGetMapOfAllEnvironmentVariablesFromApplication() throws Throwable {
 		// preconditions
 		mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",
 				GET_4_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
@@ -718,7 +718,7 @@ public class ApplicationResourceTest {
 	}
 
 	@Test
-	public void shouldLoadEmptyListOfEnvironmentVariables() throws Throwable {
+	public void shouldLoadEmptyMapOfEnvironmentVariables() throws Throwable {
 		// precondition
 		mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",
 				GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
@@ -728,5 +728,36 @@ public class ApplicationResourceTest {
 		// verifications
 		assertThat(environmentVariables).isEmpty();
 	}
+	
+	/*
+	 * This test does not test very explicitly, however, all other tests in this object are similar and will be left alone for now.
+	 */
+	@Test
+    public void shouldGetListOfAllEnvironmentVariablesFromApplication() throws Throwable {
+        // preconditions
+        mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",
+                GET_4_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
+
+        // operation
+        final IApplication app = domain.getApplicationByName("springeap6");
+        List<IEnvironmentVariable> environmentVariables = app.getEnvironmentVariablesList();
+
+        // verifications
+        assertThat(environmentVariables).isNotEmpty();
+        assertThat(environmentVariables).hasSize(4);
+
+    }
+
+    @Test
+    public void shouldLoadEmptyListOfEnvironmentVariables() throws Throwable {
+        // precondition
+        mockDirector.mockGetEnvironmentVariables("foobarz", "springeap6",
+                GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
+        // operation
+        final IApplication application = domain.getApplicationByName("springeap6");
+        List<IEnvironmentVariable> environmentVariables = application.getEnvironmentVariablesList();
+        // verifications
+        assertThat(environmentVariables).isEmpty();
+    }
 
 }
