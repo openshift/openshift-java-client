@@ -422,10 +422,12 @@ public interface IApplication extends IOpenShiftResource {
 	public List<String> getEnvironmentProperties() throws OpenShiftSSHOperationException;
 
 	/**
-	 * Retrieves the map of environment variables
+	 * Retrieves List of environment variables associated with the current instance.
 	 * 
-	 * @return the list of environment variables
+	 * @return java.util.List<String> list of keys of the current instance's IEnvironmentVariables
 	 * @throws OpenShiftSSHOperationException
+	 * 
+     * @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744</a>
 	 */
 	public List<IEnvironmentVariable> getEnvironmentVariables() throws OpenShiftSSHOperationException;
 
@@ -433,6 +435,8 @@ public interface IApplication extends IOpenShiftResource {
 	 * Returns Collection of IEnvironmentVariable instances that represent the variables for the current instance of IApplication.
 	 * @return java.util.List<IEnvironmentVariable> - List representation of the current instances of IEnvironmentVariable
 	 * @throws OpenShiftSSHOperationException
+	 * 
+     * @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744</a>
 	 */
 	public List<IEnvironmentVariable> getEnvironmentVariablesList() throws OpenShiftSSHOperationException;
 	
@@ -441,15 +445,17 @@ public interface IApplication extends IOpenShiftResource {
 	 * Used to get a Map of all currently instantiated instances of IEnvironmentVariable
 	 * @return Map<String,IEnvironmentVariable> map of variables from this instance of IApplication
 	 * @throws OpenShiftSSHOperationException
+	 * 
+     * @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744</a>
 	 */
 	public Map<String, IEnvironmentVariable> getEnvironmentVariablesMap() throws OpenShiftSSHOperationException;
 	
 	/**
 	 * Checks if the environment variable is present in the application.
 	 * 
-	 * @param name
-	 *            Name of the environment variable
-	 * @return
+	 * @param name  Name of the environment variable
+	 * @return <code>true</code> if the current instance has IEnvironmentVariables to return <br>
+	 *         <code>false</code> if the current instance has no IEnvironmentVariables to return
 	 * @throws OpenShiftSSHOperationException
 	 */
 	public boolean hasEnvironmentVariable(String name) throws OpenShiftException;
@@ -467,8 +473,7 @@ public interface IApplication extends IOpenShiftResource {
 	/**
 	 * Adds a map of environment variables to the application
 	 * 
-	 * @param environmentVariables
-	 *            map of environment variables
+	 * @param environmentVariables map of environment variables
 	 * @throws OpenShiftSSHOperationException
 	 */
 	public Map<String, IEnvironmentVariable> addEnvironmentVariables(Map<String, String> environmentVariables)
@@ -477,8 +482,7 @@ public interface IApplication extends IOpenShiftResource {
 	/**
 	 * Return the environment variable for the specified name
 	 * 
-	 * @param name
-	 *            Name of the environment variable
+	 * @param name Name of the environment variable
 	 * @return environment variable
 	 * @throws OpenShiftSSHOperationException
 	 */
@@ -488,15 +492,15 @@ public interface IApplication extends IOpenShiftResource {
 	 * Removes the environment variables with the given name from this application.
 	 * 
 	 * @param name
-	 * @return
+	 * @return 
 	 * @throws OpenShiftException
 	 */
 	public void removeEnvironmentVariable(String name) throws OpenShiftException;
 
 	/**
-	 * Used to determine if environment variable exist and are available to be retrieved 
+	 * Used to determine if environment variables exist and are available to be retrieved 
 	 * 
-	 * @return Returns <code>true</code> if this application can list its environment variables. 
+	 * @return Returns <code>true</code> if this application can list its environment variables. <br>
 	 *         Returns <code>false</code> if it cannot. Internally this translates to the presence of the link to list environment variables.
 	 * 
 	 * @see #getEnvironmentVariablesMap()
@@ -506,12 +510,10 @@ public interface IApplication extends IOpenShiftResource {
 	public boolean canGetEnvironmentVariables();
 
 	/**
-	 * Returns <code>true</code> if this application can update (set or unset)
-	 * its environment variables. Returns <code>false</code> if it cannot.
-	 * Internally this translates to the presence of the link to set and unset
-	 * environment variables.
+	 * Used to determine if the current instance is able to update environment variables.
 	 * 
-	 * @return true if this application can set/unset its environment variables
+	 * @return Returns <code>true</code> if this application can augment its environment variables.<br>
+     *         Returns <code>false</code> if it cannot. <br>
 	 * 
 	 * @see #addEnvironmentVariable(String, String)
 	 * @see #addEnvironmentVariables(Map)

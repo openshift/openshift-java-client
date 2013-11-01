@@ -44,6 +44,7 @@ import com.openshift.client.utils.TestConnectionFactory;
 /**
  * @author André Dietisheim
  * @author Syed Iqbal
+ * @author Martes G Wigglesworth 
  */
 public class ApplicationResourceIntegrationTest {
 
@@ -383,7 +384,10 @@ public class ApplicationResourceIntegrationTest {
 			// success
 		}
 	}
-
+    
+    /*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
 	@Test
 	public void shouldListAllEnvironmentVariables() throws Throwable {
 		// preconditions
@@ -402,6 +406,9 @@ public class ApplicationResourceIntegrationTest {
 		assertThat(environmentVariables).hasSize(3);
 	}
 	
+	/*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
 	@Test
 	public void shouldLoadEmptyListOfEnvironmentVariables() throws Throwable{
 		//precondition
@@ -415,6 +422,9 @@ public class ApplicationResourceIntegrationTest {
 		assertThat(environmentVariables).isEmpty();
 	}
 	
+	/*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
 	@Test
     public void shouldGetMapOfAllEnvironmentVariables() throws Throwable {
         // preconditions
@@ -433,6 +443,9 @@ public class ApplicationResourceIntegrationTest {
         assertThat(environmentVariables).hasSize(3);
     }
     
+	/*
+     *  @see <a href="https://issues.jboss.org/browse/JBIDE-15744">JBIDE-15744<\a>
+     */
     @Test
     public void shouldLoadEmptyMapOfEnvironmentVariables() throws Throwable{
         //precondition
