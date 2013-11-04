@@ -645,6 +645,11 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		return environmentVariablesMap;
 	}
 	
+	/*
+	 * This method should be altered to return a List<IEnvironmentVariable> because it is not the responsibility of this level
+	 * of the REST api interaction to manage uniqueness of what is coming back from a REST call to load in the variables.
+	 * @author Martes G Wigglesworth
+	 */
 	private Map<String, IEnvironmentVariable> loadEnvironmentVariables() throws OpenShiftException {
 		List<EnvironmentVariableResourceDTO> environmentVariableDTOs = new ListEnvironmentVariablesRequest().execute();
 		if (environmentVariableDTOs == null) {
@@ -694,7 +699,10 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		updateEnvironmentVariables();
 		return environmentVariables;
 	}
-    
+    /*
+     * (non-Javadoc)
+     * @see com.openshift.client.IApplication#removeEnvironmentVariable(java.lang.String)
+     */
 	@Override
 	public void removeEnvironmentVariable(String name) {
 		IEnvironmentVariable environmentVariable = getEnvironmentVariable(name);
@@ -706,6 +714,10 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		updateEnvironmentVariables();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.openshift.client.IApplication#hasEnvironmentVariable(java.lang.String)
+	 */
     @Override
 	public boolean hasEnvironmentVariable(String name) throws OpenShiftException {
 		if (StringUtils.isEmpty(name)) {
@@ -724,6 +736,10 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		}
 	}
     
+	/*
+	 * (non-Javadoc)
+	 * @see com.openshift.client.IApplication#getEnvironmentVariable(java.lang.String)
+	 */
 	@Override
 	public IEnvironmentVariable getEnvironmentVariable(String name) {
 		return getEnvironmentVariablesMap().get(name);
@@ -738,6 +754,10 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.openshift.client.IApplication#canUpdateEnvironmentVariables()
+	 */
 	@Override
 	public boolean canUpdateEnvironmentVariables() {
 		try {
@@ -1077,7 +1097,30 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 			super(LINK_LIST_ENVIRONMENT_VARIABLES);
 		}
 	}
-
+	
+	/*
+	 * Test implementation to be used instead of calls to IEnvironmentVariable.destroy()
+	 * @see <a href="https://issues.jboss.org/browse/JBIDE-15766">JBIDE-15766<\a>
+	 * @author Martes G Wigglesworth
+	 */
+	private class RemoveEnvironmentVariableRequet extends ServiceRequest{
+      /**
+       * Constructs a new instance of RemoveEnvironmentVariableRequet
+       * @param linkName
+       */
+      protected RemoveEnvironmentVariableRequet(String linkName){
+        super(LINK_SET_UNSET_ENVIRONMENT_VARIABLES);
+        // TODO Auto-generated constructor stub
+      }
+      protected EnvironmentVariableResourceDTO execute(String name) throws OpenShiftException {
+        Parameters parameters = new Parameters()
+              .add(IOpenShiftJsonConstants.PROPERTY_NAME, name)
+              .add(IOpenShiftJsonConstants.PROPERTY_VALUE, "");
+        return super.execute(parameters.toArray());
+      }
+	  
+	}
+	
 	private class AddEnvironmentVariableRequest extends ServiceRequest {
 		protected AddEnvironmentVariableRequest() {
 			super(LINK_SET_UNSET_ENVIRONMENT_VARIABLES);
