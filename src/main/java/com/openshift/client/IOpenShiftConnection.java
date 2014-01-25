@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 
 import com.openshift.client.cartridge.IEmbeddableCartridge;
 import com.openshift.client.cartridge.IStandaloneCartridge;
+import com.openshift.client.cartridge.ICartridge;
 
 /**
  * @author Xavier Coulon
@@ -63,6 +64,15 @@ public interface IOpenShiftConnection {
 	 * @throws OpenShiftException
 	 */
 	public List<IEmbeddableCartridge> getEmbeddableCartridges() throws OpenShiftException;
+	
+	/**
+	 * Returns the cartridge by name.
+	 * 
+	 * @return cartridges
+	 * @throws OpenShiftException
+	 */
+	public ICartridge getCartridge(String cartridgeName) throws OpenShiftException;
+
 
 	/**
 	 * Sets flag for enabling SSL certificate checks (i.e. self-signed SSL
