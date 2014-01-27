@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.openshift.client.IDomain;
 import com.openshift.client.IOpenShiftConnection;
 import com.openshift.client.IUser;
@@ -24,6 +27,8 @@ import com.openshift.client.cartridge.EmbeddableCartridge;
 import com.openshift.client.cartridge.IEmbeddableCartridge;
 import com.openshift.client.cartridge.IStandaloneCartridge;
 import com.openshift.client.cartridge.StandaloneCartridge;
+import com.openshift.client.cartridge.ICartridge;
+import com.openshift.internal.client.cartridge.BaseCartridge;
 import com.openshift.internal.client.httpclient.request.StringParameter;
 import com.openshift.internal.client.response.CartridgeResourceDTO;
 import com.openshift.internal.client.response.DomainResourceDTO;
@@ -32,6 +37,7 @@ import com.openshift.internal.client.response.UserResourceDTO;
 import com.openshift.internal.client.utils.Assert;
 import com.openshift.internal.client.utils.CollectionUtils;
 import com.openshift.internal.client.utils.IOpenShiftJsonConstants;
+import com.openshift.internal.client.utils.IOpenShiftParameterConstants;
 
 /**
  * @author Andre Dietisheim
@@ -162,6 +168,11 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 		}
 		return CollectionUtils.toUnmodifiableCopy(embeddedCartridgeNames);
 	}
+	
+	public ICartridge getCartridge(String cartridgeName) throws OpenShiftException {
+		ICartridge cartridge = retrieveCartridge(cartridgeName);
+		return cartridge;
+	}
 
 	private void retrieveCartridges() throws OpenShiftException {
 		final Map<String, CartridgeResourceDTO> cartridgeDTOsByName = new GetCartridgesRequest().execute();
@@ -181,6 +192,27 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 			default:
 			}
 		}
+	}
+	
+	private BaseCartridge retrieveCartridge(String cartridgeName) throws OpenShiftException {
+		Assert.notNull(cartridgeName);
+		
+		final Map<String, CartridgeResourceDTO> cartridgeDTOsByName = new GetCartridgesRequest().execute(cartridgeName);
+		CartridgeResourceDTO cartridgeDTO  = cartridgeDTOsByName.get(cartridgeName);
+		if (cartridgeDTO != null) {
+			switch (cartridgeDTO.getType()) {
+			case STANDALONE:
+				return new StandaloneCartridge(
+					cartridgeDTO.getName(), cartridgeDTO.getDisplayName(), cartridgeDTO.getDescription());
+			case EMBEDDED:
+				return new EmbeddableCartridge(
+					cartridgeDTO.getName(), cartridgeDTO.getDisplayName(), cartridgeDTO.getDescription());
+			default:
+			}
+		}
+		
+		throw new OpenShiftException("Could not find cartridge {0}", cartridgeName);
+		
 	}
 	
 	@Override
@@ -252,7 +284,11 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 			super("LIST_CARTRIDGES");
 		}
 
-		protected Map<String, CartridgeResourceDTO> execute() throws OpenShiftException {
+		protected Map<String, CartridgeResourceDTO> execute(String cartridgeName) throws OpenShiftException {
+			if (cartridgeName != null) {
+				Parameters urlParameters = new Parameters().add(IOpenShiftParameterConstants.PARAMETER_ID, cartridgeName);
+				return super.execute(urlParameters.toList());
+			}
 			return super.execute();
 		}
 	}
