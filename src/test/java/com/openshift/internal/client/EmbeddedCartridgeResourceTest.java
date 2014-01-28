@@ -122,7 +122,7 @@ public class EmbeddedCartridgeResourceTest {
 	public void shouldHaveUrlProperty() throws Throwable {
 		// pre-conditions
 		// operation
-		IEmbeddedCartridge mongo = application.getEmbeddedCartridge(Cartridges.MONGODB_22_NAME);
+		IEmbeddedCartridge mongo = application.getEmbeddedCartridge(Cartridges.MONGODB_24_NAME,);
 		IEmbeddedCartridge mysql = application.getEmbeddedCartridge(Cartridges.MYSQL_51_NAME);
 
 		// verifications

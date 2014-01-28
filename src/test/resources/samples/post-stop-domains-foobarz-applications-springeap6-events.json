@@ -147,7 +147,7 @@
       "creation_time":"2013-04-30T17:00:41Z",
       "domain_id":"foobarz",
       "embedded":{
-         "mongodb-2.2":{
+         "mongodb-2.4":{
             "connection_url":"mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/",
             "username":"admin",
             "password":"NNxXMT1z8dVj",
@@ -413,7 +413,7 @@
                   "type":"string",
                   "valid_options":[
                      "jbosseap-6",
-                     "mongodb-2.2",
+                     "mongodb-2.4",
                      "mysql-5.1"
                   ]
                },
@@ -455,7 +455,7 @@
                   "name":"name",
                   "type":"string",
                   "valid_options":[
-                     "mongodb-2.2",
+                     "mongodb-2.4",
                      "switchyard-0.6",
                      "cron-1.4",
                      "mysql-5.1",

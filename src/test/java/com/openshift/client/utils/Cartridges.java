@@ -33,7 +33,7 @@ public class Cartridges {
 			"http://cartreflect-claytondev.rhcloud.com/reflect?github=smarterclayton/openshift-go-cart";
 
 	public static final String MYSQL_51_NAME = "mysql-5.1";
-	public static final String MONGODB_22_NAME = "mongodb-2.2";
+	public static final String MONGODB_24_NAME, = "mongodb-2.4";
 	public static final String FOREMAN_DOWNLOAD_URL =
 			"http://cartreflect-claytondev.rhcloud.com/reflect?github=ncdc/openshift-foreman-cartridge";
 	public static final String SWITCHYARD_06_NAME = "switchyard-0.6";
@@ -69,8 +69,8 @@ public class Cartridges {
 		return new EmbeddableCartridge(MYSQL_51_NAME);
 	}
 
-	public static IEmbeddableCartridge mongodb22() {
-		return new EmbeddableCartridge(MONGODB_22_NAME);
+	public static IEmbeddableCartridge mongodb24() {
+		return new EmbeddableCartridge(MONGODB_24_NAME,);
 	}
 
 	public static IEmbeddableCartridge postgres84() {

@@ -13,7 +13,7 @@
             "additional_gear_storage":0,
             "base_gear_storage":1,
             "collocated_with":[
-               "mongodb-2.2"
+               "mongodb-2.4"
             ],
             "current_scale":1,
             "description":"Market-leading open source enterprise platform for next-generation, highly transactional enterprise Java applications. Build and deploy enterprise Java in the cloud.",
@@ -266,7 +266,7 @@
             "license_url":"",
             "links":{
                "GET":{
-                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.2",
+                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.4",
                   "method":"GET",
                   "optional_params":[
 
@@ -277,12 +277,12 @@
                   ]
                },
                "UPDATE":{
-                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.2",
+                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.4",
                   "method":"PUT",
                   "optional_params":[
                      {
                         "default_value":null,
-                        "description":"Additional filesystem storage in gigabytes on each gear having cartridge mongodb-2.2",
+                        "description":"Additional filesystem storage in gigabytes on each gear having cartridge mongodb-2.4",
                         "name":"additional_gear_storage",
                         "type":"integer",
                         "valid_options":[
@@ -291,7 +291,7 @@
                      },
                      {
                         "default_value":null,
-                        "description":"Minimum number of gears having cartridge mongodb-2.2",
+                        "description":"Minimum number of gears having cartridge mongodb-2.4",
                         "name":"scales_from",
                         "type":"integer",
                         "valid_options":[
@@ -300,7 +300,7 @@
                      },
                      {
                         "default_value":null,
-                        "description":"Maximum number of gears having cartridge mongodb-2.2",
+                        "description":"Maximum number of gears having cartridge mongodb-2.4",
                         "name":"scales_to",
                         "type":"integer",
                         "valid_options":[
@@ -314,7 +314,7 @@
                   ]
                },
                "START":{
-                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.2/events",
+                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.4/events",
                   "method":"POST",
                   "optional_params":[
 
@@ -335,7 +335,7 @@
                   ]
                },
                "STOP":{
-                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.2/events",
+                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.4/events",
                   "method":"POST",
                   "optional_params":[
 
@@ -356,7 +356,7 @@
                   ]
                },
                "RESTART":{
-                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.2/events",
+                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.4/events",
                   "method":"POST",
                   "optional_params":[
 
@@ -377,7 +377,7 @@
                   ]
                },
                "RELOAD":{
-                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.2/events",
+                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.4/events",
                   "method":"POST",
                   "optional_params":[
 
@@ -398,7 +398,7 @@
                   ]
                },
                "DELETE":{
-                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.2",
+                  "href":"https://openshift.redhat.com/broker/rest/domains/foobarz/applications/springeap6/cartridges/mongodb-2.4",
                   "method":"DELETE",
                   "optional_params":[
 
@@ -409,7 +409,7 @@
                   ]
                }
             },
-            "name":"mongodb-2.2",
+            "name":"mongodb-2.4",
             "properties":[
                {
                   "name":"username",
@@ -460,7 +460,7 @@
       "creation_time":"2013-09-20T21:28:53Z",
       "domain_id":"foobarz",
       "embedded":{
-         "mongodb-2.2":{
+         "mongodb-2.4":{
             "connection_url":"mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/",
             "username":"admin",
             "password":"VwFPWQEs1PEl",
@@ -783,7 +783,7 @@
                   "type":"string",
                   "valid_options":[
                      "jbosseap-6",
-                     "mongodb-2.2"
+                     "mongodb-2.4"
                   ]
                },
                {
@@ -826,7 +826,7 @@
             "rel":"Add embedded cartridge",
             "required_params":[
                {
-                  "description":"framework-type, e.g.: mongodb-2.2",
+                  "description":"framework-type, e.g.: mongodb-2.4",
                   "invalid_options":[
 
                   ],
@@ -843,7 +843,7 @@
                      "haproxy-1.4",
                      "postgresql-9.2",
                      "postgresql-8.4",
-                     "mongodb-2.2",
+                     "mongodb-2.4",
                      "jenkins-client-1"
                   ]
                }

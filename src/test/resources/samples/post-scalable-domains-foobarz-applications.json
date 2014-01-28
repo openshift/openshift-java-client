@@ -367,7 +367,7 @@
                   "name":"name",
                   "type":"string",
                   "valid_options":[
-                     "mongodb-2.2",
+                     "mongodb-2.4",
                      "switchyard-0.6",
                      "cron-1.4",
                      "mysql-5.1",

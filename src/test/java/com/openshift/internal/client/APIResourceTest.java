@@ -50,7 +50,7 @@ public class APIResourceTest {
 						, Cartridges.JBOSSEAP_6_NAME
 						, Cartridges.JBOSSEWS_1_NAME
 						, Cartridges.JBOSSEWS_2_NAME)
-				.excludes(Cartridges.MONGODB_22_NAME
+				.excludes(Cartridges.MONGODB_24_NAME,
 						, Cartridges.MYSQL_51_NAME
 						, Cartridges.SWITCHYARD_06_NAME);
 	}
@@ -69,7 +69,7 @@ public class APIResourceTest {
 						, Cartridges.JBOSSEAP_6_NAME
 						, Cartridges.JBOSSEWS_1_NAME
 						, Cartridges.JBOSSEWS_2_NAME)
-				.contains(Cartridges.MONGODB_22_NAME
+				.contains(Cartridges.MONGODB_24_NAME,
 						, Cartridges.MYSQL_51_NAME
 						, Cartridges.SWITCHYARD_06_NAME);
 	}

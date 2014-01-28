@@ -30,7 +30,7 @@
             "optional_params":[
                {
                   "default_value":null,
-                  "description":"Array of one or more cartridge names. i.e. [\"php-5.3\", \"mongodb-2.2\"]",
+                  "description":"Array of one or more cartridge names. i.e. [\"php-5.3\", \"mongodb-2.4\"]",
                   "name":"cartridges",
                   "type":"array",
                   "valid_options":[

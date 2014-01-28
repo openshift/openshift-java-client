@@ -373,7 +373,7 @@
                      "haproxy-1.4",
                      "jenkins-client-1.4",
                      "metrics-0.1",
-                     "mongodb-2.2",
+                     "mongodb-2.4",
                      "mysql-5.1",
                      "phpmyadmin-3.4",
                      "postgresql-8.4",

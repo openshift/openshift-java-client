@@ -94,7 +94,7 @@ public class EmbeddableCartridgeTest {
 		// operation
 		// verifcation
 		cartridgeAssert
-				.hasName("mongodb-2.2")
+				.hasName("mongodb-2.4")
 				.hasDisplayName("MongoDB NoSQL Database 2.2")
 				.hasDescription("MongoDB is a scalable, high-performance, open source NoSQL database.");
 	}

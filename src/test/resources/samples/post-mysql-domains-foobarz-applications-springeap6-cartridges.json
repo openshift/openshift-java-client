@@ -4,7 +4,7 @@
       "base_gear_storage":1,
       "collocated_with":[
          "jbosseap-6",
-         "mongodb-2.2"
+         "mongodb-2.4"
       ],
       "current_scale":1,
       "description":"MySQL is a multi-user, multi-threaded SQL database server.",
