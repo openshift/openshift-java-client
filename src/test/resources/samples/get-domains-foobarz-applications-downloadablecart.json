@@ -956,7 +956,7 @@
             "rel":"Add embedded cartridge",
             "required_params":[
                {
-                  "description":"framework-type, e.g.: mongodb-2.2",
+                  "description":"framework-type, e.g.: mongodb-2.4",
                   "invalid_options":[
 
                   ],
@@ -973,7 +973,7 @@
                      "haproxy-1.4",
                      "postgresql-9.2",
                      "postgresql-8.4",
-                     "mongodb-2.2",
+                     "mongodb-2.4",
                      "jenkins-client-1",
                      "andygoldstein-foreman-0.63.0"
                   ]

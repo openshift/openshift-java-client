@@ -11,7 +11,7 @@
          ],
          "license":"ASL 2.0",
          "license_url":"http://www.apache.org/licenses/LICENSE-2.0.txt",
-         "name":"mongodb-2.2",
+         "name":"mongodb-2.4",
          "scales_from":1,
          "scales_to":1,
          "scales_with":"haproxy-1.4",

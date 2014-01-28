@@ -20,7 +20,7 @@
 					"username":"admin",
 					"password":"NNxXMT1z8dVj",
 					"database_name":"springeap6",
-					"name":"mongodb-2.2",
+					"name":"mongodb-2.4",
 					"display_name":"MongoDB NoSQL Database 2.2",
 					"tags":[
 						"service",
@@ -99,7 +99,7 @@
 					"username":"admin",
 					"password":"DLCVKnnzuGfF",
 					"database_name":"sringeap6",
-					"name":"mongodb-2.2",
+					"name":"mongodb-2.4",
 					"display_name":"MongoDB NoSQL Database 2.2",
 					"tags":[
 						"service",
@@ -118,7 +118,7 @@
 					"port_interfaces":[
 						{
 							"_id":"52380a0a5973ca56960001b0",
-							"cartridge_name":"mongodb-2.2",
+							"cartridge_name":"mongodb-2.4",
 							"external_address":"174.129.147.144",
 							"external_port":"52931",
 							"internal_address":"127.7.198.1",

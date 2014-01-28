@@ -225,13 +225,13 @@ public class OpenShiftJsonDTOFactoryTest {
 		assertThat(applicationDTO.getUuid()).isEqualTo("523cbe15e0b8cd0a520001b6");
 		assertThat(applicationDTO.getCartridges().keySet()).containsOnly(
 				Cartridges.JBOSSEAP_6_NAME,
-				Cartridges.MONGODB_22_NAME,
+				Cartridges.MONGODB_24_NAME,,
 				Cartridges.MYSQL_51_NAME);
 		CartridgeResourceDTO cartridgeResourceDTO = 
-				applicationDTO.getCartridges().get(Cartridges.MONGODB_22_NAME);
+				applicationDTO.getCartridges().get(Cartridges.MONGODB_24_NAME,);
 		assertThat(cartridgeResourceDTO).isNotNull();
 		assertThat(cartridgeResourceDTO.getType()).isEqualTo(CartridgeType.EMBEDDED);
-		assertThat(cartridgeResourceDTO.getName()).isEqualTo(Cartridges.MONGODB_22_NAME);
+		assertThat(cartridgeResourceDTO.getName()).isEqualTo(Cartridges.MONGODB_24_NAME,);
 		assertThat(cartridgeResourceDTO.getDescription()).startsWith("MongoDB is a scalable, high-performance, "); 
 		assertThat(cartridgeResourceDTO.getDisplayName()).startsWith("MongoDB NoSQL Database "); 
 		assertThat(cartridgeResourceDTO.getMessages()).isNull(); // dito
@@ -358,7 +358,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		final Map<String, CartridgeResourceDTO> cartridges = response.getData();
 		assertThat(cartridges).hasSize(3); // mysql, mongo, jbosseap
 		assertThat(cartridges.values()).onProperty("name").containsOnly(
-				Cartridges.MONGODB_22_NAME,
+				Cartridges.MONGODB_24_NAME,,
 				Cartridges.MYSQL_51_NAME,
 				Cartridges.JBOSSEAP_6_NAME);
 	}
@@ -376,7 +376,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		Map<String, CartridgeResourceDTO> cartridges = response.getData();
 		assertThat(cartridges).hasSize(3);
 		assertThat(cartridges.values()).onProperty("name").containsOnly(
-				Cartridges.MONGODB_22_NAME,
+				Cartridges.MONGODB_24_NAME,,
 				Cartridges.MYSQL_51_NAME,
 				Cartridges.JBOSSEAP_6_NAME);
 	}

@@ -328,7 +328,7 @@ public class ApplicationResourceTest {
 		// pre-conditions
 		// operation
 		final IApplication app = domain.getApplicationByName("springeap6");
-		IEmbeddedCartridge mongo = app.getEmbeddedCartridge(Cartridges.mongodb22());
+		IEmbeddedCartridge mongo = app.getEmbeddedCartridge(Cartridges.mongodb24());
 		// verifications
 		// embedded cartridge should get updated with name, description and
 		// display name

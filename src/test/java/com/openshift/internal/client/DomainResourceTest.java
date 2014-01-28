@@ -12,7 +12,7 @@ package com.openshift.internal.client;
 
 import static com.openshift.client.utils.Cartridges.JBOSSAS_7_NAME;
 import static com.openshift.client.utils.Cartridges.JENKINS_14_NAME;
-import static com.openshift.client.utils.Cartridges.MONGODB_22_NAME;
+import static com.openshift.client.utils.Cartridges.MONGODB_24_NAME,;
 import static com.openshift.client.utils.Samples.DELETE_DOMAINS_FOOBARZ;
 import static com.openshift.client.utils.Samples.GET_DOMAINS_EMPTY;
 import static com.openshift.client.utils.Samples.GET_DOMAINS_FOOBARS;
@@ -506,7 +506,7 @@ public class DomainResourceTest {
 				GearProfile.LARGE, 
 				"git://github.com/adietish/openshift-java-client.git", 
 				42001, 
-				Cartridges.mongodb22(), 
+				Cartridges.mongodb24(), 
 				Cartridges.mysql51());
 		
 		// verification
@@ -522,7 +522,7 @@ public class DomainResourceTest {
 								.add(new ParameterValueMap().add(IOpenShiftJsonConstants.PROPERTY_NAME,
 										JENKINS_14_NAME))
 								.add(new ParameterValueMap().add(IOpenShiftJsonConstants.PROPERTY_NAME,
-										MONGODB_22_NAME))
+										MONGODB_24_NAME,))
 								.add(new ParameterValueMap().add(IOpenShiftJsonConstants.PROPERTY_NAME,
 										Cartridges.MYSQL_51_NAME))));
 	}
