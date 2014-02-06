@@ -24,5 +24,30 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="./js/jquery-1.10.2.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
+<script type="text/javascript">
+   function fixheight() {
+       var maxheight = 0
+       $(".fixedheight").each(function(){
+           $(this).height('auto');
+       })
+       $(".fixedheight").each(function(){
+           var height = $(this).height();
+           if (height > maxheight) {
+               maxheight = height;
+           }
+       })
+       $(".fixedheight").each(function(){
+           $(this).height(maxheight);
+       })
+   }
+    $(function(){
+        fixheight();
+    });
+    $(window).resize(function(){
+        fixheight();
+    });
+
+
+</script>
 </body>
 </html>
