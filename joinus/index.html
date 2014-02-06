@@ -34,7 +34,7 @@ title: Join Us
     <li>Create an account on github if you don't already have one at <a href="https://github.com" target="_blank">github.com</a>.</li>
     <li>Fork the <a href="https://github.com/openshift/openshift-java-client" target="_blank">OpenShift java Client</a> project to your github account.</li>
     <li>Clone your newly forked repository into your local workspace
-<pre>
+<pre name="code" class="java:nocontrols">
     User$ git clone git@github.com:[your user]/openshift-java-client.git
     Cloning into 'openshift-java-client'...
     remote: Reusing existing pack: 4745, done.
@@ -45,17 +45,17 @@ title: Join Us
 </pre>
     </li>
     <li>Add a remote ref to upstream for pulling future updates
-<pre>
+<pre name="code" class="java:nocontrols">
     git remote add upstream https://github.com/openshift/openshift-java-client.git
 </pre>
     </li>
     <li>As a precaution, disable merge commits to your master branch
-<pre>
+<pre name="code" class="java:nocontrols">
     git config branch.master.mergeoptions --ff-only
 </pre>
     </li>
     <li>To pull later updates from the upstream
-<pre>
+<pre name="code" class="java:nocontrols">
     git pull --rebase upstream master
 </pre>
         (--rebase will automatically move your local commits, if you have any, on top of the latest branch you pull from, you can leave it off if you do not).
@@ -63,25 +63,25 @@ title: Join Us
   Please note that --rebase is very important if you do have commits. What happens is that when git pull can't fast forward, it does a merge commit, and a merge commit puts the sucked in changes ON TOP of yours whereas a rebase puts them BELOW yours. In other words a merge commit makes the history a graph, and we prefer a cleaner, easier to follow linear history (hence the rebasing). Further once you do a merge commit it will be difficult to rebase the history before that commit (say you want to combine two commits to one later) as described in point 13. Luckily the option set in step 5 will prevent this from happening.
     </li>
     <li>Push the pulled updates to your fork of openshift-java-client on github
-<pre>
+<pre name="code" class="java:nocontrols">
     git push
 </pre>
     </li>
     <li>Make sure there is a JIRA logged for your Bug Fix or Feature Request that you are working on <a href="https://issues.jboss.org/browse/OSJC" target="_blank">here</a>.</li>
     <li>Create a simple topic branch to isolate that work (just a recommendation)
-<pre>
+<pre name="code" class="java:nocontrols">
     git checkout -b my_cool_feature
 </pre>
     </li>
     <li>Make the changes and commit one or more times (Don't forget to push)
-<pre>
+<pre name="code" class="java:nocontrols">
     git commit -m 'OSJC-XXXX Making this awesome new feature'
     git commit -m 'OSJC-YYYY Fixing this really bad bug'
     git push origin my_cool_feature
 </pre>
     </li>
     <li>Rebase your branch against the latest master (applies your patches on top of master)
-<pre>
+<pre name="code" class="java:nocontrols">
     git fetch upstream
     git rebase -i upstream/master
     # if you have conflicts fix them and rerun rebase
@@ -97,14 +97,14 @@ title: Join Us
         <li>As part of the review you may see an automated test run comment on your request. Currently this link can only be viewed by Red Hat employees, but if you request a copy we can send you one. In the future we hope to make this public</li>
         <li>After review a maintainer will merge your patch, update/resolve issues by request, and reply when complete</li>
         <li>Don't forget to switch back to master and pull the updates</li>
-        <pre>
+        <pre name="code" class="java:nocontrols">
         git checkout master
         git pull --ff-only upstream master
         </pre>
         </li>
         <li>To update the master branch of your github repository (otherwise you will see a message like 'Your branch is ahead of 'origin/master' by XXX commits.'
         if you are use 'git status' on your local master branch.
-        <pre>git push origin master</pre>
+            <pre name="code" class="java:nocontrols">git push origin master</pre>
     </li>
     </ol>
     </li>
@@ -117,14 +117,12 @@ title: Join Us
 
 <h3>Writing Tests</h3>
 <p>All tests must pass before a pull request will be merged.  We also require that all new code, such as Feature Requests be covered by tests.  Tests are written using the junit 4.x framework and are located in the src/test/java directory. We also use the fest assertions (https://code.google.com/p/fest/) to take advantage of more expressive verification-(assertion) statements. We have both unit tests and integration tests. The unit tests do no remoting, they use pre-recorded answers that you may find in src/test/resources/samples/. To fake server responses we use mockito and mock the http-client we're using in the openshift-java-client (HttpClientMockDirector):</p>
-<pre>
-<code class="language-java">
+<pre name="code" class="java:nocontrols">
 public HttpClientMockDirector mockGetAny(String response) throws
-SocketTimeoutException, HttpClientException {
-when(client.get(any(URL.class), anyInt())).thenReturn(response);
-return this;
+    SocketTimeoutException, HttpClientException {
+    when(client.get(any(URL.class), anyInt())).thenReturn(response);
+    return this;
 }
-</code>
 </pre>
 <p>The tests are all in src/test/java. We name unit tests XXXTest.java and integration tests XXXIntegrationTest.java so that one immediately knows if the test is talking to the backend or not.</p>
 
@@ -134,15 +132,15 @@ return this;
 <h3>Building the Library</h3>
 <p>To build the library, run the <code>mvn clean package</code> command in your terminal inside of the project directory that you cloned with git. This will create a new directory called <code>target</code> that will contain all of the compiled class files along with a JAR file, and a sources.JAR file for use in your projects.</p>
 <p>You can also run the command <code>mvn clean install</code> which will install the library in your ~/.m2 directory.  You can then include the library in your project by adding the correct configuration to your pom.xml such as:</p>
-<code class="language-java">
+<pre name="code" class="xml:nocontrols">
     &lt;dependencies&gt;
-    &lt;dependency&gt;
-    &lt;groupId&gt;com.openshift&lt;/groupId&gt;
-    &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
-    &lt;version&gt;2.5.1-SNAPSHOT&lt;/version&gt;
-    &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.openshift&lt;/groupId&gt;
+            &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
+            &lt;version&gt;2.5.1-SNAPSHOT&lt;/version&gt;
+        &lt;/dependency&gt;
     &lt;/dependencies&gt;
-</code>
+</pre>
 <p>When you are testing locally it is Maven convention to use version-SNAPSHOT for any non-finalized versions.  Also remember to increment the minor or major version depending on the scale of the changes you have made to the source code.</p>
 
 <h3>Updating this website and adding documentation</h3>

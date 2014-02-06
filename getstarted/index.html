@@ -16,7 +16,7 @@ title: Get Started
 <p>If you are using a Maven based project, the easiest way to use this library in your application is to add it as a dependency in your pom.xml file.</p>
 <p>To do this, you need to visit the <a href="http://search.maven.org/" target="_blank">Maven Central Repository</a> and pick which version you want to use from <a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22openshift-java-client%22" target="_blank">this page</a>.  Once you have chosen a version, click on the version number that is displayed under the "Latest Version" heading.</p>
 <p>On the left side of the page, under "Dependency Information" you will see a box with the heading of "Apache Maven".  You will need to copy the xml that is provided in that box and add it into the dependencies section of your pom.xml file.  Sample XML code is provided below for the 2.5.0.Final version.</p>
-<code class="language-java">
+<pre name="code" class="xml:nocontrols">
     &lt;dependencies&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;com.openshift&lt;/groupId&gt;
@@ -24,7 +24,7 @@ title: Get Started
             &lt;version&gt;2.5.0.Final&lt;/version&gt;
         &lt;/dependency&gt;
     &lt;/dependencies&gt;
-</code>
+</pre>
 <p>Once you have added the dependency you can build your project and the OpenShift Java Client will be downloaded and installed.</p>
 
 <h3>Build the Library Using Maven and Use Within a Non-Maven Based Project</h3>
@@ -33,8 +33,8 @@ title: Get Started
 <p>The next step is to get the code.  The best way to get it would be to fork the <a href="https://github.com/openshift/openshift-java-client" target="_blank">repository on github </a> and then clone it to your workstation.  Please see the <a href="../joinus">Join Us</a> section of the website for help updating your local working copy with upstream changes.  Alternatively you can also <a href="https://github.com/openshift/openshift-java-client/archive/master.zip">download a zip file</a> from github.</p>
 <p>Once you have Maven installed and the source code downloaded you will need to open up a terminal and cd (change directory) to the location in which the source code resides.  You will then need to type the command <code>mvn clean package</code>.  This will clean the project (if you have issued the command before and have leftovers) and then build the project, including downloading any dependencies that are defined in the pom.xml file.</p>
 <p>Maven will also run a few unit-tests to make sure that everything works after building the project.  This is a basic set of functional tests and should not take very long to complete.  Once it is finished you should have a new directory called <code>target</code>.  If you cd (change directory) into the new <code>target</code> directory and run <code>ls -lah</code> you will see something similar to the below files:</p>
-<pre>
-<code>
+
+<pre name="code" class="java:nocontrols">
     total 680
     drwxr-xr-x  10 user  staff   340B Jan 28 23:02 .
     drwxr-xr-x  10 user  staff   340B Jan 28 23:01 ..
@@ -46,10 +46,9 @@ title: Get Started
     drwxr-xr-x   2 user  staff    68B Jan 28 23:02 surefire
     drwxr-xr-x   4 user  staff   136B Jan 28 23:02 surefire-reports
     drwxr-xr-x   6 user  staff   204B Jan 28 23:01 test-classe
-</code>
 </pre>
 <p>The file with the .jar extension, that is not -sources.jar is the one that you want to use.  The version will be whatever the version of code that you downloaded or checked out is, and is defined in the pom.xml file of the project in the "Artifact Information" section as seen below:</p>
-<code>
+<pre name="code" class="xml:nocontrols">
     &lt;!-- Artifact Information --&gt;
     &lt;groupId&gt;com.openshift&lt;/groupId&gt;
     &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
@@ -58,7 +57,7 @@ title: Get Started
     &lt;name&gt;OpenShift Java Client&lt;/name&gt;
     &lt;url&gt;http://openshift.redhat.com&lt;/url&gt;
     &lt;description&gt;OpenShift Java Client&lt;/description&gt;
-</code>
+</pre>
 
 <p>Lastly you will need to add the JAR file that you have downloaded to your project.  This can be accomplished by viewing your projects properties in your favorite IDE and adding this file as a dependency, or sometimes by placing it in a "libs" directory inside of your project.</p>
 <p>If you would like to run the full integration tests you can run the command <code>mvn clean verify -Pintegration-tests</code>, it will take quite awhile so be patient, but remember that it is not required to build and use the library.  It is covered more in the <a href="../joinus" >Join Us</a> section of this website.</p>
@@ -69,25 +68,25 @@ title: Get Started
 <p>The next step is to get the code.  The best way to get it would be to fork the <a href="https://github.com/openshift/openshift-java-client" target="_blank">repository on github </a> and then clone it to your workstation.  Please see the <a href="../joinus">Join Us</a> section of the website for help updating your local working copy with upstream changes.  Alternatively you can also <a href="https://github.com/openshift/openshift-java-client/archive/master.zip">download a zip file</a> from github.</p>
 <p>Once you have Maven installed and the source code downloaded you will need to open up a terminal and cd (change directory) to the location in which the source code resides.  You will then need to type the command <code>mvn clean install</code>.  This will clean the project, build the project, including downloading any dependencies that are defined in the pom.xml file, and then install it into your local Maven repository usually located at ~/.m2.</p>
 <p>Once the package is installed, you can use it by inserting the following dependency in your projects pom.xml file.</p>
-<code class="language-java">
+<pre name="code" class="xml:nocontrols">
     &lt;dependencies&gt;
-    &lt;dependency&gt;
-    &lt;groupId&gt;com.openshift&lt;/groupId&gt;
-    &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
-    &lt;version&gt;2.5.0.Final&lt;/version&gt;
-    &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.openshift&lt;/groupId&gt;
+            &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
+            &lt;version&gt;2.5.0.Final&lt;/version&gt;
+        &lt;/dependency&gt;
     &lt;/dependencies&gt;
-</code>
+</pre>
 <p>Where 2.5.0 is the version that was built and installed.  If you make any changes to the source code you should increment the minor or major version, depending on the depth of the change that you have made.  It is also a Maven convention to use version-SNAPSHOT for any non-finalized version of the library.  So the dependency you add in your local project's pom.xml file when testing updated version of the library may look more like this:</p>
-<code class="language-java">
+<pre name="code" class="xml:nocontrols">
     &lt;dependencies&gt;
-    &lt;dependency&gt;
-    &lt;groupId&gt;com.openshift&lt;/groupId&gt;
-    &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
-    &lt;version&gt;2.5.1-SNAPSHOT&lt;/version&gt;
-    &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.openshift&lt;/groupId&gt;
+            &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
+            &lt;version&gt;2.5.1-SNAPSHOT&lt;/version&gt;
+        &lt;/dependency&gt;
     &lt;/dependencies&gt;
-</code>
+</pre>
 
 <p>Maven will also run a few unit-tests to make sure that everything works after building the project.  This is a basic set of functional tests and should not take very long to complete.  Once it is finished you should have the library installed in your ~/.m2 directory as stated above.</p>
 
