@@ -1,0 +1,88 @@
+---
+layout: default
+title: Sample Code
+---
+<h1>Sample Code</h1>
+<p>Here is some sample code to help you get going using this library in your own projects.</p>
+
+<h3>Connecting to the OpenShift server</h3>
+<h4>Create a connection to the OpenShift server</h4>
+<pre name="code" class="java">
+    IOpenShiftConnection connection = new OpenShiftConnectionFactory().getConnection("myApplicationId", "user", "password");
+</pre>
+<hr/>
+<h3>Interacting with User objects</h3>
+<h4>Get the user information</h4>
+<pre name="code" class="java">
+    IUser user = connection.getUser();
+    System.out.println("RHLogin:\t" + user.getRhlogin());
+</pre>
+<hr/>
+
+<h3>Interacting with Domain objects</h3>
+<h4>Create a new domain</h4>
+<pre name="code" class="java">
+    IUser user = connection.getUser();
+    IDomain domain = user.createDomain("myDomain");
+</pre>
+
+<h4>Get the default domain</h4>
+<pre name="code" class="java">
+    IDomain domain = user.getDefaultDomain();
+    System.out.println("Namespace:\t" + domain.getId());
+</pre>
+<hr/>
+
+<h3>Interacting with Application objects</h3>
+<h4>Create a new application within a domain</h4>
+<pre name="code" class="java">
+    IApplication as7Application = domain.createApplication("myApplication", LatestVersionOf.jbossAs().get(user));
+</pre>
+
+<h4>Get application information</h4>
+<pre name="code" class="java">
+    for (IApplication application : domain.getApplications()) {
+        System.out.println(application.getName());
+        System.out.println("\tFramework:\t" + application.getCartridge().getName());
+        System.out.println("\tCreation:\t" + application.getCreationTime());
+        System.out.println("\tUUID:\t\t" + application.getUUID());
+        System.out.println("\tGit URL:\t" + application.getGitUrl());
+        System.out.println("\tPublic URL:\t" + application.getApplicationUrl() + "\n");
+    }
+</pre>
+<hr/>
+
+<h3>Interacting with Cartridge objects</h3>
+<h4>Add the latest version of of the MySQL cartridge</h4>
+<pre name="code" class="java">
+    IEmbeddedCartridge mySqlCartridge = as7Application.addEmbeddableCartridge(LatestVersionOf.mySQL().get(user));
+</pre>
+
+<h4>Get embedded cartridge information</h4>
+<pre name="code" class="java">
+    for(IEmbeddedCartridge cartridge : application.getEmbeddedCartridges()) {
+        System.out.println("\t" + cartridge.getName() + " - URL:" + cartridge.getUrl());
+    }
+</pre>
+
+<h4>Get the MySQL cartridge's connection URL</h4>
+<pre name="code" class="java">
+    String mySqlConnectionUrl = mySqlCartridge.getUrl();
+</pre>
+<hr/>
+
+<h3>Interacting with SSHPublicKey objects</h3>
+<h4>Add a public SSH key</h4>
+<pre name="code" class="java">
+    ISSHPublicKey key = new SSHPublicKey(SSH_PUBLIC_KEY);
+    IOpenShiftSSHKey addedKey = user.getSSHKeyByPublicKey(key.getPublicKey());
+    if (addedKey == null) {
+              user.putSSHKey(String.valueOf(System.currentTimeMillis()), key);
+    }
+</pre>
+
+
+<hr/>
+Special thanks to the following articles for supplying some of the above sample code:<br/>
+<a href="https://community.jboss.org/wiki/Enable-openshift-ciFullExampleUsingOpenshift-java-client" target="_blank">enable-openshift-ci: full example using openshift-java-client</a><br/>
+<a href="http://planet.jboss.org/post/show_domain_info_openshift_java_client_in_a_nutshell" target="_blank">show-domain-info: openshift-java-client in a nutshell</a>
