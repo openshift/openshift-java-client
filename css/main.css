@@ -35,7 +35,7 @@ a:hover {
 }
 
 .row h2 {
-    color:#ef2e32;
+    color:#383838;
 }
 .btn-primary {
     color: #fff;
@@ -44,19 +44,20 @@ a:hover {
 }
 .btn-primary:hover {
     color: #fff;
-    background-color: #c5272b;
+    background-color: #ef2e32;
     border-color: #af2e30;
 }
 .btn-default {
     color: #fff;
-    background-color: #333;
-    border-color: #000;
+    background-color: #c5272b;
+    border-color: #e59092;
 }
 hr {
-    border-top:1px dashed #000;
+    border-top:1px none #000;
 }
 footer {
     text-align:center;
+    margin-top: 60px;
 }
 footer a {
     color:#ef2e32;

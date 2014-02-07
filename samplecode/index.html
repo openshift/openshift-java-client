@@ -8,7 +8,7 @@ title: Sample Code
 <h3>Connecting to the OpenShift server</h3>
 <h4>Create a connection to the OpenShift server</h4>
 <pre name="code" class="java">
-    IOpenShiftConnection connection = new OpenShiftConnectionFactory().getConnection("myApplicationId", "user", "password");
+    IOpenShiftConnection connection = new OpenShiftConnectionFactory().getConnection("my_user_application", "user", "password");
 </pre>
 <hr/>
 <h3>Interacting with User objects</h3>
@@ -77,7 +77,7 @@ title: Sample Code
     ISSHPublicKey key = new SSHPublicKey(SSH_PUBLIC_KEY);
     IOpenShiftSSHKey addedKey = user.getSSHKeyByPublicKey(key.getPublicKey());
     if (addedKey == null) {
-              user.putSSHKey(String.valueOf(System.currentTimeMillis()), key);
+        user.putSSHKey(String.valueOf(System.currentTimeMillis()), key);
     }
 </pre>
 
