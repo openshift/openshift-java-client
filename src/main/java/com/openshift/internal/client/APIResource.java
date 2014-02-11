@@ -38,10 +38,6 @@ import com.openshift.internal.client.utils.IOpenShiftJsonConstants;
  * @author Xavier Coulon
  */
 public class APIResource extends AbstractOpenShiftResource implements IOpenShiftConnection {
-	
-	private static final String SYSPROPERTY_PROXY_PORT = "proxyPort";
-	private static final String SYSPROPERTY_PROXY_HOST = "proxyHost";
-	private static final String SYSPROPERTY_PROXY_SET = "proxySet";
 
 	private final String login;
 	private final String password;
@@ -77,23 +73,6 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 		this.doSSLChecks = doSSLChecks;
 	}
 
-	public void setProxySet(boolean proxySet) {
-		if (proxySet) {
-			System.setProperty(SYSPROPERTY_PROXY_SET, "true");
-		} else {
-			System.setProperty(SYSPROPERTY_PROXY_SET, "false");
-		}
-	}
-
-	public void setProxyHost(String proxyHost) {
-		System.setProperty(SYSPROPERTY_PROXY_HOST, proxyHost);
-	}
-
-	public void setProxyPort(String proxyPort) {
-		Assert.notNull(proxyPort);
-
-		System.setProperty(SYSPROPERTY_PROXY_PORT, proxyPort);
-	}
 
 	public IUser getUser() throws OpenShiftException {
 		if (user == null) {
