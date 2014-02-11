@@ -73,27 +73,6 @@ public interface IOpenShiftConnection {
 	public void setEnableSSLCertChecks(boolean doSSLChecks);
 
 	/**
-	 * Sets flag for using an HTTP proxy
-	 * 
-	 * @param proxySet
-	 */
-	public void setProxySet(boolean proxySet);
-
-	/**
-	 * Sets the HTTP proxy hostname
-	 * 
-	 * @param proxyHost
-	 */
-	public void setProxyHost(String proxyHost);
-
-	/**
-	 * Sets the HTTP proxy port
-	 * 
-	 * @param proxyPort
-	 */
-	public void setProxyPort(String proxyPort);
-
-	/**
 	 * Returns the executor service instance that's available in this
 	 * connection.
 	 * 
