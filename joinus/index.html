@@ -70,14 +70,14 @@ title: Join Us
     <li>Make sure there is a JIRA logged for your Bug Fix or Feature Request that you are working on <a href="https://issues.jboss.org/browse/OSJC" target="_blank">here</a>.</li>
     <li>Create a simple topic branch to isolate that work (just a recommendation)
 <pre name="code" class="java:nocontrols">
-    git checkout -b my_cool_feature
+    git checkout -b JIRA_ISSUE_NUMBER
 </pre>
     </li>
     <li>Make the changes and commit one or more times (Don't forget to push)
 <pre name="code" class="java:nocontrols">
     git commit -m 'OSJC-XXXX Making this awesome new feature'
     git commit -m 'OSJC-YYYY Fixing this really bad bug'
-    git push origin my_cool_feature
+    git push origin JIRA_ISSUE_NUMBER
 </pre>
     </li>
     <li>Rebase your branch against the latest master (applies your patches on top of master)
@@ -86,7 +86,7 @@ title: Join Us
     git rebase -i upstream/master
     # if you have conflicts fix them and rerun rebase
     # The -f, forces the push, alters history, see note below
-    git push -f origin my_cool_feature
+    git push -f origin JIRA_ISSUE_NUMBER
 </pre>
         The -i triggers an interactive update which also allows you to combine commits, alter commit messages etc. It's a good idea to make the commit log very nice for external consumption. Note that this alters history, which while great for making a clean patch, is unfriendly to anyone who has forked your branch. Therefore you want to make sure that you either work in a branch that you don't share, or if you do share it, tell them you are about to revise the branch history (and thus, they will then need to rebase on top of your branch once you push it out).
     </li>
@@ -110,7 +110,16 @@ title: Join Us
     </li>
 </ol>
 
-
+<h3>Submitting Pull Requests</h3>
+<p>Following these steps will help making submitting a pull request on github a breeze:
+<ol>
+    <li>We ask that you name your feature branch after the issue that you are working on such as OSJC-XXXX, this is not required, but it will help you remember what you were working on in this branch and easily reference the issue in the future.</li>
+    <li>Make sure that when you make a commit, you reference the JIRA Issue number at the beginning of your message eg <code>git commit -am "[OSJC-XXXX] fixing spacing</code>
+    </li>
+    <li>Keep commit messages under 72 characters so that github doesn't cut them off!</li>
+    <li>Update the JIRA Issue with the pull request link under the "Workflow" tab.</li>
+</ol>
+</p>
 <h3>Setting Up Your IDE</h3>
 
 <p>If you are using Eclipse or IntelliJ IDEA to work on this project, you will need to create a Maven project, or import an existing Maven project.  This will allow the IDE to download the required dependencies, build the project (so that you don't get any nasty errors), and show you the test code coverage if applicable.</p>
