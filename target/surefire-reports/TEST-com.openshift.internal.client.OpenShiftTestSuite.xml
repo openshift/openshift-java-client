@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="1" time="21.282" errors="0" skipped="7" tests="254" name="com.openshift.internal.client.OpenShiftTestSuite">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/usr/java/jdk1.7.0_51/jre/lib/amd64"/>
+    <property name="java.vm.version" value="24.51-b03"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/home/adietish/jboss-workspaces/openshift-java-client"/>
+    <property name="java.runtime.version" value="1.7.0_51-b13"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="/usr/java/jdk1.7.0_51/jre/lib/endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Linux"/>
+    <property name="classworlds.conf" value="/usr/share/maven/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="51.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="3.13.3-201.fc20.x86_64"/>
+    <property name="user.home" value="/home/adietish"/>
+    <property name="user.timezone" value="Europe/Zurich"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="1.7"/>
+    <property name="user.name" value="adietish"/>
+    <property name="java.class.path" value="/usr/share/maven/boot/plexus-classworlds.jar"/>
+    <property name="org.slf4j.simpleLogger.defaultLogLevel" value="info"/>
+    <property name="java.vm.specification.version" value="1.7"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/usr/java/jdk1.7.0_51/jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean verify"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="en"/>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.7.0_51"/>
+    <property name="java.ext.dirs" value="/usr/java/jdk1.7.0_51/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="sun.boot.class.path" value="/usr/java/jdk1.7.0_51/jre/lib/resources.jar:/usr/java/jdk1.7.0_51/jre/lib/rt.jar:/usr/java/jdk1.7.0_51/jre/lib/sunrsasign.jar:/usr/java/jdk1.7.0_51/jre/lib/jsse.jar:/usr/java/jdk1.7.0_51/jre/lib/jce.jar:/usr/java/jdk1.7.0_51/jre/lib/charsets.jar:/usr/java/jdk1.7.0_51/jre/lib/jfr.jar:/usr/java/jdk1.7.0_51/jre/classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="/usr/share/maven"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase time="0.017" classname="com.openshift.internal.client.ConfigurationTest" name="canReadUsername"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.ConfigurationTest" name="versionTest"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.ConfigurationTest" name="doubleQuotedLibraServerIsReturnedWithoutQuotes"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.ConfigurationTest" name="nonQuotedLibraServerIsReturnedAsIs"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.ConfigurationTest" name="nullLibraServerIsReturnedAsNull"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.ConfigurationTest" name="systemPropsOverrideSystemconfig"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.ConfigurationTest" name="emptySystemPropertiesDefaultToUserConfig"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.ConfigurationTest" name="fallsBackToDefaultUrl"/>
+  <testcase time="0.015" classname="com.openshift.internal.client.ConfigurationTest" name="canStoreUsername"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.ConfigurationTest" name="usernameInUserconfigOverridesUsernameInSystemconfig"/>
+  <testcase time="0" classname="com.openshift.internal.client.ConfigurationTest" name="quotedLibraServerIsReturnedWithoutQuotes"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.ConfigurationTest" name="canStoreAndReadUsername"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.ConfigurationTest" name="canReadUsernameIfItsInSystemConfigurationOnly"/>
+  <testcase time="0.461" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldThrowIfNoAcceptedMediaType"/>
+  <testcase time="0.025" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="canGet"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="canHead"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="canPost"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="canPut"/>
+  <testcase time="0.014" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="canDelete"/>
+  <testcase time="0.019" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="canPatch"/>
+  <testcase time="0.103" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldFailHttpsSelfsignedCertificateNoCallback"/>
+  <testcase time="0.102" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldSucceedHttpsSelfsignedCertificate"/>
+  <testcase time="0.044" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldFailHttpsSelfsignedCertificate"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="canAddAuthorization"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldAcceptJson"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldEncodeParametersCorrectly"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldAddServiceVersionToAcceptHeader"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldThrowNotFoundException"/>
+  <testcase time="0.014" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldReasonPhraseIsOptional"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldHaveURLInExceptionMessage"/>
+  <testcase time="1.013" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldRespectGivenTimeoutPOST"/>
+  <testcase time="1.01" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldRespectGivenTimeoutDELETE"/>
+  <testcase time="1.009" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldRespectGivenTimeoutPUT"/>
+  <testcase time="1.01" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldRespectGivenTimeoutGET"/>
+  <testcase time="1.011" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldFallbackToOpenShiftTimeout"/>
+  <testcase time="1.01" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldFallbackToDefaultSystemPropertyTimeout"/>
+  <testcase time="4.009" classname="com.openshift.internal.client.httpclient.HttpClientTest" name="shouldFallbackToDefaultTimeout"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.RestServicePropertiesTest" name="shouldReturnClientIdAndVersion"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.RestServicePropertiesTest" name="shouldReturnUserAgentEvenIfClientIdIsNull"/>
+  <testcase time="0.133" classname="com.openshift.internal.client.RestServiceTest" name="shouldNotThrowIfNoReqiredParameter"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.RestServiceTest" name="shouldGetIfGetHttpMethod"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.RestServiceTest" name="shouldPostIfPostHttpMethod"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldPutIfPutHttpMethod"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldDeleteIfDeleteHttpMethod"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.RestServiceTest" name="shouldPatchIfPatchHttpMethod"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.RestServiceTest" name="shouldHeadIfHeadHttpMethod"/>
+  <testcase time="0.06" classname="com.openshift.internal.client.RestServiceTest" name="shouldNotAddServerToAbsUrl"/>
+  <testcase time="5.124" classname="com.openshift.internal.client.RestServiceTest" name="shouldAddServerToPath"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldNotAddBrokerPathIfPresent"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.RestServiceTest" name="shouldNotAddEmptyServerAndEmptyServicePath"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldAddParameters"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldSubstituteUrlVariables"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldNotSubstituteUrlVariables"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldSubstituteUrlVariablesTwice"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.RestServiceTest" name="shouldThrowExceptionWithResponseOnNotFound"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.RestServiceTest" name="shouldHaveMessageIfErrors"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.RestServiceTest" name="shouldReportPlatformUrlInException"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldReturnPlatformWithSchema"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.RestServiceTest" name="shouldReturnUnchangedPlatformUrl"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldSetUserAgentToHttpClient"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.RestServiceTest" name="shouldDefaultTo12ProtocolVersion"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.RestServiceTest" name="shouldSetAcceptedMediaTypeJsonToHttpClient"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.RestServiceTest" name="shouldUseGivenProtocolVersion"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetUserResponseBody"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetUserNoKeyResponseBody"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetUserSingleKeyResponseBody"/>
+  <testcase time="0.016" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetUserMultipleKeyResponseBody"/>
+  <testcase time="0.013" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetRootAPIResponseBody"/>
+  <testcase time="0.016" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetDomainsWith2ExistingResponseBody"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetDomainsWithNoExistingResponseBody"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetDomainResponseBody"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallDeleteDomainKoNotFoundResponseBody"/>
+  <testcase time="0.032" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetApplicationsWith2AppsResponseBody"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetApplicationWithAliasesResponseBody"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallAddApplicationEmbeddedCartridgeResponseBody"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetApplicationCartridgesWith1ElementResponseBody"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetApplicationCartridgesWith3ElementsResponseBody"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallGetApplicationGearGroupsResponseBody"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallSingleValidOptionInResponseBody"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallMultipleValidOptionInResponseBody"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.response.OpenShiftJsonDTOFactoryTest" name="shouldUnmarshallLinksUnknwonLinkParameterType"/>
+  <testcase time="0.024" classname="com.openshift.internal.client.DomainResourceTest" name="shouldLoadEmptyListOfDomains"/>
+  <testcase time="0.013" classname="com.openshift.internal.client.DomainResourceTest" name="shouldLoadDomains"/>
+  <testcase time="0.017" classname="com.openshift.internal.client.DomainResourceTest" name="shouldCreateNewDomain"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotRecreateExistingDomain"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.DomainResourceTest" name="shouldDestroyDomain"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotDestroyDomainWithApp"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.DomainResourceTest" name="shouldUpdateDomainId"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.DomainResourceTest" name="shouldListAvailableGearSizes"/>
+  <testcase time="0.02" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRefreshDomainAndLoadApplications"/>
+  <testcase time="0.025" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRefreshDomainAndReloadApplications"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.DomainResourceTest" name="shouldLoadListOfApplicationsWithNoElement"/>
+  <testcase time="0.016" classname="com.openshift.internal.client.DomainResourceTest" name="shouldLoadListOfApplicationsWith2Elements"/>
+  <testcase time="0.014" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotLoadApplicationTwice"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotLoadListOfApplicationsWithInvalidCredentials"/>
+  <testcase time="0.017" classname="com.openshift.internal.client.DomainResourceTest" name="shouldCreateApplicationWithDownloadableCartridge">
+    <failure message="expected:&lt;GearProfile [name=[micro]]&gt; but was:&lt;GearProfile [name=[small]]&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;GearProfile [name=[micro]]&gt; but was:&lt;GearProfile [name=[small]]&gt;
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.fest.assertions.ConstructorInvoker.newInstance(ConstructorInvoker.java:36)
+	at org.fest.assertions.ComparisonFailureFactory.newComparisonFailure(ComparisonFailureFactory.java:60)
+	at org.fest.assertions.ComparisonFailureFactory.comparisonFailure(ComparisonFailureFactory.java:46)
+	at org.fest.assertions.Fail.comparisonFailed(Fail.java:83)
+	at org.fest.assertions.Fail.failIfNotEqual(Fail.java:71)
+	at org.fest.assertions.GenericAssert.isEqualTo(GenericAssert.java:217)
+	at com.openshift.client.utils.ApplicationAssert.hasGearProfile(ApplicationAssert.java:145)
+	at com.openshift.internal.client.DomainResourceTest.shouldCreateApplicationWithDownloadableCartridge(DomainResourceTest.java:307)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.rules.ExpectedException$ExpectedExceptionStatement.evaluate(ExpectedException.java:110)
+	at org.junit.rules.Verifier$1.evaluate(Verifier.java:34)
+	at org.junit.runners.BlockJUnit4ClassRunner.runNotIgnored(BlockJUnit4ClassRunner.java:79)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:71)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:49)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:24)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:236)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:134)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:113)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:103)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:74)
+</failure>
+  </testcase>
+  <testcase time="0.007" classname="com.openshift.internal.client.DomainResourceTest" name="shouldUpdateDownloadableStandaloneCartridgeAfterDeploy"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRequestCreateApplicationWithDownloadableCartridge"/>
+  <testcase time="0.005" classname="com.openshift.internal.client.DomainResourceTest" name="shouldHaveMessagesWhenCreating"/>
+  <testcase time="0.005" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRequestCreateApplicationWithNameAndCartridgeOnly"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRequestCreateApplicationWithNameCartridgeAndScaleOnly"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRequestCreateApplicationWithNameCartridgeScaleGearProfileOnly"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRequestCreateApplicationWithNameCartridgeScaleGearProfileAndGitUrl"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRequestCreateApplicationWithEmbeddableCartridges"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotCreateApplicationWithMissingName"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotCreateApplicationWithMissingCartridge"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotRecreateExistingApplication"/>
+  <testcase time="0.017" classname="com.openshift.internal.client.DomainResourceTest" name="shouldGetApplicationByNameCaseInsensitive"/>
+  <testcase time="0.018" classname="com.openshift.internal.client.DomainResourceTest" name="shouldRefreshDomain">
+    <skipped/>
+  </testcase>
+  <testcase time="0.018" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotReloadDomainTwice">
+    <skipped/>
+  </testcase>
+  <testcase time="0.018" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotifyAfterDomainCreated">
+    <skipped/>
+  </testcase>
+  <testcase time="0.018" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotifyAfterDomainUpdated">
+    <skipped/>
+  </testcase>
+  <testcase time="0.018" classname="com.openshift.internal.client.DomainResourceTest" name="shouldNotifyAfterDomainDestroyed">
+    <skipped/>
+  </testcase>
+  <testcase time="0.007" classname="com.openshift.internal.client.DomainResourceTest" name="shouldPassTimeoutToClient"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.DomainResourceTest" name="shouldReportCannotCreateAppWithEnvVars"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.DomainResourceTest" name="shouldReportCanCreateAppWithEnvVars"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.DomainResourceTest" name="shouldEqualDomainFromOtherUser"/>
+  <testcase time="0.014" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldDestroyApplication"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldStopApplication"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldForceStopApplication"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldStartApplication"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldRestartApplication"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldScaleDownApplication">
+    <skipped message="Need higher quotas on stg"/>
+  </testcase>
+  <testcase time="0.009" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldNotScaleDownApplication"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldScaleUpApplication">
+    <skipped message="Need higher quotas on stg"/>
+  </testcase>
+  <testcase time="0.01" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldNotScaleUpApplication"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldAddAliasToApplication"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldNotAddExistingAliasToApplication"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldRemoveAliasFromApplication"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldNotRemoveAliasFromApplication"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldListExistingCartridges"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldGetEmbeddableCartridgeByCartridge"/>
+  <testcase time="0.131" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldGetDownloadableEmbeddableCartridgeByCartridge"/>
+  <testcase time="0.013" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldReloadExistingEmbeddedCartridges"/>
+  <testcase time="0.018" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldAddCartridgeToApplication"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldNotAddCartridgeToApplication"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldRemoveCartridgeFromApplication"/>
+  <testcase time="0.013" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldNotRemoveCartridgeFromApplication"/>
+  <testcase time="2.122" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldWaitUntilTimeout"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldEndBeforeTimeout"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldGetForwardablePorts"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldCanGetEnvironmentVariables"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldUpdateEnvironmentVariables"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldAddOneEnvironmentVariableToApplication"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldAddEnvironmentVariablesToApplication"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldUpdateOneEnvironmentVariableToApplication"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldRefreshEnvironmentVariables"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldGetEnvironmentVariableByNameFromApplication"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldGetEnvironmentVariableValueByNameFromApplication"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldNotAddExistingEnvironmentVariable"/>
+  <testcase time="0.016" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldRemoveEnvironmentVariableByName"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldRemoveEnvironmentVariable"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldGetMapOfAllEnvironmentVariablesFromApplication"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldLoadEmptyMapOfEnvironmentVariables"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldRefreshWithoutLoadingEnvironmentVariablesIfNotSupported"/>
+  <testcase time="0.005" classname="com.openshift.internal.client.ApplicationResourceTest" name="shouldEqualApplication"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.APIResourceTest" name="shouldLoadListOfStandaloneCartridges"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.APIResourceTest" name="shouldListEmbeddableCartridges"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.StandaloneCartridgeTest" name="shouldNonDownloadableEqualsNonDownloadable"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.StandaloneCartridgeTest" name="shouldDownloadableEqualsDownloadable"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.StandaloneCartridgeTest" name="shouldDownloadableWithDifferentNameEqualsDownloadable"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.StandaloneCartridgeTest" name="shouldDownloadableStandaloneNotEqualsDownloadableEmbeddable"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.StandaloneCartridgeTest" name="shouldHaveNameDisplaynameDescription"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.EmbeddableCartridgeTest" name="shouldNonDownloadableEqualsNonDownloadable"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.EmbeddableCartridgeTest" name="shouldDownloadableEqualsDownloadable"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.EmbeddableCartridgeTest" name="shouldDownloadableStandaloneNotEqualsDownloadableEmbeddable"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.EmbeddableCartridgeTest" name="shouldHaveNameDisplaynameDescription"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.EmbeddableCartridgeTest" name="shouldDownloadableWithNonEqualNameEqualsDownloadable"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldEmbeddedCartridgeEqualsEmbeddableCartridge"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldHaveSameHashCode"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldEmbeddableCartridgeWithNameEqualsEmbeddedCartridgeWithoutName"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldRemoveEmbeddedCartridgeInASetByEmbeddableCartridge"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldHaveUrlProperty"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldNotHaveUrlInNonDownloadableCartridge"/>
+  <testcase time="0.016" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldHaveNameDescriptionDisplayNameUrlInDownloadableCartridge"/>
+  <testcase time="0.014" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldHaveDisplayName"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldHaveDescription"/>
+  <testcase time="0.017" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldUpdatePropertiesWhenRefreshed"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldRemoveRemovedCartridge"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldBeDownloadableCartridges"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EmbeddedCartridgeResourceTest" name="shouldNotBeDownloadableCartridge"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldEqualsOtherCartridgeConstraint"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.QueryTest" name="shouldMatchEmbeddableCartridge"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.QueryTest" name="shouldReturnEmptyListOnNoCartridges"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.QueryTest" name="shouldReturnEmptyListOnNoMatchingCartridge"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldMatchMysql"/>
+  <testcase time="0.031" classname="com.openshift.internal.client.QueryTest" name="shouldMatchLatestMysql"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldMatchMajorVersionedCartridge"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.QueryTest" name="shouldMatchLaterMajorVersion"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.QueryTest" name="shouldMatchAlphanumericVersionedCartridge"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldMatchCartridgeNameWithDash"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldMatchingCartridgeName"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.QueryTest" name="shouldSelectNodeJsByDescriptionRegex"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectJBossAs"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectJBossEap"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectJBossEws"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectJenkins"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectPerl"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectPhp"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectPython"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectRuby"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectZend"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectMmsAgent"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectHaProxy"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectJenkinsClient"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.QueryTest" name="shouldSelectMetrics"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectMongoDb"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectMySql"/>
+  <testcase time="0.01" classname="com.openshift.internal.client.QueryTest" name="shouldSelectPhpMyAdmin"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectpostgreSql"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.QueryTest" name="shouldSelectRockmongo"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.UserTest" name="shouldReturnServer"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.UserTest" name="shouldHaveCredentials"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.UserTest" name="shouldHaveConsumedGears"/>
+  <testcase time="0.003" classname="com.openshift.internal.client.UserTest" name="shouldHaveMaxGears"/>
+  <testcase time="0.563" classname="com.openshift.internal.client.SSHKeyTest" name="shouldCreatePublicKey"/>
+  <testcase time="0.193" classname="com.openshift.internal.client.SSHKeyTest" name="shouldLoadKeyPairRsa"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.SSHKeyTest" name="shouldLoadKeyPairDsa"/>
+  <testcase time="0.568" classname="com.openshift.internal.client.SSHKeyTest" name="shouldLoadPublicKeyRsa"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.SSHKeyTest" name="shouldLoadPublicKeyDsa"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.SSHKeyTest" name="shouldGetKeyTypeByTypeId"/>
+  <testcase time="0.002" classname="com.openshift.internal.client.SSHKeyTest" name="getKeyTypeByTypeIdReturnsNullIfNoMatchingType"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.SSHKeyTest" name="shouldReturn2SSHKeys"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.SSHKeyTest" name="shouldAddAndUpdateKey"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.SSHKeyTest" name="shouldUpdateKeyTypeAndPublicKey"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.SSHKeyTest" name="shouldUpdatePublicKey"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.SSHKeyTest" name="shouldNotAddKeyWithExistingName"/>
+  <testcase time="0.008" classname="com.openshift.internal.client.SSHKeyTest" name="shouldNotAddKeyTwice"/>
+  <testcase time="0.017" classname="com.openshift.internal.client.GearGroupsResourceTest" name="shouldGetGearGroups"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="nullShouldCreateUnknownGearState"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="emptyShouldCreateUnknownGearState"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="stateCaseShouldNotMatter"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="bogusStateShouldBeUnknown"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="nullShouldCreateUnknownGearState"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="emptyShouldCreateUnknownGearState"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="stateCaseShouldNotMatter"/>
+  <testcase time="0" classname="com.openshift.internal.client.GearTest" name="bogusStateShouldBeUnknown"/>
+  <testcase time="0.009" classname="com.openshift.internal.client.OpenShiftExceptionTest" name="shouldReportServerInTimeoutExceptionMessage"/>
+  <testcase time="0.004" classname="com.openshift.internal.client.OpenShiftExceptionTest" name="shouldThrowWithTextAndExistCode"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.FormUrlEncodedMediaTypeTest" name="shouldEncodeSingleParameter"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.FormUrlEncodedMediaTypeTest" name="shouldNotStart2ndWriteWithAmpersand"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.FormUrlEncodedMediaTypeTest" name="shouldEncode3ParametersWithAmpersand"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.FormUrlEncodedMediaTypeTest" name="shouldNotAllowIdenticalNames"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.FormUrlEncodedMediaTypeTest" name="shouldEncodeNestedMap"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.FormUrlEncodedMediaTypeTest" name="shouldEncodeMultipleNestedMaps"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.httpclient.request.JsonMediaTypeTest" name="shouldEncodeSingleParameter"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.JsonMediaTypeTest" name="shouldEncode3ParametersWithAmpersand"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.JsonMediaTypeTest" name="shouldNotAllowIdenticalNames"/>
+  <testcase time="0" classname="com.openshift.internal.client.httpclient.request.JsonMediaTypeTest" name="shouldEncodeNestedMap"/>
+  <testcase time="0.001" classname="com.openshift.internal.client.httpclient.request.JsonMediaTypeTest" name="shouldEncodeMultipleNestedMaps"/>
+  <testcase time="0.007" classname="com.openshift.internal.client.EnvironmentVariableResourceTest" name="shouldGetEnvironmentVariableName"/>
+  <testcase time="0.006" classname="com.openshift.internal.client.EnvironmentVariableResourceTest" name="shouldGetEnvironmentVariableValue"/>
+  <testcase time="0.011" classname="com.openshift.internal.client.EnvironmentVariableResourceTest" name="shouldDeleteEnvironmentVariable"/>
+  <testcase time="0.012" classname="com.openshift.internal.client.EnvironmentVariableResourceTest" name="shouldUpdateEnvironmentVariableValue"/>
+</testsuite>

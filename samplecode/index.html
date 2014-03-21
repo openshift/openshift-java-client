@@ -1,89 +1,126 @@
----
-layout: default
-title: Sample Code
-description: How about some example code to help you get going using this library? Click the link below and view basic and advanced code samples.
----
-<h1>Sample Code</h1>
-<p>Here is some sample code to help you get going using this library in your own projects.</p>
-
-<h3>Connecting to the OpenShift server</h3>
-<h4>Create a connection to the OpenShift server</h4>
-<pre name="code" class="java">
-    IOpenShiftConnection connection = new OpenShiftConnectionFactory().getConnection("my_user_application", "user", "password");
-</pre>
-<hr/>
-<h3>Interacting with User objects</h3>
-<h4>Get the user information</h4>
-<pre name="code" class="java">
-    IUser user = connection.getUser();
-    System.out.println("RHLogin:\t" + user.getRhlogin());
-</pre>
-<hr/>
-
-<h3>Interacting with Domain objects</h3>
-<h4>Create a new domain</h4>
-<pre name="code" class="java">
-    IUser user = connection.getUser();
-    IDomain domain = user.createDomain("myDomain");
-</pre>
-
-<h4>Get the default domain</h4>
-<pre name="code" class="java">
-    IDomain domain = user.getDefaultDomain();
-    System.out.println("Namespace:\t" + domain.getId());
-</pre>
-<hr/>
-
-<h3>Interacting with Application objects</h3>
-<h4>Create a new application within a domain</h4>
-<pre name="code" class="java">
-    IApplication as7Application = domain.createApplication("myApplication", LatestVersionOf.jbossAs().get(user));
-</pre>
-
-<h4>Get application information</h4>
-<pre name="code" class="java">
-    for (IApplication application : domain.getApplications()) {
-        System.out.println(application.getName());
-        System.out.println("\tFramework:\t" + application.getCartridge().getName());
-        System.out.println("\tCreation:\t" + application.getCreationTime());
-        System.out.println("\tUUID:\t\t" + application.getUUID());
-        System.out.println("\tGit URL:\t" + application.getGitUrl());
-        System.out.println("\tPublic URL:\t" + application.getApplicationUrl() + "\n");
-    }
-</pre>
-<hr/>
-
-<h3>Interacting with Cartridge objects</h3>
-<h4>Add the latest version of of the MySQL cartridge</h4>
-<pre name="code" class="java">
-    IEmbeddedCartridge mySqlCartridge = as7Application.addEmbeddableCartridge(LatestVersionOf.mySQL().get(user));
-</pre>
-
-<h4>Get embedded cartridge information</h4>
-<pre name="code" class="java">
-    for(IEmbeddedCartridge cartridge : application.getEmbeddedCartridges()) {
-        System.out.println("\t" + cartridge.getName() + " - URL:" + cartridge.getUrl());
-    }
-</pre>
-
-<h4>Get the MySQL cartridge's connection URL</h4>
-<pre name="code" class="java">
-    String mySqlConnectionUrl = mySqlCartridge.getUrl();
-</pre>
-<hr/>
-
-<h3>Interacting with SSHPublicKey objects</h3>
-<h4>Add a public SSH key</h4>
-<pre name="code" class="java">
-    ISSHPublicKey key = new SSHPublicKey(SSH_PUBLIC_KEY);
-    IOpenShiftSSHKey addedKey = user.getSSHKeyByPublicKey(key.getPublicKey());
-    if (addedKey == null) {
-        user.putSSHKey(String.valueOf(System.currentTimeMillis()), key);
-    }
-</pre>
-
-
-<hr/>
-Special thanks to the following articles for supplying some of the above sample code:<br/>
-<a href="https://community.jboss.org/wiki/Enable-openshift-ciFullExampleUsingOpenshift-java-client" target="_blank">enable-openshift-ci: full example using openshift-java-client</a><br/>
-<a href="http://planet.jboss.org/post/show_domain_info_openshift_java_client_in_a_nutshell" target="_blank">show-domain-info: openshift-java-client in a nutshell</a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sample Code | OpenShift Java Client</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="description">
+    <link href="../images/favicon.png" rel="shortcut icon">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet">
+    <link href="../css/main.css" rel="stylesheet">
+    <link href="../css/topnav.css" rel="stylesheet">
+    <link href="../css/SyntaxHighlighter.css" rel="stylesheet">
+    <!-- IE 6-8 support of HTML 5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.js"></script>
+      <script src="../js/respond.min.js"></script>
+      <script src="../js/prism.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="../">OpenShift Java Client</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <a class="getstarted" href="../getstarted">Get Started</a>
+            </li>
+            <li>
+              <a href="../documentation" target="_blank">Documentation</a>
+            </li>
+            <li>
+              <a class="samplecode" href="../samplecode">Sample Code</a>
+            </li>
+            <li>
+              <a class="gethelp" href="../gethelp">Get Help</a>
+            </li>
+            <li>
+              <a href="https://github.com/openshift/openshift-java-client" target="_blank">Source Code</a>
+            </li>
+            <li>
+              <a class="joinus" href="../joinus">Join Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h1>Sample Code</h1>
+      <p>Here is some sample code to help you get going using this library in your own projects.</p>
+      <h3>Connecting to the OpenShift server</h3>
+      <h4>Create a connection to the OpenShift server</h4>
+      <pre name="code" class="java">&#x000A;IOpenShiftConnection connection = new OpenShiftConnectionFactory().getConnection("my_user_application", "user", "password");</pre>
+      <hr>
+      <h3>Interacting with User objects</h3>
+      <h4>Get the user information</h4>
+      <pre name="code" class="java">&#x000A;IUser user = connection.getUser();&#x000A;System.out.println("RHLogin:\t" + user.getRhlogin());</pre>
+      <hr>
+      <h3>Interacting with Domain objects</h3>
+      <h4>Create a new domain</h4>
+      <pre name="code" class="java">&#x000A;IUser user = connection.getUser();&#x000A;IDomain domain = user.createDomain("myDomain");</pre>
+      <h4>Get the default domain</h4>
+      <pre name="code" class="java">&#x000A;IDomain domain = user.getDefaultDomain();&#x000A;System.out.println("Namespace:\t" + domain.getId());</pre>
+      <hr>
+      <h3>Interacting with Application objects</h3>
+      <h4>Create a new application within a domain</h4>
+      <pre name="code" class="java">&#x000A;IApplication as7Application = domain.createApplication("myApplication", LatestVersionOf.jbossAs().get(user));</pre>
+      <h4>Get application information</h4>
+      <pre name="code" class="java">&#x000A;for (IApplication application : domain.getApplications()) {&#x000A;    System.out.println(application.getName());&#x000A;    System.out.println("\tFramework:\t" + application.getCartridge().getName());&#x000A;    System.out.println("\tCreation:\t" + application.getCreationTime());&#x000A;    System.out.println("\tUUID:\t\t" + application.getUUID());&#x000A;    System.out.println("\tGit URL:\t" + application.getGitUrl());&#x000A;    System.out.println("\tPublic URL:\t" + application.getApplicationUrl() + "\n");&#x000A;}</pre>
+      <hr>
+      <h3>Interacting with Cartridge objects</h3>
+      <h4>Add the latest version of of the MySQL cartridge</h4>
+      <pre name="code" class="java">&#x000A;IEmbeddedCartridge mySqlCartridge = as7Application.addEmbeddableCartridge(LatestVersionOf.mySQL().get(user));</pre>
+      <h4>Get embedded cartridge information</h4>
+      <pre name="code" class="java">&#x000A;for(IEmbeddedCartridge cartridge : application.getEmbeddedCartridges()) {&#x000A;    System.out.println("\t" + cartridge.getName() + " - URL:" + cartridge.getUrl());&#x000A;}</pre>
+      <h4>Get the MySQL cartridge's connection URL</h4>
+      <pre name="code" class="java">&#x000A;String mySqlConnectionUrl = mySqlCartridge.getUrl();</pre>
+      <hr>
+      <h3>Interacting with SSHPublicKey objects</h3>
+      <h4>Add a public SSH key</h4>
+      <pre name="code" class="java">&#x000A;ISSHPublicKey key = new SSHPublicKey(SSH_PUBLIC_KEY);&#x000A;IOpenShiftSSHKey addedKey = user.getSSHKeyByPublicKey(key.getPublicKey());&#x000A;if (addedKey == null) {&#x000A;    user.putSSHKey(String.valueOf(System.currentTimeMillis()), key);&#x000A;}</pre>
+      <hr>
+      <p></p>
+      Special thanks to the following articles for supplying some of the above sample code:<br/>
+      <p>
+        <a href="https://community.jboss.org/wiki/Enable-openshift-ciFullExampleUsingOpenshift-java-client" target="_blank">enable-openshift-ci: full example using openshift-java-client</a>
+      </p>
+      <p>
+        <a href="http://planet.jboss.org/post/show_domain_info_openshift_java_client_in_a_nutshell" target="_blank">show-domain-info: openshift-java-client in a nutshell</a>
+      </p>
+    </div>
+    <div class="container">
+      <hr>
+      <footer>
+        <a href="../getstarted">Get Started</a>
+        |
+        <a href="../documentation" target="_blank">Documentation</a>
+        |
+        <a href="../samplecode">Sample Code</a>
+        |
+        <a href="../gethelp">Get Help</a>
+        |
+        <a href="https://github.com/openshift/openshift-java-client" target="_blank">Source Code</a>
+        |
+        <a href="../joinus">Join Us</a>
+        <p class="copyright">Copyright &copy; 2011 Red Hat, Inc.
+        Distributed under license by Red Hat, Inc. All rights reserved.<br />
+        This program is made available under the terms of the
+        Eclipse Public License v1.0 which accompanies <a href="https://github.com/openshift/openshift-java-client" target="_blank">this distribution</a>,
+        and is available <a href="http://www.eclipse.org/legal/epl-v10.html" target="_blank">here</a> to view online.</p>
+      </footer>
+    </div>
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/alignbuttons.js"></script>
+    <script src="../js/googleanalytics.js"></script>
+    <script>
+      $(function(){
+        $(".samplecode").addClass("current");
+      });
+    </script>
+  </body>
+</html>

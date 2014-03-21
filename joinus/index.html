@@ -1,173 +1,198 @@
----
-layout: default
-title: Join Us
-description: Learn how to setup your favorite IDE, install the Maven dependencies, run the tests, and build the library. Also included are tips on indentation, merging your changes in git, squashing commits, and sending pull requests.
----
-<h1>Join Us</h1>
-<h3>Why Should I Help?</h3>
-<p>You're already reading this page so we can assume that you are a.) using this library for something and b.) interested in contributing somehow.  Great!</p>
-<p>Open Source projects like this one can't survive without you, the user.  We love working on this project, and absolutely want to provide every update and fix that you, our users, want.  But we are a small team and can use all the help we can get.</p>
-<p>Even if you don't have the time to hack away on this project, there are lots of things you can do to help.  Please read through the list in the next section and I am sure you can find something that you have the time to help with.</p>
-<h3>Ok, You Convinced Me.  How Can I Help?</h3>
-<p>Great, glad you made it to this section.  There are lots of ways that you can help:</p>
-<ul>
-    <li>Spread the word about the OpenShift Java Client library.  If you have friends or co-workers who are interested in both Java and OpenShift, and looking for an Open Source project to work on, this could be a great match!</li>
-    <li>Use the library and file Bug Reports on the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a></li>
-    <li>Think up great new ideas for this library, and create a Feature Request on the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a></li>
-    <li>Help keep this website, and the documenation for the OpenShift Java Client up to date by fixing spelling/grammatical errors, documenting methods, or adding code samples.  Just for <a href="https://github.com/openshift/openshift-java-client.git" target="_blank">this repository</a> on github and checkout the gh-pages branch.  It uses Jekyll and is written in HTML/CSS using Bootstrap.</li>
-    <li>Review the list of Feature Requests and Bug Reports on the JIRA Issue Tracker and see if there is anything that you would like to work on.  Make sure that you sign up for an account on the <a href="https://community.jboss.org" target="_blank">JBoss Community Site</a> so that you can take ownership of issues and comment on them.</li>
-</ul>
-<p>If you have any other ideas of how you can contribute feel free to run them by us using the contact information on the <a href="../gethelp">Get Help</a> page.</p>
-
-<h3>Project Best Practices</h3>
-
-<strong>Communication</strong>
-<p>Communication is the key to keeping any good project rolling in the right direction.  Anything that is being worked on, Bugs, Feature Requests, Documenation efforts, are all tracked in the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a>.  This makes sure that everyone is on the same page and that there are no duplication of efforts.</p>
-<p>If you want to work on an existing Bug or Feature request, please check the JIRA issue for it and make sure that no one else has already claimed it.  Also comment letting everyone know that you want to work on it and ask that the issue be assigned to you (or assign it to yourself if you have the correct permissions).</p>
-<p>If you would like to work on an Bug or Enhancement that you have come up with, please log it in the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a> and get some feedback first.  This make sure that no one else is working on the issue without coordinating on it, and that the issue can be properly tracked and prioritized within the project.</p>
-<p>If you have any questions at all please don't hesitate to ask them on the JIRA issue, or using any of the methods listed on the <a href="../gethelp">Get Help</a> page.  We want to make it as easy as possible to help with the project and also keep the project moving in the right direction.</p>
-
-<strong>Javadoc</strong>
-<p>We are strong proponents of well documented code and use <a href="http://www.oracle.com/technetwork/java/javase/documentation/index-jsp-135444.html" target="_blank">Javadoc</a> extensively.  The documentation section of this website is built by running the Javadoc tool against this code using the command <code>mvn javadoc:javadoc</code>.  Please document any new classes or methods, and make sure to update the comments for any existing code that you update.</p>
-
-<h3>Getting The Code and git Best Practices</h3>
-<ol>
-    <li>Create an account on github if you don't already have one at <a href="https://github.com" target="_blank">github.com</a>.</li>
-    <li>Fork the <a href="https://github.com/openshift/openshift-java-client" target="_blank">OpenShift java Client</a> project to your github account.</li>
-    <li>Clone your newly forked repository into your local workspace
-<pre name="code" class="java:nocontrols">
-    User$ git clone git@github.com:[your user]/openshift-java-client.git
-    Cloning into 'openshift-java-client'...
-    remote: Reusing existing pack: 4745, done.
-    remote: Total 4745 (delta 0), reused 0 (delta 0)
-    Receiving objects: 100% (4745/4745), 1.92 MiB | 1.52 MiB/s, done.
-    Resolving deltas: 100% (1475/1475), done.
-    Checking connectivity... done
-</pre>
-    </li>
-    <li>Add a remote ref to upstream for pulling future updates
-<pre name="code" class="java:nocontrols">
-    git remote add upstream https://github.com/openshift/openshift-java-client.git
-</pre>
-    </li>
-    <li>As a precaution, disable merge commits to your master branch
-<pre name="code" class="java:nocontrols">
-    git config branch.master.mergeoptions --ff-only
-</pre>
-    </li>
-    <li>To pull later updates from the upstream
-<pre name="code" class="java:nocontrols">
-    git pull --rebase upstream master
-</pre>
-        (--rebase will automatically move your local commits, if you have any, on top of the latest branch you pull from, you can leave it off if you do not).
-
-  Please note that --rebase is very important if you do have commits. What happens is that when git pull can't fast forward, it does a merge commit, and a merge commit puts the sucked in changes ON TOP of yours whereas a rebase puts them BELOW yours. In other words a merge commit makes the history a graph, and we prefer a cleaner, easier to follow linear history (hence the rebasing). Further once you do a merge commit it will be difficult to rebase the history before that commit (say you want to combine two commits to one later) as described in point 13. Luckily the option set in step 5 will prevent this from happening.
-    </li>
-    <li>Push the pulled updates to your fork of openshift-java-client on github
-<pre name="code" class="java:nocontrols">
-    git push
-</pre>
-    </li>
-    <li>Make sure there is a JIRA logged for your Bug Fix or Feature Request that you are working on <a href="https://issues.jboss.org/browse/OSJC" target="_blank">here</a>.</li>
-    <li>Create a simple topic branch to isolate that work (just a recommendation)
-<pre name="code" class="java:nocontrols">
-    git checkout -b JIRA_ISSUE_NUMBER
-</pre>
-    </li>
-    <li>Make the changes and commit one or more times (Don't forget to push)
-<pre name="code" class="java:nocontrols">
-    git commit -m 'OSJC-XXXX Making this awesome new feature'
-    git commit -m 'OSJC-YYYY Fixing this really bad bug'
-    git push origin JIRA_ISSUE_NUMBER
-</pre>
-    </li>
-    <li>Rebase your branch against the latest master (applies your patches on top of master)
-<pre name="code" class="java:nocontrols">
-    git fetch upstream
-    git rebase -i upstream/master
-    # if you have conflicts fix them and rerun rebase
-    # The -f, forces the push, alters history, see note below
-    git push -f origin JIRA_ISSUE_NUMBER
-</pre>
-        The -i triggers an interactive update which also allows you to combine commits, alter commit messages etc. It's a good idea to make the commit log very nice for external consumption. Note that this alters history, which while great for making a clean patch, is unfriendly to anyone who has forked your branch. Therefore you want to make sure that you either work in a branch that you don't share, or if you do share it, tell them you are about to revise the branch history (and thus, they will then need to rebase on top of your branch once you push it out).
-    </li>
-    <li>Get your changes merged into upstream
-    <ol>
-        <li>Make sure your repo is in sync with other unrelated changes in upstream before requesting your changes be merged into upstream by repeating  step 11.</li>
-        <li>Send a github pull request, by clicking the pull request link while in your repo's fork</li>
-        <li>As part of the review you may see an automated test run comment on your request. Currently this link can only be viewed by Red Hat employees, but if you request a copy we can send you one. In the future we hope to make this public</li>
-        <li>After review a maintainer will merge your patch, update/resolve issues by request, and reply when complete</li>
-        <li>Don't forget to switch back to master and pull the updates</li>
-        <pre name="code" class="java:nocontrols">
-        git checkout master
-        git pull --ff-only upstream master
-        </pre>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Join Us | OpenShift Java Client</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="description">
+    <link href="../images/favicon.png" rel="shortcut icon">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet">
+    <link href="../css/main.css" rel="stylesheet">
+    <link href="../css/topnav.css" rel="stylesheet">
+    <link href="../css/SyntaxHighlighter.css" rel="stylesheet">
+    <!-- IE 6-8 support of HTML 5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.js"></script>
+      <script src="../js/respond.min.js"></script>
+      <script src="../js/prism.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="../">OpenShift Java Client</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <a class="getstarted" href="../getstarted">Get Started</a>
+            </li>
+            <li>
+              <a href="../documentation" target="_blank">Documentation</a>
+            </li>
+            <li>
+              <a class="samplecode" href="../samplecode">Sample Code</a>
+            </li>
+            <li>
+              <a class="gethelp" href="../gethelp">Get Help</a>
+            </li>
+            <li>
+              <a href="https://github.com/openshift/openshift-java-client" target="_blank">Source Code</a>
+            </li>
+            <li>
+              <a class="joinus" href="../joinus">Join Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h1>Join Us</h1>
+      <h3>Why Should I Help?</h3>
+      <p>You're already reading this page so we can assume that you are a.) using this library for something and b.) interested in contributing somehow.  Great!</p>
+      <p>Open Source projects like this one can't survive without you, the user.  We love working on this project, and absolutely want to provide every update and fix that you, our users, want.  But we are a small team and can use all the help we can get.</p>
+      <p>Even if you don't have the time to hack away on this project, there are lots of things you can do to help.  Please read through the list in the next section and I am sure you can find something that you have the time to help with.</p>
+      <h3>Ok, You Convinced Me.  How Can I Help?</h3>
+      <p>Great, glad you made it to this section.  There are lots of ways that you can help:</p>
+      <ul>
+        <li>Spread the word about the OpenShift Java Client library.  If you have friends or co-workers who are interested in both Java and OpenShift, and looking for an Open Source project to work on, this could be a great match!</li>
+        <li>Use the library and file Bug Reports on the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a></li>
+        <li>Think up great new ideas for this library, and create a Feature Request on the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a></li>
+        <li>Help keep this website, and the documenation for the OpenShift Java Client up to date by fixing spelling/grammatical errors, documenting methods, or adding code samples.  Just for <a href="https://github.com/openshift/openshift-java-client.git" target="_blank">this repository</a> on github and checkout the gh-pages branch.  It uses Jekyll and is written in HTML/CSS using Bootstrap.</li>
+        <li>Review the list of Feature Requests and Bug Reports on the JIRA Issue Tracker and see if there is anything that you would like to work on.  Make sure that you sign up for an account on the <a href="https://community.jboss.org" target="_blank">JBoss Community Site</a> so that you can take ownership of issues and comment on them.</li>
+      </ul>
+      <p>If you have any other ideas of how you can contribute feel free to run them by us using the contact information on the <a href="../gethelp">Get Help</a> page.</p>
+      <h3>Project Best Practices</h3>
+      <strong>Communication</strong>
+      <p>Communication is the key to keeping any good project rolling in the right direction.  Anything that is being worked on, Bugs, Feature Requests, Documenation efforts, are all tracked in the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a>.  This makes sure that everyone is on the same page and that there are no duplication of efforts.</p>
+      <p>If you want to work on an existing Bug or Feature request, please check the JIRA issue for it and make sure that no one else has already claimed it.  Also comment letting everyone know that you want to work on it and ask that the issue be assigned to you (or assign it to yourself if you have the correct permissions).</p>
+      <p>If you would like to work on an Bug or Enhancement that you have come up with, please log it in the <a href="https://issues.jboss.org/browse/OSJC" target="_blank">JIRA Issue Tracker</a> and get some feedback first.  This make sure that no one else is working on the issue without coordinating on it, and that the issue can be properly tracked and prioritized within the project.</p>
+      <p>If you have any questions at all please don't hesitate to ask them on the JIRA issue, or using any of the methods listed on the <a href="../gethelp">Get Help</a> page.  We want to make it as easy as possible to help with the project and also keep the project moving in the right direction.</p>
+      <strong>Javadoc</strong>
+      <p>We are strong proponents of well documented code and use <a href="http://www.oracle.com/technetwork/java/javase/documentation/index-jsp-135444.html" target="_blank">Javadoc</a> extensively.  The documentation section of this website is built by running the Javadoc tool against this code using the command <code>mvn javadoc:javadoc</code>.  Please document any new classes or methods, and make sure to update the comments for any existing code that you update.</p>
+      <h3>Getting The Code and git Best Practices</h3>
+      <ol>
+        <li>Create an account on github if you don't already have one at <a href="https://github.com" target="_blank">github.com</a>.</li>
+        <li>Fork the <a href="https://github.com/openshift/openshift-java-client" target="_blank">OpenShift java Client</a> project to your github account.</li>
+        <li>
+          Clone your newly forked repository into your local workspace
+          <pre name="code" class="java:nocontrols">&#x000A;User$ git clone git@github.com:[your user]/openshift-java-client.git&#x000A;Cloning into 'openshift-java-client'...&#x000A;remote: Reusing existing pack: 4745, done.&#x000A;remote: Total 4745 (delta 0), reused 0 (delta 0)&#x000A;Receiving objects: 100% (4745/4745), 1.92 MiB | 1.52 MiB/s, done.&#x000A;Resolving deltas: 100% (1475/1475), done.&#x000A;Checking connectivity... done</pre>
+          <li>
+            Add a remote ref to upstream for pulling future updates
+            <pre name="code" class="java:nocontrols">&#x000A;git remote add upstream https://github.com/openshift/openshift-java-client.git</pre>
+          </li>
+          <li>
+            As a precaution, disable merge commits to your master branch
+            <pre name="code" class="java:nocontrols">&#x000A;git config branch.master.mergeoptions --ff-only</pre>
+          </li>
+          <li>
+            To pull later updates from the upstream
+            <pre name="code" class="java:nocontrols">&#x000A;git pull --rebase upstream master</pre>
+            (--rebase will automatically move your local commits, if you have any, on top of the latest branch you pull from, you can leave it off if you do not).
+            
+            Please note that --rebase is very important if you do have commits. What happens is that when git pull can't fast forward, it does a merge commit, and a merge commit puts the sucked in changes ON TOP of yours whereas a rebase puts them BELOW yours. In other words a merge commit makes the history a graph, and we prefer a cleaner, easier to follow linear history (hence the rebasing). Further once you do a merge commit it will be difficult to rebase the history before that commit (say you want to combine two commits to one later) as described in point 13. Luckily the option set in step 5 will prevent this from happening.
+          </li>
+          <li>
+            Push the pulled updates to your fork of openshift-java-client on github
+            <pre name="code" class="java:nocontrols">&#x000A;git push</pre>
+          </li>
+          <li>Make sure there is a JIRA logged for your Bug Fix or Feature Request that you are working on <a href="https://issues.jboss.org/browse/OSJC" target="_blank">here</a>.</li>
+          <li>
+            Create a simple topic branch to isolate that work (just a recommendation)
+            <pre name="code" class="java:nocontrols">&#x000A;git checkout -b my_cool_feature</pre>
+          </li>
+          <li>
+            Make the changes and commit one or more times (Don't forget to push)
+            <pre name="code" class="java:nocontrols">&#x000A;git commit -m 'OSJC-XXXX Making this awesome new feature'&#x000A;git commit -m 'OSJC-YYYY Fixing this really bad bug'&#x000A;git push origin my_cool_feature</pre>
+          </li>
+          <li>
+            Rebase your branch against the latest master (applies your patches on top of master)
+            <pre name="code" class="java:nocontrols">&#x000A;git fetch upstream&#x000A;git rebase -i upstream/master&#x000A;# if you have conflicts fix them and rerun rebase&#x000A;# The -f, forces the push, alters history, see note below&#x000A;git push -f origin my_cool_feature</pre>
+            The -i triggers an interactive update which also allows you to combine commits, alter commit messages etc. It's a good idea to make the commit log very nice for external consumption. Note that this alters history, which while great for making a clean patch, is unfriendly to anyone who has forked your branch. Therefore you want to make sure that you either work in a branch that you don't share, or if you do share it, tell them you are about to revise the branch history (and thus, they will then need to rebase on top of your branch once you push it out).
+          </li>
+          <li>
+            Get your changes merged into upstream
+            <ol>
+              <li>Make sure your repo is in sync with other unrelated changes in upstream before requesting your changes be merged into upstream by repeating  step 11.</li>
+              <li>Send a github pull request, by clicking the pull request link while in your repo's fork</li>
+              <li>As part of the review you may see an automated test run comment on your request. Currently this link can only be viewed by Red Hat employees, but if you request a copy we can send you one. In the future we hope to make this public</li>
+              <li>After review a maintainer will merge your patch, update/resolve issues by request, and reply when complete</li>
+              <li>
+                Don't forget to switch back to master and pull the updates
+                <pre name="code" class="java:nocontrols">&#x000A;git checkout master&#x000A;git pull --ff-only upstream master</pre>
+              </li>
+              <li>
+                To update the master branch of your github repository (otherwise you will see a message like 'Your branch is ahead of 'origin/master' by XXX commits.'
+                if you are use 'git status' on your local master branch.
+                <pre name="code" class="java:nocontrols">git push origin master</pre>
+              </li>
+            </ol>
+          </li>
         </li>
-        <li>To update the master branch of your github repository (otherwise you will see a message like 'Your branch is ahead of 'origin/master' by XXX commits.'
-        if you are use 'git status' on your local master branch.
-            <pre name="code" class="java:nocontrols">git push origin master</pre>
-    </li>
-    </ol>
-    </li>
-</ol>
-
-<h3>Submitting Pull Requests</h3>
-<p>Following these steps will help making submitting a pull request on github a breeze:
-<ol>
-    <li>We ask that you name your feature branch after the issue that you are working on such as OSJC-XXXX, this is not required, but it will help you remember what you were working on in this branch and easily reference the issue in the future.</li>
-    <li>Make sure that when you make a commit, you reference the JIRA Issue number at the beginning of your message eg <code>git commit -am "[OSJC-XXXX] fixing spacing</code>
-    </li>
-    <li>Keep commit messages under 72 characters so that github doesn't cut them off!</li>
-    <li>Update the JIRA Issue with the pull request link under the "Workflow" tab.</li>
-</ol>
-</p>
-<h3>Setting Up Your IDE</h3>
-
-<p>If you are using Eclipse or IntelliJ IDEA to work on this project, you will need to create a Maven project, or import an existing Maven project.  This will allow the IDE to download the required dependencies, build the project (so that you don't get any nasty errors), and show you the test code coverage if applicable.</p>
-
-<h3>Writing Tests</h3>
-<p>All tests must pass before a pull request will be merged.  We also require that all new code, such as Feature Requests be covered by tests.  Tests are written using the junit 4.x framework and are located in the src/test/java directory. We also use the fest assertions (https://code.google.com/p/fest/) to take advantage of more expressive verification-(assertion) statements. We have both unit tests and integration tests. The unit tests do no remoting, they use pre-recorded answers that you may find in src/test/resources/samples/. To fake server responses we use mockito and mock the http-client we're using in the openshift-java-client (HttpClientMockDirector):</p>
-<pre name="code" class="java:nocontrols">
-public HttpClientMockDirector mockGetAny(String response) throws
-    SocketTimeoutException, HttpClientException {
-    when(client.get(any(URL.class), anyInt())).thenReturn(response);
-    return this;
-}
-</pre>
-<p>The tests are all in src/test/java. We name unit tests XXXTest.java and integration tests XXXIntegrationTest.java so that one immediately knows if the test is talking to the backend or not.</p>
-
-<h3>Running the Tests</h3>
-<p>You can either run the tests using your IDE or run the <code>mvn clean verify -Pintegration-tests</code> command in your terminal inside of the project directory that you cloned with git.  The integration tests take quite awhile to run so be patient.</p>
-
-<h3>Building the Library</h3>
-<p>To build the library, run the <code>mvn clean package</code> command in your terminal inside of the project directory that you cloned with git. This will create a new directory called <code>target</code> that will contain all of the compiled class files along with a JAR file, and a sources.JAR file for use in your projects.</p>
-<p>You can also run the command <code>mvn clean install</code> which will install the library in your ~/.m2 directory.  You can then include the library in your project by adding the correct configuration to your pom.xml such as:</p>
-<pre name="code" class="xml:nocontrols">
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.openshift&lt;/groupId&gt;
-            &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;
-            &lt;version&gt;2.5.1-SNAPSHOT&lt;/version&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-</pre>
-<p>When you are testing locally it is Maven convention to use version-SNAPSHOT for any non-finalized versions.  Also remember to increment the minor or major version depending on the scale of the changes you have made to the source code.</p>
-
-<h3>Updating this website and adding documentation</h3>
-<p>Just as important as adding new features and fixing bugs is helping others figure out how to use this library in their own projects.  That is where this website and the <a href="../documenation">documentation</a> section comes into play.  If you notice an error on this website or have some knowledge that would be useful to others?  Have some extra time to document a method?
-    <ul>
-        <li>Fork the repository on github</li>
-        <li>Checkout the gh-pages branch</li>
-        <li>Add your fix or new information</li>
-        <li>Commit your change locally</li>
-        <li>Push your change to your repo on github</li>
-        <li>Do a pull request</li>
-    </ul>
-    Now just sit back, relax, and give yourself a high five while we review your change and merge it.  We'll let you know if we have any questions or something in your change needs to be corrected.</p>
-
- <p>We use <a href="http://jekyllrb.com" target="_blank">Jekyll</a> for this website and the documenation.  Most of it is static HTML/CSS with Jekyll handling the templates (header, footer, navigation, etc).</p>
-
-<h3>Thanks</h3>
-
-A special thanks to the WildFly team for putting together <a href="https://community.jboss.org/wiki/HackingOnWildFly" target="_blank">this page</a> which was the inspiration for the git tips listed here.
-
+      </ol>
+      <h3>Setting Up Your IDE</h3>
+      <p>If you are using Eclipse or IntelliJ IDEA to work on this project, you will need to create a Maven project, or import an existing Maven project.  This will allow the IDE to download the required dependencies, build the project (so that you don't get any nasty errors), and show you the test code coverage if applicable.</p>
+      <h3>Writing Tests</h3>
+      <p>All tests must pass before a pull request will be merged.  We also require that all new code, such as Feature Requests be covered by tests.  Tests are written using the junit 4.x framework and are located in the src/test/java directory. We also use the fest assertions (https://code.google.com/p/fest/) to take advantage of more expressive verification-(assertion) statements. We have both unit tests and integration tests. The unit tests do no remoting, they use pre-recorded answers that you may find in src/test/resources/samples/. To fake server responses we use mockito and mock the http-client we're using in the openshift-java-client (HttpClientMockDirector):</p>
+      <pre name="code" class="java:nocontrols">&#x000A;public HttpClientMockDirector mockGetAny(String response) throws&#x000A;    SocketTimeoutException, HttpClientException {&#x000A;    when(client.get(any(URL.class), anyInt())).thenReturn(response);&#x000A;    return this;&#x000A;}</pre>
+      <p>The tests are all in src/test/java. We name unit tests XXXTest.java and integration tests XXXIntegrationTest.java so that one immediately knows if the test is talking to the backend or not.</p>
+      <h3>Running the Tests</h3>
+      <p>You can either run the tests using your IDE or run the <code>mvn clean verify -Pintegration-tests</code> command in your terminal inside of the project directory that you cloned with git.  The integration tests take quite awhile to run so be patient.</p>
+      <p>You can also run <code>mvn clean verify -DshowTestTimes</code> or <code>mvn clean verify -Pintegration-tests -DshowTestTimes</code> to show the name of each test and how many milliseconds it took to run.</p>
+      <h3>Building the Library</h3>
+      <p>To build the library, run the <code>mvn clean package</code> command in your terminal inside of the project directory that you cloned with git. This will create a new directory called <code>target</code> that will contain all of the compiled class files along with a JAR file, and a sources.JAR file for use in your projects.</p>
+      <p>You can also run the command <code>mvn clean install</code> which will install the library in your ~/.m2 directory.  You can then include the library in your project by adding the correct configuration to your pom.xml such as:</p>
+      <pre name="code" class="xml:nocontrols">&#x000A;&lt;dependencies&gt;&#x000A;    &lt;dependency&gt;&#x000A;        &lt;groupId&gt;com.openshift&lt;/groupId&gt;&#x000A;        &lt;artifactId&gt;openshift-java-client&lt;/artifactId&gt;&#x000A;        &lt;version&gt;2.5.1-SNAPSHOT&lt;/version&gt;&#x000A;    &lt;/dependency&gt;&#x000A;&lt;/dependencies&gt;</pre>
+      <p>When you are testing locally it is Maven convention to use version-SNAPSHOT for any non-finalized versions.  Also remember to increment the minor or major version depending on the scale of the changes you have made to the source code.</p>
+      <h3>Updating this website and adding documentation</h3>
+      <p>
+        Just as important as adding new features and fixing bugs is helping others figure out how to use this library in their own projects.  That is where this website and the <a href="../documenation">documentation</a> section comes into play.  If you notice an error on this website or have some knowledge that would be useful to others?  Have some extra time to document a method?
+        <ul>
+          <li>Fork the repository on github</li>
+          <li>Checkout the gh-pages branch</li>
+          <li>Add your fix or new information</li>
+          <li>Commit your change locally</li>
+          <li>Push your change to your repo on github</li>
+          <li>Do a pull request</li>
+        </ul>
+        Now just sit back, relax, and give yourself a high five while we review your change and merge it.  We'll let you know if we have any questions or something in your change needs to be corrected.
+      </p>
+      <p>We use <a href="http://jekyllrb.com" target="_blank">Jekyll</a> for this website and the documenation.  Most of it is static HTML/CSS with Jekyll handling the templates (header, footer, navigation, etc).</p>
+      <h3>Thanks</h3>
+      <p></p>
+      A special thanks to the WildFly team for putting together <a href="https://community.jboss.org/wiki/HackingOnWildFly" target="_blank">this page</a> which was the inspiration for the git tips listed here.
+    </div>
+    <div class="container">
+      <hr>
+      <footer>
+        <a href="../getstarted">Get Started</a>
+        |
+        <a href="../documentation" target="_blank">Documentation</a>
+        |
+        <a href="../samplecode">Sample Code</a>
+        |
+        <a href="../gethelp">Get Help</a>
+        |
+        <a href="https://github.com/openshift/openshift-java-client" target="_blank">Source Code</a>
+        |
+        <a href="../joinus">Join Us</a>
+        <p class="copyright">Copyright &copy; 2011 Red Hat, Inc.
+        Distributed under license by Red Hat, Inc. All rights reserved.<br />
+        This program is made available under the terms of the
+        Eclipse Public License v1.0 which accompanies <a href="https://github.com/openshift/openshift-java-client" target="_blank">this distribution</a>,
+        and is available <a href="http://www.eclipse.org/legal/epl-v10.html" target="_blank">here</a> to view online.</p>
+      </footer>
+    </div>
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/alignbuttons.js"></script>
+    <script src="../js/googleanalytics.js"></script>
+    <script>
+      $(function(){
+        $(".joinus").addClass("current");
+      });
+    </script>
+  </body>
+</html>
