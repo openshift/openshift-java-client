@@ -1,4 +1,4 @@
-!!!5
+!!! 5
 %html(lang="en")
   %head
     %title OpenShift Java Client
@@ -6,16 +6,16 @@
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
     %meta(name="description" content="#{page.description}")
 
-    %link(href="./images/favicon.png" rel="shortcut icon")
+    %link(href="#{site.base_url}/images/favicon.png" rel="shortcut icon")
 
-    %link(href="./css/bootstrap.min.css" rel="stylesheet")
-    %link(href="./css/prism.css" rel="stylesheet")
-    %link(href="./css/main.css" rel="stylesheet")
+    %link(href="#{site.base_url}/css/bootstrap.min.css" rel="stylesheet")
+    %link(href="#{site.base_url}/css/prism.css" rel="stylesheet")
+    %link(href="#{site.base_url}/css/main.css" rel="stylesheet")
     / IE 6-8 support of HTML 5 elements
     /[if lt IE 9]
-      %script(src="./js/html5shiv.js")
-      %script(src="./js/respond.min.js")
-      %script(src="./js/prism.js")
+      %script(src="#{site.base_url}/js/html5shiv.js")
+      %script(src="#{site.base_url}/js/respond.min.js")
+      %script(src="#{site.base_url}/js/prism.js")
   %body
 
     ~ content
@@ -23,24 +23,24 @@
       %hr
       %footer
 
-        %a{:href=>"./getstarted",}Get Started
+        %a{:href=>"#{site.base_url}/getstarted",}Get Started
         |
-        %a{:href=>"./documentation", :target=>"_blank" }Documentation
+        %a{:href=>"#{site.base_url}/documentation", :target=>"_blank" }Documentation
         |
-        %a{:href=>"./samplecode",} Sample Code
+        %a{:href=>"#{site.base_url}/samplecode",} Sample Code
         |
-        %a{:href=>"./gethelp"} Get Help
+        %a{:href=>"#{site.base_url}/gethelp"} Get Help
         |
         %a{:href=>"https://github.com/openshift/openshift-java-client", :target=>"_blank"} Source Code
         |
-        %a{ :href=>"./joinus"} Join Us
+        %a{ :href=>"#{site.base_url}/joinus"} Join Us
         %p.copyright<
           Copyright &copy; 2011 Red Hat, Inc.
           Distributed under license by Red Hat, Inc. All rights reserved.<br />
           This program is made available under the terms of the
           Eclipse Public License v1.0 which accompanies <a href="https://github.com/openshift/openshift-java-client" target="_blank">this distribution</a>,
           and is available <a href="http://www.eclipse.org/legal/epl-v10.html" target="_blank">here</a> to view online.
-    %script(src="./js/jquery-1.10.2.min.js")
-    %script(src="./js/bootstrap.min.js")
-    %script(src="./js/alignbuttons.js")
-    %script(src="./js/googleanalytics.js")
+    %script(src="#{site.base_url}/js/jquery-1.10.2.min.js")
+    %script(src="#{site.base_url}/js/bootstrap.min.js")
+    %script(src="#{site.base_url}/js/alignbuttons.js")
+    = google_analytics_async

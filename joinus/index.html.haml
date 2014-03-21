@@ -147,7 +147,14 @@ page_name: joinus
 %h3 Running the Tests
 %p You can either run the tests using your IDE or run the <code>mvn clean verify -Pintegration-tests</code> command in your terminal inside of the project directory that you cloned with git.  The integration tests take quite awhile to run so be patient.
 %p You can also run <code>mvn clean verify -DshowTestTimes</code> or <code>mvn clean verify -Pintegration-tests -DshowTestTimes</code> to show the name of each test and how many milliseconds it took to run.
+%p
+  If you would like to single out a specific test to run (maybe one you are currently working on writing) you can do the following:
+  %ul
+    %li Running a single test class: <code>mvn -Dtest=APIResourceTest test</code>
+    %li Running a single method in a test class: <code>mvn -Dtest=APIResourceTest#shouldLoadListOfStandaloneCartridges test</code>
+    %li You can also combine this with the -DshowTestTimes like this: <code>mvn -Dtest=APIResourceTest test -DshowTestTimes</code>
 
+%p You can read more about running specific tests <a href="http://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html" target="_blank">here</a>.
 %h3 Building the Library
 %p To build the library, run the <code>mvn clean package</code> command in your terminal inside of the project directory that you cloned with git. This will create a new directory called <code>target</code> that will contain all of the compiled class files along with a JAR file, and a sources.JAR file for use in your projects.
 %p You can also run the command <code>mvn clean install</code> which will install the library in your ~/.m2 directory.  You can then include the library in your project by adding the correct configuration to your pom.xml such as:
@@ -168,7 +175,8 @@ page_name: joinus
   Just as important as adding new features and fixing bugs is helping others figure out how to use this library in their own projects.  That is where this website and the <a href="../documenation">documentation</a> section comes into play.  If you notice an error on this website or have some knowledge that would be useful to others?  Have some extra time to document a method?
   %ul
     %li Fork the repository on github
-    %li Checkout the gh-pages branch
+    %li Checkout the gh-pages-awestruct branch
+    %li Read the README.md for that branch
     %li Add your fix or new information
     %li Commit your change locally
     %li Push your change to your repo on github
@@ -176,7 +184,7 @@ page_name: joinus
     
   Now just sit back, relax, and give yourself a high five while we review your change and merge it.  We'll let you know if we have any questions or something in your change needs to be corrected.
 
-%p We use <a href="http://jekyllrb.com" target="_blank">Jekyll</a> for this website and the documenation.  Most of it is static HTML/CSS with Jekyll handling the templates (header, footer, navigation, etc).
+%p We use <a href="http://http://awestruct.org/" target="_blank">Awestruct</a> for this website and the documentation.  Most of it is static HTML/CSS with Awestruct handling the templates (header, footer, navigation, etc).
 
 %h3 Thanks
 %p

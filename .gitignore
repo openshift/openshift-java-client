@@ -8,3 +8,4 @@ bin
 _site
 _tmp
 .sass-cache
+.awestruct
