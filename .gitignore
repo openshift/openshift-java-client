@@ -5,3 +5,6 @@ target
 bin
 .metadata
 **/integrationTest.properties
+_site
+_tmp
+.sass-cache
