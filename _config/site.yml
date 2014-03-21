@@ -1,0 +1,17 @@
+name: Project Name
+title: Baked with Awestruct
+org: Organization
+base_url: ''
+profiles:
+  production:
+    base_url: http://openshift.github.io/openshift-java-client
+    deploy:
+      repository: git@github.com:openshift/openshift-java-client.git
+      host: github_pages
+      branch: gh-pages
+  corey:
+    base_url: http://developercorey.github.io/openshift-java-client
+    deploy:
+      repository: git@github.com:developercorey/openshift-java-client.git
+      host: github_pages
+      branch: gh-pages
