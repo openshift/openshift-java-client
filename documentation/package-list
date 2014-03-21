@@ -1,0 +1,12 @@
+com.openshift.client
+com.openshift.client.cartridge
+com.openshift.client.cartridge.selector
+com.openshift.client.configuration
+com.openshift.client.utils
+com.openshift.internal.client
+com.openshift.internal.client.cartridge
+com.openshift.internal.client.httpclient
+com.openshift.internal.client.httpclient.request
+com.openshift.internal.client.response
+com.openshift.internal.client.ssh
+com.openshift.internal.client.utils

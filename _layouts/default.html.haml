@@ -1,0 +1,69 @@
+!!!5
+%html(lang="en")
+  %head
+    %title #{page.title} | OpenShift Java Client
+    %meta(charset="utf-8")
+    %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    %meta(name="description" content="#{page.description}")
+
+    %link(href="../images/favicon.png" rel="shortcut icon")
+
+    %link(href="../css/bootstrap.min.css" rel="stylesheet")
+    %link(href="../css/prism.css" rel="stylesheet")
+    %link(href="../css/main.css" rel="stylesheet")
+    %link(href="../css/topnav.css" rel="stylesheet")
+    %link(href="../css/SyntaxHighlighter.css" rel="stylesheet")
+    / IE 6-8 support of HTML 5 elements
+    /[if lt IE 9]
+      %script(src="../js/html5shiv.js")
+      %script(src="../js/respond.min.js")
+      %script(src="../js/prism.js")
+  %body
+    .navbar.navbar-inverse.navbar-fixed-top{:role=>"navigation"}
+      .container
+        .navbar-header
+          %a.navbar-brand{:href=>"../"} OpenShift Java Client
+        .collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li
+              %a.getstarted{:href=>"../getstarted" } Get Started
+            %li
+              %a{:href=>"../documentation", :target=>"_blank"} Documentation
+            %li
+              %a.samplecode{:href=>"../samplecode"} Sample Code
+            %li
+              %a.gethelp{:href=>"../gethelp" } Get Help
+            %li
+              %a{:href=>"https://github.com/openshift/openshift-java-client", :target=>"_blank"} Source Code
+            %li
+              %a.joinus{:href=>"../joinus"} Join Us
+    .container
+      ~ content
+    .container
+      %hr
+      %footer
+        %a{:href=>"../getstarted"} Get Started
+        |
+        %a{:href=>"../documentation", :target=>"_blank" }Documentation
+        |
+        %a{:href=>"../samplecode"} Sample Code
+        |
+        %a{:href=>"../gethelp"} Get Help
+        |
+        %a{:href=>"https://github.com/openshift/openshift-java-client", :target=>"_blank"} Source Code
+        |
+        %a{ :href=>"../joinus"} Join Us
+        %p.copyright<
+          Copyright &copy; 2011 Red Hat, Inc.
+          Distributed under license by Red Hat, Inc. All rights reserved.<br />
+          This program is made available under the terms of the
+          Eclipse Public License v1.0 which accompanies <a href="https://github.com/openshift/openshift-java-client" target="_blank">this distribution</a>,
+          and is available <a href="http://www.eclipse.org/legal/epl-v10.html" target="_blank">here</a> to view online.
+    %script(src="../js/jquery-1.10.2.min.js")
+    %script(src="../js/bootstrap.min.js")
+    %script(src="../js/alignbuttons.js")
+    %script(src="../js/googleanalytics.js")
+    :javascript
+      $(function(){
+        $(".#{page.page_name}").addClass("current");
+      });
