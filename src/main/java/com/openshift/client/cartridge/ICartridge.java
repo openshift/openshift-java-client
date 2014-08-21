@@ -70,6 +70,7 @@ public interface ICartridge {
 	 */
 	public URL getUrl();
 	
+	
 	public CartridgeType getType();
 
 	/**

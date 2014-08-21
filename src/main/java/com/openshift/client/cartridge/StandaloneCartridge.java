@@ -14,6 +14,7 @@ import java.net.URL;
 
 import com.openshift.internal.client.APIResource;
 import com.openshift.internal.client.ApplicationResource;
+import com.openshift.client.IApplication;
 import com.openshift.internal.client.CartridgeType;
 import com.openshift.internal.client.cartridge.BaseCartridge;
 
@@ -59,5 +60,37 @@ public class StandaloneCartridge extends BaseCartridge implements IStandaloneCar
 	@Override
 	public CartridgeType getType() {
 		return CartridgeType.STANDALONE;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof IStandaloneCartridge)) {
+			return false;
+		}
+		IStandaloneCartridge other = (IStandaloneCartridge) obj;
+		// shortcut: downloadable cartridges get their name only when
+		// they're deployed thus should equal on url only
+		if (isDownloadable()) {
+			if (other.isDownloadable()) {
+				if (getUrl() == null) {
+					return other.getUrl() == null;
+				}
+				return getUrl().equals(other.getUrl());
+			}
+		}
+		if (getName() == null) {
+			if (other.getName() != null) {
+				return false;
+			}
+		} else if (!getName().equals(other.getName())) {
+			return false;
+		}
+		return true;
 	}
 }

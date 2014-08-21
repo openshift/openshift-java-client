@@ -61,6 +61,11 @@ public class GearGroupAssert implements AssertExtension {
 		return this;
 	}
 	
+	public GearGroupAssert hasAdditionalStorageSize(int size){
+		assertThat(gearGroup.getAdditionalStorage()).isEqualTo(size);
+		return this;
+	}
+	
 	public GearAssert assertGear(String id) {
 		assertNotNull(id);
 

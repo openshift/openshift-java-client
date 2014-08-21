@@ -22,11 +22,13 @@ import com.openshift.client.IApplication;
 import com.openshift.client.IDomain;
 import com.openshift.client.IUser;
 import com.openshift.client.OpenShiftException;
+import com.openshift.client.cartridge.IDeployedStandaloneCartridge;
 import com.openshift.client.cartridge.IStandaloneCartridge;
 import com.openshift.client.utils.ApplicationTestUtils;
 import com.openshift.client.utils.DomainTestUtils;
 import com.openshift.client.utils.StandaloneCartridgeAssert;
 import com.openshift.client.utils.TestConnectionBuilder;
+import com.openshift.client.utils.TestConnectionFactory;
 
 /**
  * @author André Dietisheim
@@ -54,6 +56,24 @@ public class StandaloneCartridgesIntegrationTest extends TestTimer {
 		// verification
 		assertThat(cartridge).isNotNull();
 		assertThat(cartridge.getName()).isNotEmpty();
+		IStandaloneCartridge availableCartridge = getAvailableCartridge(cartridge.getName());
+		new StandaloneCartridgeAssert(cartridge).equals(availableCartridge);
+	}
+	
+	@Test
+	public void shouldSetGearStorage() throws OpenShiftException, URISyntaxException, IOException {
+		// precondition
+
+		// operation
+		IDeployedStandaloneCartridge cartridge = application.getStandaloneCartridge();
+		assertThat(cartridge).isNotNull();
+		cartridge.setAdditionalGearStorage(11);
+		
+		// verification
+		// reload user info to ensure the storage info isnt cached
+		IUser refreshedUser = new TestConnectionFactory().getConnection().getUser();
+		refreshedUser.getDefaultDomain().getApplicationByName(application.getName());
+
 		IStandaloneCartridge availableCartridge = getAvailableCartridge(cartridge.getName());
 		new StandaloneCartridgeAssert(cartridge).equals(availableCartridge);
 	}

@@ -43,4 +43,12 @@ public interface IGearGroup {
 	 * @return the gears
 	 */
 	public Collection<ICartridge> getCartridges();
+	
+	/**
+	 * Returns the additional storage configured for this gear group in gigabytes
+	 *
+	 * @return the additional storage value
+	 */
+	public int getAdditionalStorage();
+	
 }
