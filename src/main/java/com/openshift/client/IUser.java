@@ -42,6 +42,10 @@ public interface IUser extends IOpenShiftResource {
 
 	public List<IOpenShiftSSHKey> getSSHKeys() throws OpenShiftException;
 
+	public IAuthorization getAuthorization() throws OpenShiftException;
+
+	public IAuthorization createAuthorization(String note, String scopes) throws OpenShiftException;
+
 	/**
 	 * Deprecated, use {@link #addSSHKey(String, ISSHPublicKey)}
 	 * 

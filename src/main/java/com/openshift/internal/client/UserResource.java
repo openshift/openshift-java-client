@@ -23,6 +23,7 @@ import com.openshift.client.OpenShiftException;
 import com.openshift.client.OpenShiftSSHKeyException;
 import com.openshift.client.OpenShiftUnknonwSSHKeyTypeException;
 import com.openshift.client.SSHKeyType;
+import com.openshift.client.IAuthorization;
 import com.openshift.internal.client.httpclient.request.StringParameter;
 import com.openshift.internal.client.response.KeyResourceDTO;
 import com.openshift.internal.client.response.UserResourceDTO;
@@ -116,6 +117,16 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 		
 		return api.getDomain(id) != null;
 	}
+
+    @Override
+    public IAuthorization createAuthorization(String note, String scopes)  throws OpenShiftException {
+        return api.createAuthorization(note, scopes);
+    }
+
+    @Override
+    public IAuthorization getAuthorization() throws OpenShiftException {
+        return api.getAuthorization();
+    }
 
 	@Override
 	public void refresh() throws OpenShiftException {
