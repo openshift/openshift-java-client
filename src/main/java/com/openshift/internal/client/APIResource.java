@@ -66,6 +66,15 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 	private Map<String, IQuickstart> quickstartsByName;
 	private final ExecutorService executorService;
 
+    protected APIResource(final String token, final IRestService service,
+                          final Map<String, Link> links) {
+        super(service, links, null);
+        this.login = null;
+        this.password = null;
+        this.token = token;
+        this.executorService = Executors.newFixedThreadPool(10);
+    }
+
 	protected APIResource(final String login, final String password, final String token, final IRestService service,
 			final Map<String, Link> links) {
 		super(service, links, null);
