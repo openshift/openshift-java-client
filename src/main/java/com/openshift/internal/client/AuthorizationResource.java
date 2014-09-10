@@ -62,12 +62,9 @@ public class AuthorizationResource extends AbstractOpenShiftResource implements 
                 + "]";
     }
 
-    public void destroy() {
-        destroy(false);
-    }
 
-    public void destroy(boolean force) throws OpenShiftException {
-        new DeleteAuthorizationRequest().execute(force);
+    public void destroy() throws OpenShiftException {
+        new DeleteAuthorizationRequest().execute();
         this.id=null;
         this.note=null;
         this.scopes=null;
