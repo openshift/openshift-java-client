@@ -73,5 +73,25 @@ public class AuthorizationTest extends TestTimer {
         assertNull(authorization.getToken());
     }
 
+    @Test
+    public void shouldCreateAuthorizationWithExpiration() throws Exception {
+
+        IAuthorization authorization = user.createAuthorization("my note", "session read", 600);
+        assertNotNull(authorization.getToken());
+        assertEquals(authorization.getScopes(), "session read");
+
+        IOpenShiftConnection connection =
+                new TestConnectionFactory().getAuthTokenConnection(authorization.getToken());
+
+        authorization = connection.getUser().getAuthorization();
+
+        assertEquals(authorization.getScopes(), "session read");
+        assertEquals(authorization.getNote(), "my note");
+
+        authorization.destroy();
+
+        assertNull(authorization.getToken());
+    }
+
 
 }

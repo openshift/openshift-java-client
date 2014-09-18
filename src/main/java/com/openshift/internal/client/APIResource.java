@@ -129,6 +129,7 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 		}
 		return this.user;
 	}
+    
     public IAuthorization createAuthorization(String note, String scopes) throws OpenShiftException {
         if (authorization != null) {
             authorization.destroy();
@@ -136,6 +137,17 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
         this.authorization = new AuthorizationResource(this, new AddAuthorizationRequest().execute(
             new StringParameter(IOpenShiftJsonConstants.PROPERTY_NOTE, note),
             new StringParameter(IOpenShiftJsonConstants.PROPERTY_SCOPES, scopes)));
+        return this.authorization;
+    }
+    
+    public IAuthorization createAuthorization(String note, String scopes, int expiresIn) throws OpenShiftException {
+        if (authorization != null) {
+            authorization.destroy();
+        }
+        this.authorization = new AuthorizationResource(this, new AddAuthorizationRequest().execute(
+            new StringParameter(IOpenShiftJsonConstants.PROPERTY_NOTE, note),
+            new StringParameter(IOpenShiftJsonConstants.PROPERTY_SCOPES, scopes),
+            new StringParameter(IOpenShiftJsonConstants.PROPERTY_EXPIRES_IN, Integer.toString(expiresIn))));
         return this.authorization;
     }
 

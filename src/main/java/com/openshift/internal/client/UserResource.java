@@ -122,6 +122,11 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
     public IAuthorization createAuthorization(String note, String scopes)  throws OpenShiftException {
         return api.createAuthorization(note, scopes);
     }
+    
+    @Override
+    public IAuthorization createAuthorization(String note, String scopes, int expiresIn) throws OpenShiftException {
+        return api.createAuthorization(note, scopes, expiresIn); 
+    }
 
     @Override
     public IAuthorization getAuthorization() throws OpenShiftException {
