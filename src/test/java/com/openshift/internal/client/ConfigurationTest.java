@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.openshift.internal.client;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 import com.openshift.client.OpenShiftException;
+import com.openshift.client.configuration.AbstractOpenshiftConfiguration.ConfigurationOptions;
 import com.openshift.client.configuration.DefaultConfiguration;
 import com.openshift.client.configuration.IOpenShiftConfiguration;
 import com.openshift.client.configuration.SystemConfiguration;
@@ -257,5 +259,43 @@ public class ConfigurationTest extends TestTimer {
 		assertNotNull(configuration.getLibraServer());
 		assertTrue(configuration.getLibraServer().contains(DefaultConfiguration.LIBRA_SERVER));
 		assertNull(configuration.getRhlogin());
+	}
+	
+	@Test
+	public void disableBadSSLCiphersShouldDefaultToNo() throws OpenShiftException, IOException {
+		// pre-condition
+		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
+
+			@Override
+			protected void init(Properties properties) {
+				properties.put(KEY_DISABLE_BAD_SSL_CIPHERS, "bingobongo");
+			}
+
+		};
+		
+		// operation
+		ConfigurationOptions option = systemConfiguration.getDisableBadSSLCiphers();
+		
+		// verification
+		assertThat(option).isEqualTo(ConfigurationOptions.NO);
+	}
+
+	@Test
+	public void disableBadSSLCiphersShouldbeYes() throws OpenShiftException, IOException {
+		// pre-condition
+		SystemConfiguration systemConfiguration = new SystemConfigurationFake(new DefaultConfiguration()) {
+
+			@Override
+			protected void init(Properties properties) {
+				properties.put(KEY_DISABLE_BAD_SSL_CIPHERS, "\"yes\"");
+			}
+
+		};
+		
+		// operation
+		ConfigurationOptions option = systemConfiguration.getDisableBadSSLCiphers();
+		
+		// verification
+		assertThat(option).isEqualTo(ConfigurationOptions.YES);
 	}
 }

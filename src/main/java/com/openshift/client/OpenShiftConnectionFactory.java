@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2012 Red Hat, Inc. 
+ * Copyright (c) 2012-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -14,8 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.openshift.client.IHttpClient.ISSLCertificateCallback;
+import com.openshift.client.configuration.AbstractOpenshiftConfiguration.ConfigurationOptions;
 import com.openshift.client.configuration.IOpenShiftConfiguration;
 import com.openshift.client.configuration.OpenShiftConfiguration;
+import com.openshift.client.utils.SSLUtils;
 import com.openshift.internal.client.AbstractOpenShiftConnectionFactory;
 import com.openshift.internal.client.IRestService;
 import com.openshift.internal.client.RestService;
@@ -33,7 +35,7 @@ import com.openshift.internal.client.utils.Assert;
  * 
  */
 public class OpenShiftConnectionFactory extends AbstractOpenShiftConnectionFactory {
-	private IOpenShiftConfiguration configuration = null;
+	private IOpenShiftConfiguration configuration;
 	/**
 	 * Establish a connection with the clientId along with user's password.
 	 * User's login and Server URL are retrieved from the local configuration
@@ -49,11 +51,7 @@ public class OpenShiftConnectionFactory extends AbstractOpenShiftConnectionFacto
 	 * @throws OpenShiftException
 	 */
 	public IOpenShiftConnection getConnection(final String clientId, final String password) throws OpenShiftException {
-		try {
-			configuration = new OpenShiftConfiguration();
-		} catch (IOException e) {
-			throw new OpenShiftException(e, "Failed to load OpenShift configuration file.");
-		}
+		IOpenShiftConfiguration configuration = getConfiguration();
 		return getConnection(clientId, configuration.getRhlogin(), password, configuration.getLibraServer());
 	}
 
@@ -75,12 +73,7 @@ public class OpenShiftConnectionFactory extends AbstractOpenShiftConnectionFacto
 	 */
 	public IOpenShiftConnection getConnection(final String clientId, final String username, final String password)
 			throws OpenShiftException {
-		try {
-			configuration = new OpenShiftConfiguration();
-		} catch (IOException e) {
-			throw new OpenShiftException(e, "Failed to load OpenShift configuration file.");
-		}
-		return getConnection(clientId, username, password, configuration.getLibraServer());
+		return getConnection(clientId, username, password, getConfiguration().getLibraServer());
 	}
 
 	/**
@@ -115,6 +108,23 @@ public class OpenShiftConnectionFactory extends AbstractOpenShiftConnectionFacto
 		return getConnection(clientId, username, password, null, null, serverUrl, null);
 	}
 	
+	public IOpenShiftConnection getConnection(final String clientId, final String username, final String password,
+			final String authKey, final String authIV, final String serverUrl,
+			final ISSLCertificateCallback sslCertificateCallback) throws OpenShiftException {
+		return getConnection(clientId, username, password, authKey, authIV, serverUrl, sslCertificateCallback, createCipherExclusionRegex(getConfiguration()));
+	}
+	
+	protected String createCipherExclusionRegex(IOpenShiftConfiguration configuration) {
+		if(configuration.getDisableBadSSLCiphers() == ConfigurationOptions.YES
+				|| (configuration.getDisableBadSSLCiphers() == ConfigurationOptions.AUTO) && !SSLUtils.supportsDHECipherKeysOf(1024 + 64)) {
+			// jdk < 1.8 only support DHE cipher keys <= 1024 bit
+			// https://issues.jboss.org/browse/JBIDE-18454
+			return SSLUtils.CIPHER_DHE_REGEX;
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Establish a connection with the clientId along with user's login and
 	 * password.
@@ -133,31 +143,47 @@ public class OpenShiftConnectionFactory extends AbstractOpenShiftConnectionFacto
 	 * @throws OpenShiftException
 	 */
 	public IOpenShiftConnection getConnection(final String clientId, final String username, final String password,
-		final String authKey, final String authIV, final String serverUrl,
-		final ISSLCertificateCallback sslCertificateCallback) throws OpenShiftException {
-		if (configuration == null) {
-			try {
-				configuration = new OpenShiftConfiguration();
-			} catch (IOException e) {
-				throw new OpenShiftException(e, "Failed to load OpenShift configuration file.");
-			}
-		}
+			final String authKey, final String authIV, final String serverUrl,
+			final ISSLCertificateCallback sslCertificateCallback, String exludeSSLCipherRegex)
+			throws OpenShiftException {
 
 		Assert.notNull(clientId);
 		Assert.notNull(username);
 		Assert.notNull(password);
 		Assert.notNull(serverUrl);
 
+		IHttpClient httpClient = createClient(
+				clientId, username, password, authKey, authIV, serverUrl, sslCertificateCallback, exludeSSLCipherRegex);
 		try {
-			IHttpClient httpClient =
-					new UrlConnectionHttpClientBuilder()
-						.setCredentials(username, password, authKey, authIV)
-						.setSSLCertificateCallback(sslCertificateCallback)
-						.setConfigTimeout(configuration.getTimeout())
-						.client();
 			return getConnection(clientId, username, password, serverUrl, httpClient);
 		} catch (IOException e) {
 			throw new OpenShiftException(e, "Failed to establish connection for user ''{0}}''", username);
+		}
+	}
+
+	protected IHttpClient createClient(final String clientId, final String username, final String password,
+			final String authKey, final String authIV, final String serverUrl,
+			final ISSLCertificateCallback sslCertificateCallback, String exludeSSLCipherRegex) {
+			return new UrlConnectionHttpClientBuilder()
+						.setCredentials(username, password, authKey, authIV)
+						.setSSLCertificateCallback(sslCertificateCallback)
+						.setConfigTimeout(getConfiguration().getTimeout())
+						.excludeSSLCipher(exludeSSLCipherRegex)
+						.client();
+	}
+
+	protected IOpenShiftConfiguration getConfiguration() throws OpenShiftException {
+		if (this.configuration == null) {
+			this.configuration = createConfiguration();
+		}
+		return this.configuration;
+	}
+	
+	protected IOpenShiftConfiguration createConfiguration() throws OpenShiftException {
+		try {
+			return new OpenShiftConfiguration();
+		} catch (IOException e) {
+			throw new OpenShiftException(e, "Failed to load OpenShift configuration file.");
 		}
 	}
 

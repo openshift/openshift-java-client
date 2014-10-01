@@ -19,14 +19,12 @@ import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.KeyStoreException;
 import java.security.cert.X509Certificate;
-import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -40,9 +38,7 @@ import java.util.regex.Pattern;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSession;
 
-import com.openshift.client.configuration.*;
-import com.openshift.client.fakes.*;
-import com.openshift.internal.client.TestTimer;
+import org.fest.assertions.Condition;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -52,11 +48,20 @@ import org.junit.rules.ExpectedException;
 import com.openshift.client.IHttpClient;
 import com.openshift.client.IHttpClient.ISSLCertificateCallback;
 import com.openshift.client.OpenShiftException;
+import com.openshift.client.configuration.AbstractOpenshiftConfiguration.ConfigurationOptions;
+import com.openshift.client.configuration.IOpenShiftConfiguration;
+import com.openshift.client.fakes.HttpServerFake;
+import com.openshift.client.fakes.HttpsServerFake;
+import com.openshift.client.fakes.OpenShiftConfigurationFake;
+import com.openshift.client.fakes.PayLoadReturningHttpClientFake;
+import com.openshift.client.fakes.SSLCipherOpenShiftConnectionFactoryFake;
+import com.openshift.client.fakes.WaitingHttpServerFake;
 import com.openshift.client.utils.Base64Coder;
 import com.openshift.client.utils.ExceptionCauseMatcher;
+import com.openshift.client.utils.SSLUtils;
+import com.openshift.internal.client.TestTimer;
 import com.openshift.internal.client.httpclient.request.FormUrlEncodedMediaType;
 import com.openshift.internal.client.httpclient.request.StringParameter;
-import sun.net.www.http.HttpClient;
 
 /**
  * @author Andre Dietisheim
@@ -623,6 +628,26 @@ public class HttpClientTest extends TestTimer {
 		}
 	}
 
+	@Test
+	public void shouldFilterBadSSLCiphers() throws Throwable {
+		// pre-conditions
+		// operations
+		SSLCipherOpenShiftConnectionFactoryFake factory = 
+				new SSLCipherOpenShiftConnectionFactoryFake(ConfigurationOptions.YES);
+		// verification
+		assertThat(factory.getFilteredCiphers()).satisfies(new NoDHECiphersCondition());
+	}
+	
+	@Test
+	public void shouldNotFilterBadSSLCiphers() throws Throwable {
+		// pre-conditions
+		// operations
+		SSLCipherOpenShiftConnectionFactoryFake factory = 
+				new SSLCipherOpenShiftConnectionFactoryFake(ConfigurationOptions.NO);
+		// verification
+		assertThat(factory.getSupportedCiphers()).isEqualTo(factory.getFilteredCiphers());
+	}
+	
 	private HttpServerFake startHttpServerFake(String statusLine) throws Exception {
 		int port = new Random().nextInt(9 * 1024) + 1024;
 		HttpServerFake serverFake = null;
@@ -653,16 +678,20 @@ public class HttpClientTest extends TestTimer {
 		return serverFake;
 	}
 
-	private class UserAgentClientFake extends UrlConnectionHttpClientFake {
-
-		public UserAgentClientFake(String userAgent) {
-			super(userAgent, null);
+	private static final class NoDHECiphersCondition extends Condition<Object[]> {
+		@Override
+		public boolean matches(Object[] ciphers) {
+			for (Object cipher : ciphers) {
+				if (!(cipher instanceof String)) {
+					return false;
+				}
+				// no DHE ciphers left
+				if (((String) cipher).matches(SSLUtils.CIPHER_DHE_REGEX)) {
+					return false;
+				}
+			}
+			return true;
 		}
-
-		public String getUserAgent(HttpURLConnection connection) {
-			return connection.getRequestProperty(PROPERTY_USER_AGENT);
-		}
-
 	}
 
 	private class AcceptVersionClientFake extends UrlConnectionHttpClientFake {
@@ -679,12 +708,12 @@ public class HttpClientTest extends TestTimer {
 	private abstract class UrlConnectionHttpClientFake extends UrlConnectionHttpClient {
 		private UrlConnectionHttpClientFake(String userAgent, String acceptVersion) {
 			super("username", "password", userAgent, IHttpClient.MEDIATYPE_APPLICATION_JSON, acceptVersion,
-					"authkey", "authiv", null,IHttpClient.NO_TIMEOUT);
+					"authkey", "authiv", null,IHttpClient.NO_TIMEOUT, null);
 		}
 
 		private UrlConnectionHttpClientFake(String userAgent, String acceptVersion, ISSLCertificateCallback callback) {
 			super("username", "password", userAgent, IHttpClient.MEDIATYPE_APPLICATION_JSON, acceptVersion,
-					"authkey", "authiv", callback,IHttpClient.NO_TIMEOUT);
+					"authkey", "authiv", callback,IHttpClient.NO_TIMEOUT, null);
 		}
 		
 		public HttpURLConnection createConnection() throws IOException, KeyStoreException {

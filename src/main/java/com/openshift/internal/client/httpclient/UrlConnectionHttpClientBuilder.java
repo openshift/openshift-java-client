@@ -28,6 +28,7 @@ public class UrlConnectionHttpClientBuilder {
 	private String version;
 	private Integer configTimeout;
 	private ISSLCertificateCallback callback;
+	private String excludeSSLCipherRegex;
 
 	public UrlConnectionHttpClientBuilder setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
@@ -65,8 +66,13 @@ public class UrlConnectionHttpClientBuilder {
 		return this;
 	}
 
+	public UrlConnectionHttpClientBuilder excludeSSLCipher(String excludeSSLCipherRegex) {
+		this.excludeSSLCipherRegex = excludeSSLCipherRegex;
+		return this;
+	}
+	
 	public IHttpClient client() {
 		return new UrlConnectionHttpClient(
-				username, password, userAgent, acceptedMediaType, version, authKey, authIV, callback, configTimeout);
+				username, password, userAgent, acceptedMediaType, version, authKey, authIV, callback, configTimeout, excludeSSLCipherRegex);
 	}
 }
