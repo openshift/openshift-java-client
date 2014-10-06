@@ -14,8 +14,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -122,4 +124,93 @@ public class AuthorizationIntegrationTest extends TestTimer {
 		authorization.destroy();
 		newAuthorization.destroy();
 	}
+    
+    @Test
+    public void shouldGetAuthorizationById() throws Exception {
+        // pre-conditions
+        IAuthorization authorization = user.createAuthorization("my note", IAuthorization.SCOPE_SESSION_READ, 600);
+
+
+        // operations
+        user.getAuthorization(authorization.getId());
+        IAuthorization verifyAuthorization = user.getAuthorization();
+
+        // verifications
+        assertEquals(verifyAuthorization.getScopes(), authorization.getScopes());
+        assertEquals(verifyAuthorization.getNote(), authorization.getNote());
+        assertTrue((verifyAuthorization.getExpiresIn() <= authorization.getExpiresIn()));
+
+        // cleanup
+        authorization.destroy();
+        verifyAuthorization.destroy();
+    }
+
+    @Test
+    public void shouldGetAuthorizationByToken() throws Exception {
+        // pre-conditions
+        IAuthorization authorization = user.createAuthorization("my note", IAuthorization.SCOPE_SESSION_READ, 600);
+
+
+        // operations
+        user.getAuthorization(authorization.getToken());
+        IAuthorization verifyAuthorization = user.getAuthorization();
+
+        // verifications
+        assertEquals(verifyAuthorization.getScopes(), authorization.getScopes());
+        assertEquals(verifyAuthorization.getNote(), authorization.getNote());
+        assertTrue((verifyAuthorization.getExpiresIn()<= authorization.getExpiresIn()));
+
+        // cleanup
+        authorization.destroy();
+        verifyAuthorization.destroy();
+    }
+
+    @Test
+    public void shouldGetAuthorizationList() throws Exception {
+        // pre-conditions
+        IAuthorization authorization = user.createAuthorization("my note", IAuthorization.SCOPE_SESSION_READ, 600);
+
+
+        // operations
+        Collection<IAuthorization> authList = user.getAuthorizations();
+
+        // verifications
+        assertTrue(authList!=null);
+        assertTrue(authList.size() > 0);
+
+        // cleanup
+        authorization.destroy();
+    }
+
+    @Test
+    public void shouldRemoveAuthorizationById() throws Exception {
+        // pre-conditions
+        IAuthorization authorization = user.createAuthorization("my note", IAuthorization.SCOPE_SESSION_READ, 600);
+        String id=authorization.getId();
+
+        // operations
+        boolean success = user.removeAuthorization(id);
+
+        // verifications
+        assertTrue(success);
+        assertNull(user.getAuthorization(id));
+
+
+    }
+
+    @Test
+    public void shouldRemoveAuthorizationByToken() throws Exception {
+        // pre-conditions
+        IAuthorization authorization = user.createAuthorization("my note", IAuthorization.SCOPE_SESSION_READ, 600);
+        String token=authorization.getToken();
+
+        // operations
+        boolean success = user.removeAuthorization(token);
+
+        // verifications
+        assertTrue(success);
+        assertNull(user.getAuthorization(token));
+
+
+    }
 }
