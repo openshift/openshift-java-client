@@ -19,6 +19,7 @@ import java.util.concurrent.Future;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.openshift.client.cartridge.ICartridge;
+import com.openshift.client.cartridge.IDeployedStandaloneCartridge;
 import com.openshift.client.cartridge.IEmbeddableCartridge;
 import com.openshift.client.cartridge.IEmbeddedCartridge;
 import com.openshift.client.cartridge.IStandaloneCartridge;
@@ -106,6 +107,13 @@ public interface IApplication extends IOpenShiftResource {
 	 *
 	 */
 	public IStandaloneCartridge getCartridge();
+	
+	/**
+	 * Returns the cartridge (application type) that this app is running on.
+	 *
+	 * @return the deployed standalone cartridge of this application
+	 */
+	public IDeployedStandaloneCartridge getStandaloneCartridge();
 
 	/**
 	 * Adds the given embeddable cartridge to this application.

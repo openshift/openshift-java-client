@@ -17,8 +17,10 @@ import com.openshift.client.OpenShiftException;
 import com.openshift.client.cartridge.EmbeddableCartridge;
 import com.openshift.client.cartridge.IEmbeddableCartridge;
 import com.openshift.client.cartridge.IEmbeddedCartridge;
+import com.openshift.internal.client.httpclient.request.Parameter;
 import com.openshift.internal.client.response.CartridgeResourceDTO;
 import com.openshift.internal.client.response.CartridgeResourceProperties;
+import com.openshift.internal.client.utils.IOpenShiftJsonConstants;
 
 /**
  * A cartridge that is embedded into an application. 
@@ -28,6 +30,7 @@ import com.openshift.internal.client.response.CartridgeResourceProperties;
 public class EmbeddedCartridgeResource extends AbstractOpenShiftResource implements IEmbeddedCartridge {
 
 	private static final String LINK_DELETE_CARTRIDGE = "DELETE";
+	private static final String LINK_UPDATE_CARTRIDGE = "UPDATE";
 
 	private final String name;
 	private String displayName;
@@ -99,6 +102,16 @@ public class EmbeddedCartridgeResource extends AbstractOpenShiftResource impleme
 	}
 
 	/**
+	 * Update the additional gear storage for this cartridge to the given value
+	 * 
+	 * @param   size   The total size of storage in gigabytes for the gear
+	 */
+	@Override
+	public void setAdditionalGearStorage(int size) {
+		new UpdateCartridgeRequest().execute(new Parameter(IOpenShiftJsonConstants.PROPERTY_ADDITIONAL_GEAR_STORAGE, String.valueOf(size)));
+		
+	}
+	/**
 	 * Refreshes the content of this embedded cartridge. Causes all embedded
 	 * cartridges of the same application to get updated.
 	 * 
@@ -168,6 +181,11 @@ public class EmbeddedCartridgeResource extends AbstractOpenShiftResource impleme
 		
 		private DeleteCartridgeRequest() {
 			super(LINK_DELETE_CARTRIDGE);
+		}
+	}
+	private class UpdateCartridgeRequest extends ServiceRequest {
+		private UpdateCartridgeRequest() {
+			super(LINK_UPDATE_CARTRIDGE);
 		}
 	}
 }

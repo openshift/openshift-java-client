@@ -49,6 +49,7 @@ import com.openshift.client.Messages;
 import com.openshift.client.OpenShiftException;
 import com.openshift.client.OpenShiftSSHOperationException;
 import com.openshift.client.cartridge.ICartridge;
+import com.openshift.client.cartridge.IDeployedStandaloneCartridge;
 import com.openshift.client.cartridge.IEmbeddableCartridge;
 import com.openshift.client.cartridge.IEmbeddedCartridge;
 import com.openshift.client.cartridge.IStandaloneCartridge;
@@ -107,7 +108,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	private Date creationTime;
 
 	/** The cartridge (application type/framework) of this application. */
-	private IStandaloneCartridge cartridge;
+	private IDeployedStandaloneCartridge cartridge;
 
 	/** The scalability enablement. */
 	private ApplicationScale scale;
@@ -236,6 +237,11 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 
 	@Override
 	public IStandaloneCartridge getCartridge() {
+		return cartridge;
+	}
+
+	@Override
+	public IDeployedStandaloneCartridge getStandaloneCartridge() {
 		return cartridge;
 	}
 
@@ -449,7 +455,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		for (CartridgeResourceDTO cartridgeDTO : cartridgeDTOByName.values()) {
 			switch(cartridgeDTO.getType()) {
 				case STANDALONE:
-					createStandaloneCartrdige(cartridgeDTO);
+					createStandaloneCartridge(cartridgeDTO);
 					break;
 				case EMBEDDED:
 					addOrUpdateEmbeddedCartridge(cartridgeDTO.getName(), cartridgeDTO);
@@ -460,13 +466,8 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		}
 	}
 
-	private void createStandaloneCartrdige(CartridgeResourceDTO cartridgeDTO) {
-		this.cartridge = new StandaloneCartridge(
-				cartridgeDTO.getName(),
-				cartridgeDTO.getUrl(),
-				cartridgeDTO.getDisplayName(),
-				cartridgeDTO.getDescription(),
-				cartridgeDTO.getObsolete());
+	private void createStandaloneCartridge(CartridgeResourceDTO dto) {
+		this.cartridge = new StandaloneCartridgeResource(dto,this);
 	}
 
 	private void addOrUpdateEmbeddedCartridge(String name, CartridgeResourceDTO cartridgeDTO) {

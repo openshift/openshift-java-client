@@ -11,6 +11,7 @@
 package com.openshift.internal.client;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -81,6 +82,13 @@ public class StandaloneCartridgeTest extends TestTimer {
 						+ "scalable network applications. Node.js is perfect for data-intensive real-time "
 						+ "applications that run across distributed devices.");
 	}
-
-
+	
+	@Test
+	public void standaloneCartridgeResourceShouldEqualStandAloneCartridgeWithoutName() throws MalformedURLException {
+		// pre-coniditions
+		// operation
+		// verification
+		assertEquals(new StandaloneCartridge(new URL(CartridgeTestUtils.FOREMAN_URL)),
+				new StandaloneCartridge("redhat", new URL(CartridgeTestUtils.FOREMAN_URL)));
+	}
 }
