@@ -10,7 +10,10 @@
 	</appender>
 
 	<logger name="com.openshift">
-		<level value="warn" />
+		<level value="debug" />
+	</logger>
+	<logger name="com.openshift3">
+		<level value="debug" />
 	</logger>
 
 	<root>
