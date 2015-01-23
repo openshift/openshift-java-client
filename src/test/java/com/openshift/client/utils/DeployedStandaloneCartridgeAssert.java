@@ -28,7 +28,7 @@ public class DeployedStandaloneCartridgeAssert extends CartridgeAssert<IDeployed
 			throws OpenShiftException {
 		super.isEqualTo(otherCartridge);
 
-		assertThat(getCartridge().getAdditionalGearStorage()).equals(otherCartridge.getAdditionalGearStorage());
+		assertThat(getCartridge().getAdditionalGearStorage()).isEqualTo(otherCartridge.getAdditionalGearStorage());
 		return this;
 	}
 
