@@ -555,14 +555,13 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	}
 
 	public IGearGroup getGearGroup(ICartridge cartridge, Collection<IGearGroup> gearGroups) {
-		if (cartridge == null
-				|| gearGroups == null) {
+		if (cartridge == null || gearGroups == null) {
 			return null;
 		}
 		
 		for (IGearGroup gearGroup : gearGroups) {
 			for (ICartridge groupCartridge : gearGroup.getCartridges()) {
-				if (cartridge.equals(cartridge)) {
+				if (groupCartridge.equals(cartridge)) {
 					return gearGroup;
 				}
 			}
