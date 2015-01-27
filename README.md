@@ -1,4 +1,4 @@
-OpenShift Java Client [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.openshift/openshift-java-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.openshift/openshift-java-client)
+OpenShift Java Client [![Build Status](https://travis-ci.org/openshift/openshift-java-client.svg)](https://travis-ci.org/openshift/openshift-java-client)  [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.openshift/openshift-java-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.openshift/openshift-java-client)
 ===========================
 
 Java client for the OpenShift REST API.  It pretty much offers all features that are currently available in the rhc-* command line tools 
