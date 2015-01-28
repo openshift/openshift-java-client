@@ -2,7 +2,6 @@ package com.openshift.client.utils;
 
 import com.openshift.client.IDomain;
 import com.openshift.client.IGearProfile;
-import com.openshift.internal.client.GearProfile;
 
 import java.util.List;
 
