@@ -33,7 +33,7 @@ public class CartridgeNameQuery extends AbstractCartridgeQuery {
 				|| cartridge.getName() == null) {
 			return false;
 		}
-		return cartridge.getName().indexOf(nameSubstring) >= 0;
+		return cartridge.getName().contains(nameSubstring);
 	}
 
 	@Override
