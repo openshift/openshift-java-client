@@ -617,7 +617,7 @@ public class ApplicationResourceTest extends TestTimer {
 						POST_ADD_ENVIRONMENT_VARIABLE_FOO_TO_FOOBARZ_SPRINGEAP6)
 				.mockGetEnvironmentVariables("foobarz", "springeap6", GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6,
 						GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6)
-				.mockUpdateEnvironmentVariableValue("foobarz", "springeap6", "FOO", PUT_FOO_ENVIRONMENT_VARIABLE_FOOBARZ_SPRINGEAP6);;
+				.mockUpdateEnvironmentVariableValue("foobarz", "springeap6", "FOO", PUT_FOO_ENVIRONMENT_VARIABLE_FOOBARZ_SPRINGEAP6);
 
 		// operation
 		final IApplication app = domain.getApplicationByName("springeap6");

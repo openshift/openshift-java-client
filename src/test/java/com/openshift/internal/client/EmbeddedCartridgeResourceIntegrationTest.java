@@ -87,7 +87,7 @@ public class EmbeddedCartridgeResourceIntegrationTest extends TestTimer {
 					}
 					if (php.getName().equals(((ICartridge)value).getName())) {
 						return true;
-					};
+					}
 				}
 				return false;
 			}
