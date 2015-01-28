@@ -181,7 +181,7 @@ public class Link {
 			throw new OpenShiftRequestException("Requesting {0}: required request parameter \"{1}\" is empty",
 					getHref(), linkParameter.getName());
 		}
-		// TODO: check valid options (still reported in a very incosistent way)
+		// TODO: check valid options (still reported in a very inconsistent way)
 	}
 
 	private Parameter getParameter(String name, Parameter[] parameters) {
@@ -257,9 +257,9 @@ public class Link {
 			new FormUrlEncodedMediaType().writeTo(new ParameterValueMap(urlParameters), out);
 			return out.toString();
 		} catch (IOException e) {
-			throw new OpenShiftException(e, "Could not add paramters {0} to url {1}", urlParameters, url);
+			throw new OpenShiftException(e, "Could not add parameters {0} to url {1}", urlParameters, url);
 		} catch (EncodingException e) {
-			throw new OpenShiftException(e, "Could not add paramters {0} to url {1}", urlParameters, url);
+			throw new OpenShiftException(e, "Could not add parameters {0} to url {1}", urlParameters, url);
 		}
 	}
 

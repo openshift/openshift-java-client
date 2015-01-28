@@ -73,7 +73,7 @@ public class EmbeddedCartridgeResourceTest extends TestTimer {
 
 	@Test
 	public void shouldEmbeddedCartridgeEqualsEmbeddableCartridge() {
-		// pre-coniditions
+		// pre-conditions
 		IEmbeddedCartridge embeddedCartridgeFake = createEmbeddedCartridgeFake("redhat");
 
 		// operation
@@ -85,7 +85,7 @@ public class EmbeddedCartridgeResourceTest extends TestTimer {
 
 	@Test
 	public void shouldHaveSameHashCode() {
-		// pre-coniditions
+		// pre-conditions
 		IEmbeddedCartridge embeddedCartridgeFake = createEmbeddedCartridgeFake("redhat");
 		// operation
 		// verification
@@ -94,7 +94,7 @@ public class EmbeddedCartridgeResourceTest extends TestTimer {
 	
 	@Test
 	public void shouldEmbeddableCartridgeWithNameEqualsEmbeddedCartridgeWithoutName() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertEquals(new EmbeddableCartridge(null, new URL(CartridgeTestUtils.FOREMAN_URL)),
@@ -103,7 +103,7 @@ public class EmbeddedCartridgeResourceTest extends TestTimer {
 
 	@Test
 	public void shouldRemoveEmbeddedCartridgeInASetByEmbeddableCartridge() {
-		// pre-coniditions
+		// pre-conditions
 		IEmbeddedCartridge embeddedCartridgeMock = createEmbeddedCartridgeFake("redhat");
 		HashSet<IEmbeddedCartridge> cartridges = new HashSet<IEmbeddedCartridge>();
 		cartridges.add(embeddedCartridgeMock);

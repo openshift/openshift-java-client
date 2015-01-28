@@ -113,7 +113,7 @@ public class FormUrlEncodedMediaType implements IMediaType {
 
 	private String encode(String value) throws UnsupportedEncodingException {
 		if (UrlUtils.isUrl(value)) {
-			// dont encode url payload
+			// don't encode url payload
 			return value;
 		}
 		return URLEncoder.encode(value, UTF8);

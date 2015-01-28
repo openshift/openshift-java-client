@@ -11,7 +11,7 @@
 package com.openshift.internal.client.ssh;
 
 import com.openshift.client.ISSHPublicKey;
-import com.openshift.client.OpenShiftUnknonwSSHKeyTypeException;
+import com.openshift.client.OpenShiftUnknownSSHKeyTypeException;
 import com.openshift.client.SSHKeyType;
 
 /**
@@ -29,7 +29,7 @@ public abstract class AbstractSSHKey implements ISSHPublicKey {
 		return keyType;
 	}
 
-	protected void setKeyType(String keyTypeId) throws OpenShiftUnknonwSSHKeyTypeException {
+	protected void setKeyType(String keyTypeId) throws OpenShiftUnknownSSHKeyTypeException {
 		setKeyType(SSHKeyType.getByTypeId(keyTypeId));
 	}
 

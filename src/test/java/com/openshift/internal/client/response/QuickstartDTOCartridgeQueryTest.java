@@ -141,7 +141,7 @@ public class QuickstartDTOCartridgeQueryTest {
 
 		// verification
 		assertThat(cartridge).isNotNull();
-		assertThat(cartridge.isDownloadable()).isFalse();;
+		assertThat(cartridge.isDownloadable()).isFalse();
 		assertThat(cartridges).hasSize(1);
 	}
 

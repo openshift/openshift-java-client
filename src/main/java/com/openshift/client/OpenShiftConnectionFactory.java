@@ -158,7 +158,7 @@ public class OpenShiftConnectionFactory extends AbstractOpenShiftConnectionFacto
 	 */
 	public IOpenShiftConnection getConnection(final String clientId, final String username, final String password,
 			final String authKey, final String authIV, final String token, final String serverUrl,
-			final ISSLCertificateCallback sslCertificateCallback, String exludeSSLCipherRegex)
+			final ISSLCertificateCallback sslCertificateCallback, String excludeSSLCipherRegex)
 			throws OpenShiftException {
 
 		Assert.notNull(clientId);
@@ -170,7 +170,7 @@ public class OpenShiftConnectionFactory extends AbstractOpenShiftConnectionFacto
 
 		IHttpClient httpClient = createClient(
 				clientId, username, password, authKey, authIV, token, serverUrl, sslCertificateCallback,
-				exludeSSLCipherRegex);
+				excludeSSLCipherRegex);
 		try {
 			return getConnection(clientId, username, password, token, serverUrl, httpClient);
 		} catch (IOException e) {

@@ -58,7 +58,7 @@ public class UserResourceIntegrationTest extends TestTimer {
 	
 	@Test(expected = InvalidCredentialsOpenShiftException.class)
 	public void shouldThrowIfInvalidCredentials() throws Exception {
-		// dont test on dev server
+		// don't test on dev server
 		OpenShiftTestConfiguration configuration = new OpenShiftTestConfiguration();
 		if (configuration.isDevelopmentServer()) {
 			throw new InvalidCredentialsOpenShiftException(null, new HttpClientException(""), null);

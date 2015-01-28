@@ -20,7 +20,7 @@ import com.openshift.client.cartridge.IEmbeddableCartridge;
 import com.openshift.internal.client.utils.Assert;
 
 /**
- * A query that shall select the latest version of an embedded cartidge that's given by name.
+ * A query that shall select the latest version of an embedded cartridge that's given by name.
  * 
  * @author Andre Dietisheim
  * 
