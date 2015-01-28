@@ -49,7 +49,7 @@ public enum SSHKeyType {
 		}
 	}
 
-	public static SSHKeyType getByTypeId(String keyTypeId) throws OpenShiftUnknonwSSHKeyTypeException {
+	public static SSHKeyType getByTypeId(String keyTypeId) throws OpenShiftUnknownSSHKeyTypeException {
 		Assert.notNull(keyTypeId);
 
 		for (SSHKeyType sSHKeyType : values()) {
@@ -57,22 +57,22 @@ public enum SSHKeyType {
 				return sSHKeyType;
 			}
 		}
-		throw new OpenShiftUnknonwSSHKeyTypeException("OpenShift does not support keys of type \"{0}\"", keyTypeId);
+		throw new OpenShiftUnknownSSHKeyTypeException("OpenShift does not support keys of type \"{0}\"", keyTypeId);
 	}
 
-	public static SSHKeyType getByJSchKeyType(KeyPair keyPair) throws OpenShiftUnknonwSSHKeyTypeException {
+	public static SSHKeyType getByJSchKeyType(KeyPair keyPair) throws OpenShiftUnknownSSHKeyTypeException {
 		Assert.notNull(keyPair);
 
 		return getByJSchKeyType(keyPair.getKeyType());
 	}
 
-	public static SSHKeyType getByJSchKeyType(int jschKeyType) throws OpenShiftUnknonwSSHKeyTypeException {
+	public static SSHKeyType getByJSchKeyType(int jschKeyType) throws OpenShiftUnknownSSHKeyTypeException {
 		if (jschKeyType == KeyPair.RSA) {
 			return SSH_RSA;
 		} else if (jschKeyType == KeyPair.DSA) {
 			return SSH_DSA;
 		} else {
-			throw new OpenShiftUnknonwSSHKeyTypeException("Unknown jsch key type \"{0}\"", jschKeyType);
+			throw new OpenShiftUnknownSSHKeyTypeException("Unknown jsch key type \"{0}\"", jschKeyType);
 		}
 	}
 }

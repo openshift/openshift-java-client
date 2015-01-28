@@ -29,7 +29,7 @@ import com.openshift.client.IOpenShiftSSHKey;
 import com.openshift.client.ISSHPublicKey;
 import com.openshift.client.IUser;
 import com.openshift.client.OpenShiftSSHKeyException;
-import com.openshift.client.OpenShiftUnknonwSSHKeyTypeException;
+import com.openshift.client.OpenShiftUnknownSSHKeyTypeException;
 import com.openshift.client.SSHKeyPair;
 import com.openshift.client.SSHKeyType;
 import com.openshift.client.SSHPublicKey;
@@ -164,13 +164,13 @@ public class SSHKeyTest extends TestTimer {
 	}
 
 	@Test
-	public void shouldGetKeyTypeByTypeId() throws OpenShiftUnknonwSSHKeyTypeException {
+	public void shouldGetKeyTypeByTypeId() throws OpenShiftUnknownSSHKeyTypeException {
 		assertTrue(SSHKeyType.SSH_DSA == SSHKeyType.getByTypeId(SSHKeyTestUtils.SSH_DSA));
 		assertTrue(SSHKeyType.SSH_RSA == SSHKeyType.getByTypeId(SSHKeyTestUtils.SSH_RSA));
 	}
 
-	@Test(expected = OpenShiftUnknonwSSHKeyTypeException.class)
-	public void getKeyTypeByTypeIdReturnsNullIfNoMatchingType() throws OpenShiftUnknonwSSHKeyTypeException {
+	@Test(expected = OpenShiftUnknownSSHKeyTypeException.class)
+	public void getKeyTypeByTypeIdReturnsNullIfNoMatchingType() throws OpenShiftUnknownSSHKeyTypeException {
 		SSHKeyType.getByTypeId("dummy");
 	}
 

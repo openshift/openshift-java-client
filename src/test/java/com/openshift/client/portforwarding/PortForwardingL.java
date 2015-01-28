@@ -55,8 +55,8 @@ public class PortForwardingL{
       //Channel channel=session.openChannel("shell");
       //channel.connect();
 
-      int assinged_port=session.setPortForwardingL(lport, rhost, rport);
-      System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
+      int assigned_port=session.setPortForwardingL(lport, rhost, rport);
+      System.out.println("localhost:"+assigned_port+" -> "+rhost+":"+rport);
     }
     catch(Exception e){
       System.out.println(e);

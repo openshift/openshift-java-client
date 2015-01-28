@@ -84,7 +84,7 @@ public class GearGroupResource extends AbstractOpenShiftResource implements IGea
 	 * 
 	 * @param dto the associated {@link GearGroupResourceDTO} 
 	 * @param application the parent application 
-	 * @param servicethe underlying REST Service
+	 * @param service the underlying REST Service
 	 */
 	protected GearGroupResource(final GearGroupResourceDTO dto, final ApplicationResource application, final IRestService service) {
 		this(dto.getUuid(), dto.getName(), dto.getGears(), dto.getCartridges(), dto.getAdditionalStorage(), application, service);

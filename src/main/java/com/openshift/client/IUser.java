@@ -134,14 +134,14 @@ public interface IUser extends IOpenShiftResource {
 	 */
 	public IOpenShiftSSHKey addSSHKey(String name, ISSHPublicKey key) throws OpenShiftException;
 
-	public IOpenShiftSSHKey getSSHKeyByName(String name) throws OpenShiftUnknonwSSHKeyTypeException, OpenShiftException;
+	public IOpenShiftSSHKey getSSHKeyByName(String name) throws OpenShiftUnknownSSHKeyTypeException, OpenShiftException;
 
-	public IOpenShiftSSHKey getSSHKeyByPublicKey(String publicKey) throws OpenShiftUnknonwSSHKeyTypeException,
+	public IOpenShiftSSHKey getSSHKeyByPublicKey(String publicKey) throws OpenShiftUnknownSSHKeyTypeException,
 			OpenShiftException;
 
-	public boolean hasSSHKeyName(String name) throws OpenShiftUnknonwSSHKeyTypeException, OpenShiftException;
+	public boolean hasSSHKeyName(String name) throws OpenShiftUnknownSSHKeyTypeException, OpenShiftException;
 
-	public boolean hasSSHPublicKey(String publicKey) throws OpenShiftUnknonwSSHKeyTypeException, OpenShiftException;
+	public boolean hasSSHPublicKey(String publicKey) throws OpenShiftUnknownSSHKeyTypeException, OpenShiftException;
 
 	public boolean removeSSHKey(String name);
 

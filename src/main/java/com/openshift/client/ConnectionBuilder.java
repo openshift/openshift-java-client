@@ -234,12 +234,12 @@ public class ConnectionBuilder {
 
 		public IHttpClient createHttpClient(final String clientId, final String username, final String password,
 				final String authKey, final String authIV, final String token, final String serverUrl,
-				final int timeout, final ISSLCertificateCallback sslCertificateCallback, String exludeSSLCipherRegex) {
+				final int timeout, final ISSLCertificateCallback sslCertificateCallback, String excludeSSLCipherRegex) {
 			return new UrlConnectionHttpClientBuilder()
 					.setCredentials(username, password, authKey, authIV, token)
 					.setConfigTimeout(timeout)
 					.setSSLCertificateCallback(sslCertificateCallback)
-					.excludeSSLCipher(exludeSSLCipherRegex)
+					.excludeSSLCipher(excludeSSLCipherRegex)
 					.client();
 		}
 

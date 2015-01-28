@@ -88,7 +88,7 @@ public interface IApplicationSSHSession {
 	 * @return true if the port-forwarding has been started, false otherwise.
 	 * @throws OpenShiftSSHOperationException
 	 */
-	public boolean isPortFowardingStarted() throws OpenShiftSSHOperationException;
+	public boolean isPortForwardingStarted() throws OpenShiftSSHOperationException;
 
 
 }

@@ -43,7 +43,7 @@ public enum EnumDataType {
 	cartridge,
 	/** The environment-variables type*/
 	environment_variables,
-	/** The environmetn-variable type*/
+	/** The environment-variable type*/
 	environment_variable
 	;
 	

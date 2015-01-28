@@ -19,7 +19,7 @@ import com.openshift.internal.client.cartridge.BaseCartridge;
 
 /**
  * A cartridge that is available on the openshift server. This class is no enum
- * since we dont know all available types and they may change at any time.
+ * since we don't know all available types and they may change at any time.
  * 
  * @author André Dietisheim
  * @author Jeff Cantrill

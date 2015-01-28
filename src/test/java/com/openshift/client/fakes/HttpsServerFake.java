@@ -47,10 +47,10 @@ public class HttpsServerFake extends HttpServerFake {
 	 * @param port
 	 *            the port to listen to (address is always localhost)
 	 * @param response
-	 *            the reponse to return to the requesting socket. If
+	 *            the response to return to the requesting socket. If
 	 *            <code>null</code> the request string is returned.
 	 * @param statusLine
-	 *            the staus line that shall be returned
+	 *            the status line that shall be returned
 	 * 
 	 * @see ServerFakeSocket#getResponse(Socket)
 	 */

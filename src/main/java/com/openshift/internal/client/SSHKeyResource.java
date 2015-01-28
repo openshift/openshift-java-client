@@ -12,7 +12,7 @@ package com.openshift.internal.client;
 
 import com.openshift.client.IOpenShiftSSHKey;
 import com.openshift.client.OpenShiftException;
-import com.openshift.client.OpenShiftUnknonwSSHKeyTypeException;
+import com.openshift.client.OpenShiftUnknownSSHKeyTypeException;
 import com.openshift.client.SSHKeyType;
 import com.openshift.internal.client.httpclient.request.StringParameter;
 import com.openshift.internal.client.response.KeyResourceDTO;
@@ -29,7 +29,7 @@ public class SSHKeyResource extends AbstractOpenShiftResource implements IOpenSh
 	private String publicKey;
 	private UserResource user;
 
-	protected SSHKeyResource(KeyResourceDTO dto, UserResource user) throws OpenShiftUnknonwSSHKeyTypeException {
+	protected SSHKeyResource(KeyResourceDTO dto, UserResource user) throws OpenShiftUnknownSSHKeyTypeException {
 		super(user.getService(), dto.getLinks(), dto.getMessages());
 		this.name = dto.getName();
 		this.type = SSHKeyType.getByTypeId(dto.getType());
@@ -77,7 +77,7 @@ public class SSHKeyResource extends AbstractOpenShiftResource implements IOpenSh
 		this.publicKey = null;
 	}
 	
-	protected void update(KeyResourceDTO dto) throws OpenShiftUnknonwSSHKeyTypeException {
+	protected void update(KeyResourceDTO dto) throws OpenShiftUnknownSSHKeyTypeException {
 		if (dto == null) {
 			return;
 		}

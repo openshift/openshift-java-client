@@ -47,7 +47,7 @@ public class StandaloneCartridgeTest extends TestTimer {
 
 	@Test
 	public void shouldDownloadableWithDifferentNameEqualsDownloadable() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertThat(new StandaloneCartridge("redhat", new URL(CartridgeTestUtils.GO_URL)))
@@ -60,7 +60,7 @@ public class StandaloneCartridgeTest extends TestTimer {
 
 	@Test
 	public void shouldDownloadableStandaloneNotEqualsDownloadableEmbeddable() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertThat(new StandaloneCartridge(new URL(CartridgeTestUtils.GO_URL)))
@@ -74,7 +74,7 @@ public class StandaloneCartridgeTest extends TestTimer {
 		CartridgeAssert<IStandaloneCartridge> cartridgeAssert = new CartridgeAssert<IStandaloneCartridge>(nodeJs);
 
 		// operation
-		// verifcation
+		// verification
 		cartridgeAssert
 				.hasName("nodejs-0.6")
 				.hasDisplayName("Node.js 0.6")
@@ -86,7 +86,7 @@ public class StandaloneCartridgeTest extends TestTimer {
 	
 	@Test
 	public void standaloneCartridgeResourceShouldEqualStandAloneCartridgeWithoutName() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertEquals(new StandaloneCartridge(new URL(CartridgeTestUtils.FOREMAN_URL)),

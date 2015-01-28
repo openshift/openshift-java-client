@@ -108,7 +108,7 @@ public class DomainResourceIntegrationTest extends TestTimer {
 			// operation
 			domain.destroy();
 			// verification
-			fail("OpenShiftEndpointException did not occurr");
+			fail("OpenShiftEndpointException did not occur");
 		} catch (OpenShiftEndpointException e) {
 			// verification
 		}
@@ -125,7 +125,7 @@ public class DomainResourceIntegrationTest extends TestTimer {
 			
 			// operation
 			domain.destroy();
-			fail("OpenShiftEndpointException did not occurr");
+			fail("OpenShiftEndpointException did not occur");
 		} catch (OpenShiftEndpointException e) {
 			// verification
 			assertThat(e.getRestResponseMessages().size()).isEqualTo(1);

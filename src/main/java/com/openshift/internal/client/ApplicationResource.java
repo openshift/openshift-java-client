@@ -648,7 +648,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		return this.session != null && this.session.isConnected();
 	}
 
-	public boolean isPortFowardingStarted() throws OpenShiftSSHOperationException {
+	public boolean isPortForwardingStarted() throws OpenShiftSSHOperationException {
 		try {
 			return this.session != null && this.session.isConnected() && this.session.getPortForwardingL().length > 0;
 		} catch (JSchException e) {
