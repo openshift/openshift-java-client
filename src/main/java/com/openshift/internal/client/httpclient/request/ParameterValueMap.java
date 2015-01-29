@@ -57,7 +57,7 @@ public class ParameterValueMap extends ParameterValue<Map<String, Parameter>> {
 		return this;
 	}
 
-	public Parameter getParamater(String name) {
+	public Parameter getParameter(String name) {
 		return getValue().get(name);
 	}
 	

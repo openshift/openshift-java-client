@@ -9,7 +9,7 @@ public interface IOpenShiftResource {
 	 * Creation logs are only available at creation time. So resources that were retrieved 
 	 * while they already existed wont have a creation log.
 	 * 
-	 * @return true if there's cretion log for this resource
+	 * @return true if there's creation log for this resource
 	 */
 	public boolean hasCreationLog();
 
@@ -23,7 +23,7 @@ public interface IOpenShiftResource {
 	/**
 	 * Returns all the (creation log) messages. These messages only exist at
 	 * creation time. Existing cartridges, that were added in a prior session
-	 * dont have any messages any more.
+	 * don't have any messages any more.
 	 * 
 	 * @return all messages by field
 	 * 

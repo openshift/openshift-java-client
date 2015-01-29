@@ -413,9 +413,9 @@ public interface IApplication extends IOpenShiftResource {
 	 * @return true if the port-forwarding has been started, false otherwise.
 	 * @throws OpenShiftSSHOperationException
 	 *
-	 * @deprecated use {@link IApplicationSSHSession#isPortFowardingStarted()}
+	 * @deprecated use {@link IApplicationSSHSession#isPortForwardingStarted()}
 	 */
-	public boolean isPortFowardingStarted() throws OpenShiftSSHOperationException;
+	public boolean isPortForwardingStarted() throws OpenShiftSSHOperationException;
 
 	/**
 	 * Returns the list of forwardable ports on OpenShift for this application.

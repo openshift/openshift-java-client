@@ -67,7 +67,7 @@ public class FormUrlEncodedMediaTypeTest {
 					.add(new StringParameter("name", "adietish"))
 				, out);
 		// verification
-		assertThat(out.toString().startsWith("&")).isFalse();;
+		assertThat(out.toString().startsWith("&")).isFalse();
 	}
 
 	@Test

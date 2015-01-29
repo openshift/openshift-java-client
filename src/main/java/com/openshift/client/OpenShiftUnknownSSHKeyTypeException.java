@@ -13,11 +13,11 @@ package com.openshift.client;
 /**
  * @author Andre Dietisheim
  */
-public class OpenShiftUnknonwSSHKeyTypeException  extends OpenShiftException {
+public class OpenShiftUnknownSSHKeyTypeException extends OpenShiftException {
 
 	private static final long serialVersionUID = 1L;
 
-	public OpenShiftUnknonwSSHKeyTypeException(String message, Object... arguments) {
+	public OpenShiftUnknownSSHKeyTypeException(String message, Object... arguments) {
 		super(message, arguments);
 	}
 }

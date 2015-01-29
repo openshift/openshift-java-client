@@ -242,7 +242,7 @@ public class ApplicationTestUtils {
 	
 	public static IApplication destroyAllEnvironmentVariables(IApplication application) {
 		for (String name : application.getEnvironmentVariables().keySet()) {
-			application.removeEnvironmentVariable(name);;
+			application.removeEnvironmentVariable(name);
 		}
 		return application;
 	}

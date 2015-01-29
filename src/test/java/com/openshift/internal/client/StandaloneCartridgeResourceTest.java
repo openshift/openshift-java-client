@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.openshift.client.IApplication;
 import com.openshift.client.IDomain;
@@ -154,7 +153,7 @@ public class StandaloneCartridgeResourceTest {
 		int additionalGearStorage = cartridge.getAdditionalGearStorage();
 
 		// verification
-		// reload user info to ensure the storage info isnt cached
+		// reload user info to ensure the storage info isn't cached
 		assertThat(additionalGearStorage).isNotEqualTo(IGearGroup.NO_ADDITIONAL_GEAR_STORAGE);
 	}
 
@@ -169,7 +168,7 @@ public class StandaloneCartridgeResourceTest {
 		cartridge.setAdditionalGearStorage(newAdditionalGearStorage);
 
 		// verification
-		// reload user info to ensure the storage info isnt cached
+		// reload user info to ensure the storage info isn't cached
 		mockDirector.mockGetGearGroups("foobarz", "springeap6", Samples.GET_DOMAINS_FOOBARZ_APPLICATIONS_SPRINGEAP6_GEARGROUPS_12ADDITIONALGEARSTORAGE);
 		assertThat(cartridge.getAdditionalGearStorage()).isEqualTo(newAdditionalGearStorage);
 	}

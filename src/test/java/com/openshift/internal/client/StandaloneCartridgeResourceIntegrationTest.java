@@ -88,7 +88,7 @@ public class StandaloneCartridgeResourceIntegrationTest extends TestTimer {
 		int additionalGearStorage = cartridge.getAdditionalGearStorage();
 
 		// verification
-		// reload user info to ensure the storage info isnt cached
+		// reload user info to ensure the storage info isn't cached
 		assertThat(additionalGearStorage).isNotEqualTo(IGearGroup.NO_ADDITIONAL_GEAR_STORAGE);
 	}
 
@@ -104,7 +104,7 @@ public class StandaloneCartridgeResourceIntegrationTest extends TestTimer {
 		cartridge.setAdditionalGearStorage(newAdditionalGearStorage);
 
 		// verification
-		// reload user info to ensure the storage info isnt cached
+		// reload user info to ensure the storage info isn't cached
 		assertThat(cartridge.getAdditionalGearStorage()).isEqualTo(newAdditionalGearStorage);
 	}
 
@@ -121,7 +121,7 @@ public class StandaloneCartridgeResourceIntegrationTest extends TestTimer {
 		cartridge.setAdditionalGearStorage(additionalGearStorage);
 
 		// verification
-		// reload user info to ensure the storage info isnt cached
+		// reload user info to ensure the storage info isn't cached
 		IUser newUser = new TestConnectionBuilder()
 				.defaultCredentials()
 				.disableSSLCertificateChecks()

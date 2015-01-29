@@ -305,7 +305,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			connection.setSSLSocketFactory(sslContext.getSocketFactory());
 			return sslContext;
 		} catch (GeneralSecurityException e) {
-			LOGGER.warn("Could not install trust manager callback", e);;
+			LOGGER.warn("Could not install trust manager callback", e);
 			return null;
 		}
 	}
@@ -325,7 +325,7 @@ public class UrlConnectionHttpClient implements IHttpClient {
 				trustManager = new CallbackTrustManager(trustManager, sslAuthorizationCallback);
 			}
 		} catch (GeneralSecurityException e) {
-			LOGGER.warn("Could not install trust manager callback.", e);;
+			LOGGER.warn("Could not install trust manager callback.", e);
 		}
 		return trustManager;
 	}

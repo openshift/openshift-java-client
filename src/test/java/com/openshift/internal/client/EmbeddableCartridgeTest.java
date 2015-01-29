@@ -48,7 +48,7 @@ public class EmbeddableCartridgeTest extends TestTimer {
 
 	@Test
 	public void shouldNonDownloadableEqualsNonDownloadable() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertThat(new EmbeddableCartridge("redhat"))
@@ -59,7 +59,7 @@ public class EmbeddableCartridgeTest extends TestTimer {
 
 	@Test
 	public void shouldDownloadableEqualsDownloadable() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertThat(new EmbeddableCartridge(new URL(CartridgeTestUtils.FOREMAN_URL)))
@@ -68,12 +68,12 @@ public class EmbeddableCartridgeTest extends TestTimer {
 
 	@Test
 	public void shouldDownloadableWithNonEqualNameEqualsDownloadable() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertThat(new EmbeddableCartridge("redhat", new URL(CartridgeTestUtils.FOREMAN_URL)))
 				.isEqualTo(new EmbeddableCartridge(null, new URL(CartridgeTestUtils.FOREMAN_URL)));
-		// should equal if url is equal, name doesnt matter
+		// should equal if url is equal, name doesn't matter
 		// (name is updated as soon as cartridge is deployed)
 		assertThat(new EmbeddableCartridge("jboss", new URL(CartridgeTestUtils.FOREMAN_URL)))
 				.isEqualTo(new EmbeddableCartridge("redhat", new URL(CartridgeTestUtils.FOREMAN_URL)));
@@ -81,7 +81,7 @@ public class EmbeddableCartridgeTest extends TestTimer {
 
 	@Test
 	public void shouldDownloadableStandaloneNotEqualsDownloadableEmbeddable() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertThat(new EmbeddableCartridge(null, new URL(CartridgeTestUtils.FOREMAN_URL)))
@@ -89,13 +89,13 @@ public class EmbeddableCartridgeTest extends TestTimer {
 	}
 
 	@Test
-	public void shouldHaveNameDisplaynameDescription() throws Throwable {
+	public void shouldHaveNameDisplayNameDescription() throws Throwable {
 		// pre-condition
 		IEmbeddableCartridge mongoDb = connection.getEmbeddableCartridges().get(0);
 		CartridgeAssert<IEmbeddableCartridge> cartridgeAssert = new CartridgeAssert<IEmbeddableCartridge>(mongoDb);
 
 		// operation
-		// verifcation
+		// verification
 		cartridgeAssert
 				.hasName("mongodb-2.2")
 				.hasDisplayName("MongoDB NoSQL Database 2.2")
@@ -104,7 +104,7 @@ public class EmbeddableCartridgeTest extends TestTimer {
 
 	@Test
 	public void shouldHaveObsoleteCartridges() throws MalformedURLException {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		ICartridge metrics = new CartridgeNameQuery("metrics").get(connection.getCartridges(true));
 		assertThat(metrics).isNotNull();

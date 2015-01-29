@@ -22,7 +22,7 @@ import com.openshift.client.ISSHPublicKey;
 import com.openshift.client.IUser;
 import com.openshift.client.OpenShiftException;
 import com.openshift.client.OpenShiftSSHKeyException;
-import com.openshift.client.OpenShiftUnknonwSSHKeyTypeException;
+import com.openshift.client.OpenShiftUnknownSSHKeyTypeException;
 import com.openshift.client.SSHKeyType;
 import com.openshift.client.IAuthorization;
 import com.openshift.internal.client.httpclient.request.StringParameter;
@@ -180,7 +180,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 	}
 
 	@Override
-	public List<IOpenShiftSSHKey> getSSHKeys() throws OpenShiftUnknonwSSHKeyTypeException,
+	public List<IOpenShiftSSHKey> getSSHKeys() throws OpenShiftUnknownSSHKeyTypeException,
 			OpenShiftException {
 		Map<String, IOpenShiftSSHKey> keys = new HashMap<String, IOpenShiftSSHKey>();
 		keys.putAll(getCachedOrLoadSSHKeys());
@@ -188,7 +188,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 	}
 
 	private Map<String, SSHKeyResource> getCachedOrLoadSSHKeys() throws OpenShiftException,
-			OpenShiftUnknonwSSHKeyTypeException {
+			OpenShiftUnknownSSHKeyTypeException {
 		if (sshKeys == null) {
 			this.sshKeys = loadKeys();
 		}
@@ -196,7 +196,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 	}
 
 	private Map<String, SSHKeyResource> loadKeys() throws OpenShiftException,
-			OpenShiftUnknonwSSHKeyTypeException {
+			OpenShiftUnknownSSHKeyTypeException {
 		Map<String, SSHKeyResource> keys = new HashMap<String, SSHKeyResource>();
 		List<KeyResourceDTO> keyDTOs = new GetSShKeysRequest().execute();
 		for (KeyResourceDTO keyDTO : keyDTOs) {
@@ -224,7 +224,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 	
 	@Override
 	public IOpenShiftSSHKey getSSHKeyByName(String name) 
-			throws OpenShiftUnknonwSSHKeyTypeException, OpenShiftException {
+			throws OpenShiftUnknownSSHKeyTypeException, OpenShiftException {
 		Assert.notNull(name);
 
 		return getCachedOrLoadSSHKeys().get(name);
@@ -232,7 +232,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 
 	@Override
 	public IOpenShiftSSHKey getSSHKeyByPublicKey(String publicKey)
-			throws OpenShiftUnknonwSSHKeyTypeException, OpenShiftException {
+			throws OpenShiftUnknownSSHKeyTypeException, OpenShiftException {
 		Assert.notNull(publicKey);
 
 		IOpenShiftSSHKey matchingKey = null;
@@ -250,7 +250,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 	}
 
 	@Override
-	public boolean hasSSHKeyName(String name) throws OpenShiftUnknonwSSHKeyTypeException,
+	public boolean hasSSHKeyName(String name) throws OpenShiftUnknownSSHKeyTypeException,
 			OpenShiftException {
 		Assert.notNull(name);
 
@@ -259,7 +259,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 
 	@Override
 	public boolean hasSSHPublicKey(String publicKey)
-			throws OpenShiftUnknonwSSHKeyTypeException, OpenShiftException {
+			throws OpenShiftUnknownSSHKeyTypeException, OpenShiftException {
 		return getSSHKeyByPublicKey(publicKey) != null;
 	}
 
@@ -291,7 +291,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 		return put(keyDTO);
 	}
 
-	private SSHKeyResource put(KeyResourceDTO keyDTO) throws OpenShiftUnknonwSSHKeyTypeException {
+	private SSHKeyResource put(KeyResourceDTO keyDTO) throws OpenShiftUnknownSSHKeyTypeException {
 		SSHKeyResource sshKey = new SSHKeyResource(keyDTO, this);
 		getCachedOrLoadSSHKeys().put(keyDTO.getName(), sshKey);
 		return sshKey;

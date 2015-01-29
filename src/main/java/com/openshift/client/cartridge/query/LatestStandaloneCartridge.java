@@ -18,7 +18,7 @@ import com.openshift.client.cartridge.IStandaloneCartridge;
 import com.openshift.internal.client.utils.Assert;
 
 /**
- * A query that shall select the latest version of a standalone cartidge that's given by name.
+ * A query that shall select the latest version of a standalone cartridge that's given by name.
  * 
  * @author Andre Dietisheim
  * 

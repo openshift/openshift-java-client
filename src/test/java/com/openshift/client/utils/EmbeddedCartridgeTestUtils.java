@@ -73,7 +73,7 @@ public class EmbeddedCartridgeTestUtils {
 	 * if they aren't they are added.
 	 * 
 	 * @param constraint
-	 *            the constraint that selects the available catridges that
+	 *            the constraint that selects the available cartridges that
 	 *            should be present
 	 * @param application
 	 *            the application that should have the constrained cartridges

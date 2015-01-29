@@ -59,7 +59,7 @@ public interface IRestService {
 	 * @param urlParameters
 	 *            the url parameters ("?parameter=value")
 	 * @param parameters
-	 *            the body parameters (ingnored for GET requests)
+	 *            the body parameters (ignored for GET requests)
 	 * @param parameters
 	 *            the parameters to send
 	 * @return the rest response

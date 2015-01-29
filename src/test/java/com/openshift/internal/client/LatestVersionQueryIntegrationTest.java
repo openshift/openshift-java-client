@@ -39,7 +39,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectJBossAs() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_JBOSSAS, LatestVersionOf.jbossAs().get(user)); 
@@ -47,7 +47,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectJBossEap() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_JBOSSEAP, LatestVersionOf.jbossEap().get(user)); 
@@ -55,7 +55,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectJBossEws() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_JBOSSEWS, LatestVersionOf.jbossEws().get(user)); 
@@ -63,7 +63,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectJenkins() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_JENKINS, LatestVersionOf.jenkins().get(user)); 
@@ -71,7 +71,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectPerl() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_PERL, LatestVersionOf.perl().get(user)); 
@@ -79,7 +79,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectPhp() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_PHP, LatestVersionOf.php().get(user)); 
@@ -87,7 +87,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectPython() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_PYTHON, LatestVersionOf.python().get(user)); 
@@ -95,7 +95,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectRuby() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_RUBY, LatestVersionOf.ruby().get(user)); 
@@ -103,7 +103,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectZend() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IStandaloneCartridge.NAME_ZEND, LatestVersionOf.zend().get(user)); 
@@ -111,7 +111,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectMmsAgent() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_10GEN_MMS_AGENT, LatestVersionOf.mmsAgent().get(user)); 
@@ -120,7 +120,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 	
 	@Test
 	public void shouldSelectHaProxy() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_HAPROXY, LatestVersionOf.haProxy().get(user)); 
@@ -128,7 +128,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectJenkinsClient() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_JENKINS_CLIENT, LatestVersionOf.jenkinsClient().get(user)); 
@@ -136,7 +136,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectMongoDb() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_MONGODB, LatestVersionOf.mongoDB().get(user)); 
@@ -144,7 +144,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectMySql() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_MYSQL, LatestVersionOf.mySQL().get(user)); 
@@ -152,7 +152,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectPhpMyAdmin() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_PHPMYADMIN, LatestVersionOf.phpMyAdmin().get(user)); 
@@ -160,7 +160,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectpostgreSql() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_POSTGRESQL, LatestVersionOf.postgreSQL().get(user)); 
@@ -168,7 +168,7 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 
 	@Test
 	public void shouldSelectRockmongo() {
-		// pre-coniditions
+		// pre-conditions
 		// operation
 		// verification
 		assertCartridge(IEmbeddedCartridge.NAME_ROCKMONGO, LatestVersionOf.rockMongo().get(user)); 

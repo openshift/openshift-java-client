@@ -108,7 +108,7 @@ public class ApplicationSSHSession implements IApplicationSSHSession {
 	 * @return true if port forwarding is started, false otherwise
 	 * @throws OpenShiftSSHOperationException
 	 */
-	public boolean isPortFowardingStarted() throws OpenShiftSSHOperationException {
+	public boolean isPortForwardingStarted() throws OpenShiftSSHOperationException {
 		try {
 			return isConnected()
 					&& session.getPortForwardingL().length > 0;
@@ -326,7 +326,7 @@ public class ApplicationSSHSession implements IApplicationSSHSession {
 			return false;
 		} else if (isConnected() != other.isConnected()) {
 			return false;
-		} else if (isPortFowardingStarted() != other.isPortFowardingStarted()) {
+		} else if (isPortForwardingStarted() != other.isPortForwardingStarted()) {
 			return false;
 		} else if (!application.equals(otherapp)) {
 			return false;
@@ -340,7 +340,7 @@ public class ApplicationSSHSession implements IApplicationSSHSession {
 				+ "applicationuuid=" + application.getUUID()
 				+ ", applicationname=" + application.getName()
 				+ ", isconnected=" + isConnected()
-				+ ", isportforwardingstarted=" + isPortFowardingStarted()
+				+ ", isportforwardingstarted=" + isPortForwardingStarted()
 				+ "]";
 	}
 

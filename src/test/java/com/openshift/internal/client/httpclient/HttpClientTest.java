@@ -728,7 +728,7 @@ public class HttpClientTest extends TestTimer {
 			return super.createConnection(new URL("http://localhost"), username, password, authKey, authIV,
 					token, userAgent, acceptedVersion, acceptedMediaType, sslAuthorizationCallback, NO_TIMEOUT);
 		}
-	};
+	}
 
 	private void restoreSystemProperty(String property, String value) {
 		if (value == null) {

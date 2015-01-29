@@ -45,7 +45,7 @@ public class RFC822DateUtils {
 
 	/**
 	 * Returns a date instance for a given timestamp string that complies to the
-	 * RFC 822 standard. If an error occurrs, <code>null</code> is returned an
+	 * RFC 822 standard. If an error occurs, <code>null</code> is returned an
 	 * no exception is thrown.
 	 * 
 	 * @param rfc822DateString
