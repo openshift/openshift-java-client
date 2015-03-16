@@ -82,6 +82,7 @@ public class IOpenShiftJsonConstants {
 	public static final String PROPERTY_REL = "rel";
 	public static final String PROPERTY_REQUIRED_PARAMS = "required_params";
 	public static final String PROPERTY_RESULT = "result";
+	public static final String PROPERTY_REGION = "region";
 	public static final String PROPERTY_RHLOGIN = "rhlogin";
 	public static final String PROPERTY_RHC_DOMAIN = "rhc_domain";
 	public static final String PROPERTY_SCALABLE = "scalable";

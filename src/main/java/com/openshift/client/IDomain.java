@@ -92,6 +92,10 @@ public interface IDomain extends IOpenShiftResource {
 			IGearProfile gearProfile)
 			throws OpenShiftException;
 
+	public IApplication createApplication(String name, IStandaloneCartridge cartridge, ApplicationScale scale, String region,
+			IGearProfile gearProfile)
+			throws OpenShiftException;
+
 	/**
 	 * Creates a new application with the given name and the given
 	 * cartridge/framework. Optionally, adds scalability and a specific gear
