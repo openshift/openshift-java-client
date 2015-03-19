@@ -87,6 +87,9 @@ public final class ResourcePropertiesRegistry implements ResourcePropertyKeys {
 		put(IMAGEREPO_DOCKER_IMAGE_REPO, new String[]{"status","dockerImageRepository"});
 		
 		put(PROJECT_DISPLAY_NAME, new String[]{"displayName"});
+		
+		put(ROUTE_HOST, new String[] { "host" });
+		put(ROUTE_SERVICE_NAME, new String[] { "serviceName" });
 	}};
 
 	private ResourcePropertiesRegistry(){
