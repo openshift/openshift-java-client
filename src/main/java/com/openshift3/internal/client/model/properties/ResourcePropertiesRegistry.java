@@ -87,6 +87,9 @@ public final class ResourcePropertiesRegistry implements ResourcePropertyKeys {
 		put(IMAGEREPO_DOCKER_IMAGE_REPO, new String[]{"status","dockerImageRepository"});
 		
 		put(PROJECT_DISPLAY_NAME, new String[]{"displayName"});
+		
+		put(ROUTE_HOST, new String[] { "host" });
+		put(ROUTE_SERVICE_NAME, new String[] { "serviceName" });
 	}};
 
 	private ResourcePropertiesRegistry(){
@@ -100,6 +103,7 @@ public final class ResourcePropertiesRegistry implements ResourcePropertyKeys {
 		versionPropertyMap.put(new VersionKey(OpenShiftAPIVersion.v1beta1, ResourceKind.DeploymentConfig), V1BETA1_OPENSHIFT_MAP);
 		versionPropertyMap.put(new VersionKey(OpenShiftAPIVersion.v1beta1, ResourceKind.ImageRepository), V1BETA1_OPENSHIFT_MAP);
 		versionPropertyMap.put(new VersionKey(OpenShiftAPIVersion.v1beta1, ResourceKind.Project), V1BETA1_OPENSHIFT_MAP);
+		versionPropertyMap.put(new VersionKey(OpenShiftAPIVersion.v1beta1, ResourceKind.Route), V1BETA1_OPENSHIFT_MAP);
 	}
 	
 	public static final ResourcePropertiesRegistry getInstance(){
