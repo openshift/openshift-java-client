@@ -297,6 +297,14 @@ public abstract class AbstractOpenShiftResource implements IOpenShiftResource {
 			return add(new StringParameter(IOpenShiftJsonConstants.PROPERTY_GEAR_PROFILE, gearProfile.getName()));
 		}
 
+		protected Parameters region(String region) {
+			if (region == null || "".equals(region)) {
+				return this;
+			}
+			return add(new StringParameter(IOpenShiftJsonConstants.PROPERTY_REGION, region));
+		}
+
+
 		protected Parameters include(String includedResource) {
 			add(IOpenShiftParameterConstants.PARAMETER_INCLUDE, includedResource);
 			return this;

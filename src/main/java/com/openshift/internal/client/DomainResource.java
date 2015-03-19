@@ -104,7 +104,7 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 	@Override
 	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
 			final ApplicationScale scale) throws OpenShiftException {
-		return createApplication(name, cartridge, scale, null, null);
+		return createApplication(name, cartridge, scale, (IGearProfile)null, null);
 	}
 
 	@Override
@@ -137,6 +137,12 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 
 	@Override
 	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
+			final ApplicationScale scale, String region, final IGearProfile gearProfile) throws OpenShiftException {
+		return createApplication(name, scale, gearProfile, null, IHttpClient.NO_TIMEOUT, region, null,CollectionUtils.<ICartridge> toList(cartridge));
+	}
+
+	@Override
+	public IApplication createApplication(final String name, final IStandaloneCartridge cartridge,
 			final ApplicationScale scale, final IGearProfile gearProfile, String initialGitUrl)
 			throws OpenShiftException {
 		return createApplication(name, cartridge, scale, gearProfile, initialGitUrl, IHttpClient.NO_TIMEOUT);
@@ -154,10 +160,10 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 	@Override
 	public IApplication createApplication(final String name, final IStandaloneCartridge standaloneCartridge,
 			final ApplicationScale scale, final IGearProfile gearProfile, String initialGitUrl, int timeout,
-			Map<String, String> environmentVariables, IEmbeddableCartridge... embedddableCartridges)
+			Map<String, String> environmentVariables, IEmbeddableCartridge... embeddableCartridges)
 			throws OpenShiftException {
-		return createApplication(name, scale, gearProfile, initialGitUrl, timeout, environmentVariables,
-				CollectionUtils.<ICartridge> toList(standaloneCartridge, embedddableCartridges));
+		return createApplication(name, scale, gearProfile, initialGitUrl, timeout, null, environmentVariables,
+				CollectionUtils.<ICartridge> toList(standaloneCartridge, embeddableCartridges));
 	}
 
 	@Override
@@ -165,11 +171,11 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 			final IGearProfile gearProfile, String initialGitUrl, int timeout,
 			Map<String, String> environmentVariables, ICartridge... cartridges)
 			throws OpenShiftException {
-		return createApplication(name, scale, gearProfile, initialGitUrl, timeout, environmentVariables, Arrays.asList(cartridges));
+		return createApplication(name, scale, gearProfile, initialGitUrl, timeout, null, environmentVariables, Arrays.asList(cartridges));
 	}
 
 	protected IApplication createApplication(final String name, final ApplicationScale scale,
-			final IGearProfile gearProfile, String initialGitUrl, int timeout,
+			final IGearProfile gearProfile, String initialGitUrl, int timeout, String region,
 			Map<String, String> environmentVariables, Collection<ICartridge> cartridges)
 			throws OpenShiftException {
 		if (name == null) {
@@ -184,7 +190,7 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 
 		ApplicationResourceDTO applicationDTO =
 				new CreateApplicationRequest().execute(
-						name, scale, gearProfile, initialGitUrl, timeout, environmentVariables, cartridges);
+						name, scale, gearProfile, initialGitUrl, timeout, region, environmentVariables, cartridges);
 		IApplication application = new ApplicationResource(applicationDTO, this);
 
 		getOrLoadApplications().add(application);
@@ -456,7 +462,7 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 
 		protected ApplicationResourceDTO execute(final String name, final ApplicationScale scale,
 				final IGearProfile gearProfile, final String initialGitUrl, final int timeout,
-				Map<String, String> environmentVariables, Collection<ICartridge> cartridges)
+				String region, Map<String, String> environmentVariables, Collection<ICartridge> cartridges)
 				throws OpenShiftException {
 			if (cartridges == null
 					|| cartridges.size() == 0) {
@@ -468,6 +474,7 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 					.addCartridges(cartridges)
 					.scale(scale)
 					.gearProfile(gearProfile)
+					.region(region)
 					.add(IOpenShiftJsonConstants.PROPERTY_INITIAL_GIT_URL, initialGitUrl)
 					.addEnvironmentVariables(environmentVariables);
 
