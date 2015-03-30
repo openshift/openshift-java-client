@@ -109,14 +109,6 @@ public class LatestVersionQueryIntegrationTest extends TestTimer {
 		assertCartridge(IStandaloneCartridge.NAME_ZEND, LatestVersionOf.zend().get(user)); 
 	}
 
-	@Test
-	public void shouldSelectMmsAgent() {
-		// pre-conditions
-		// operation
-		// verification
-		assertCartridge(IEmbeddedCartridge.NAME_10GEN_MMS_AGENT, LatestVersionOf.mmsAgent().get(user)); 
-	}
-
 	
 	@Test
 	public void shouldSelectHaProxy() {
