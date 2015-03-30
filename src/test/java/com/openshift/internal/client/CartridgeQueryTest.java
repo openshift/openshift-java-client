@@ -339,15 +339,6 @@ public class CartridgeQueryTest extends TestTimer {
 	}
 
 	@Test
-	public void shouldSelectMmsAgent() {
-		// pre-conditions
-		// operation
-		// verification
-		assertCartridge(IEmbeddedCartridge.NAME_10GEN_MMS_AGENT, 
-				LatestVersionOf.mmsAgent().get(connection));
-	}
-
-	@Test
 	public void shouldSelectHaProxy() {
 		// pre-conditions
 		// operation
