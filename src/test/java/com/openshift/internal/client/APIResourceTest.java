@@ -38,6 +38,13 @@ public class APIResourceTest extends TestTimer {
 		this.mockDirector = new HttpClientMockDirector();
 		this.connection = new TestConnectionBuilder().defaultCredentials().create(mockDirector.client());
 	}
+	
+	@Test
+	public void testNull() {
+	  String messages = null;
+	  boolean x = (messages != null) ? false : null;
+	  assertThat(x).equals(true);
+	}
 
 	@Test
 	public void shouldListStandaloneCartridges() throws Throwable {

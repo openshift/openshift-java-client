@@ -339,7 +339,7 @@ public abstract class AbstractOpenShiftResource implements IOpenShiftResource {
 	}
 
 	public boolean hasCreationLog() {
-		return (messages != null) ? messages.hasMessages() : null;
+		return (messages != null) ? messages.hasMessages() : false;
 	}
 
 	public String getCreationLog() {
