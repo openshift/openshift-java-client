@@ -782,5 +782,20 @@ public class ApplicationResourceTest extends TestTimer {
 		assertTrue(domain != this.domain);
 	}
 
+	@Test
+	public void shouldToString() {
+		// pre-conditions
+		assertThat(domain).isNotNull();
+		final IApplication app = domain.getApplicationByName("springeap6");
+		assertThat(app).isNotNull();
+
+		// operation
+		String appString = app.toString();
+
+		// verifications
+		assertThat(appString).isNotEmpty();
+		
+	}
+	
 
 }

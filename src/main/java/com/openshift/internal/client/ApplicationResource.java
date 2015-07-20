@@ -1007,7 +1007,8 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 				+ "uuid=" + uuid
 				+ ", name=" + name
 				+ ", creationTime=" + creationTime
-				+ ", cartridge=" + cartridge
+				// avoid recursion, only display cartridge name
+				+ ", cartridge=" + (cartridge == null? "null" : cartridge.getName())
 				+ ", scale=" + scale
 				+ ", gearProfile=" + gearProfile
 				+ ", domain=" + domain
@@ -1025,7 +1026,8 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 				return channel.getExtInputStream();
 			}
 
-		}, INPUT {
+		}, 
+		INPUT {
 			protected InputStream getInputStream(Channel channel) throws IOException {
 				return channel.getInputStream();
 			}
