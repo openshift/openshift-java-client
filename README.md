@@ -3,7 +3,13 @@ OpenShift Java Client [![Build Status](https://travis-ci.org/openshift/openshift
 
 Java client for the OpenShift REST API.  It pretty much offers all features that are currently available in the rhc-* command line tools 
 (create/rename a domain, create/destroy applications, list applications, list available cartridges, add cartridges, etc.). 
-This client is used by JBoss Tools for OpenShift 2.x.  For later OpenShift versions see https://github.com/openshift/openshift-restclient-java/.
+
+Only for Version 2
+----------------
+
+This client is used by JBoss Tools for OpenShift 2.x.
+
+For later OpenShift versions see https://github.com/openshift/openshift-restclient-java/.
 
 Usage
 -----
