@@ -700,7 +700,7 @@ public class ApplicationResourceTest extends TestTimer {
 				GET_1_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6, GET_0_ENVIRONMENT_VARIABLES_FOOBARZ_SPRINGEAP6);
 		final IApplication app = domain.getApplicationByName("springeap6");
 		assertThat(app.getEnvironmentVariables()).hasSize(1);
-		assertThat(app.getEnvironmentVariables().get("FOO").getName() == "FOO");
+		assertThat(app.getEnvironmentVariables().get("FOO").getName().equals("FOO"));
 
 		// operation
 		app.removeEnvironmentVariable("FOO");

@@ -69,6 +69,7 @@ public class StreamUtils {
 			writer.write(line);
 			writer.write('\n');
 		}
+		bufferedReader.close();
 		return writer.toString();
 	}
 

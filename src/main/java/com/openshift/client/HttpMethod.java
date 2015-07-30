@@ -23,10 +23,8 @@ public enum HttpMethod {
 	 * @return true if the value can be safely converted to the enum; false otherwise
 	 */
 	public static boolean hasValue(String value) {
-		HttpMethod[] enumConstants = HttpMethod.class.getEnumConstants();
-		for (int i = 0; i < enumConstants.length; i++) {
-			HttpMethod httpMethod = enumConstants[i];
-			if(httpMethod.name().equalsIgnoreCase(value)){
+		for (HttpMethod m : HttpMethod.values()) {
+			if(m.name().equalsIgnoreCase(value)){
 				return true;
 			}
 		}

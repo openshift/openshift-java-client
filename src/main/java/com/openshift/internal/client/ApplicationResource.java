@@ -756,7 +756,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		for(String varCandidateName:environmentVariables.keySet()){
 			IEnvironmentVariable tempVar = environmentVariablesMap.get(varCandidateName);
 			if(tempVar != null)
-			{  if(tempVar.getValue() == environmentVariables.get(varCandidateName))
+			{  if(tempVar.getValue().equals(environmentVariables.get(varCandidateName)))
 				variablesCandidateMap.put(varCandidateName,environmentVariables.get(varCandidateName));
 			}
 			else

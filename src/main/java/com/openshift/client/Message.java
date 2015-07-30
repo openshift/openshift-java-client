@@ -71,11 +71,11 @@ public class Message {
 	}
 
 	private String getOperationState() {
-		if (ISeverity.INFO.equals(severity.getValue()) 
-				|| ISeverity.DEBUG.equals(severity.getValue())
-				|| ISeverity.RESULT.equals(severity.getValue())) {
+		if (ISeverity.INFO.equals(severity) 
+				|| ISeverity.DEBUG.equals(severity)
+				|| ISeverity.RESULT.equals(severity)) {
 			return "Operation succeeded";
-		} else if (ISeverity.ERROR.equals(severity.getValue())) {
+		} else if (ISeverity.ERROR.equals(severity)) {
 			return "Operation failed";
 		} else {
 			return "Operation state is " + severity.getValue();
