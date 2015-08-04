@@ -385,12 +385,17 @@ public class ApplicationSSHSession implements IApplicationSSHSession {
 			}
 			return channelResponse;
 		} catch (JSchException e) {
-			channel.disconnect();
+			if (channel != null && channel.isConnected()) {
+				channel.disconnect();
+			}
+			
 			throw new OpenShiftSSHOperationException(e,
 					"Could no execute remote ssh command \"{0}\" on application {1}",
 					command, application.getName());
 		} catch (IOException e) {
-			channel.disconnect();
+			if (channel != null && channel.isConnected()) {
+				channel.disconnect();
+			}
 			throw new OpenShiftSSHOperationException(e,
 					"Could not get response channel for remote ssh command \"{0}\" on application {1}",
 					command, application.getName());

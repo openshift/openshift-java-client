@@ -160,21 +160,21 @@ public class EmbeddedCartridgeResource extends AbstractOpenShiftResource impleme
 			return false;
 		}
 		IEmbeddableCartridge other = (IEmbeddableCartridge) obj;
-		if (name == null) {
-			if (other.getName() != null) {
+		if (name == null && other.getName() != null) {
+				return false;
+		}
+		if (name != null) {
+			if (!name.equals(other.getName())) {
 				return false;
 			}
-		}
-		if (!name.equals(other.getName())) {
-			return false;
 		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "EmbeddedCartridgeResource [" +
-				"name=" + name
+		return "EmbeddedCartridgeResource ["
+				+ "name=" + name
 				+ "url=" + url
 				+ ", displayName=" + displayName
 				+ ", description=" + description
