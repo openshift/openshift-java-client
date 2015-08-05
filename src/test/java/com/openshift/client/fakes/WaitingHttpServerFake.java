@@ -27,8 +27,7 @@ public class WaitingHttpServerFake extends HttpServerFake {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
-            //Intentional ignore
-            return ;
+            //Intentional ignored
         }
     }
 

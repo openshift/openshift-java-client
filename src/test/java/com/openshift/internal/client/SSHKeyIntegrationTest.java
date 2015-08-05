@@ -271,14 +271,12 @@ public class SSHKeyIntegrationTest extends TestTimer {
 			IUser user = new TestConnectionBuilder().defaultCredentials().disableSSLCertificateChecks().create().getUser();
 			
 			// operation
-			int newNumOfKeys = user.getSSHKeys().size();
 			assertThat(user.getSSHKeys().size()).isEqualTo(originalNumOfKeys);
 			String newKeyName = SSHKeyTestUtils.createRandomKeyName();
 			user.addSSHKey(newKeyName, new SSHPublicKey(publicKeyPath));			
-			newNumOfKeys = user.getSSHKeys().size();
 			
 			// verification
-			assertThat(newNumOfKeys).isEqualTo(originalNumOfKeys + 1);
+			assertThat(user.getSSHKeys().size()).isEqualTo(originalNumOfKeys + 1);
 		} finally {
 			SSHKeyTestUtils.silentlyDestroyKey(key);
 		}

@@ -225,9 +225,10 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 		Assert.notNull(id);
 
 		final DomainResourceDTO domainDTO = new ShowDomainRequest().execute(id);
-		final IDomain domain = new DomainResource(domainDTO, this);
 		// TODO: implement caching
-		return domain;
+		return new DomainResource(domainDTO, this);
+
+
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public class StringUtils {
 			return string;
 		}
 		
-		return new StringBuilder(prefix).append(string).toString();
+		return prefix + string;
 	}
 	
 	public static String nullToEmptyString(String string) {

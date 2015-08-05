@@ -126,18 +126,18 @@ public class CartridgeTestUtils {
 	
 	public static IEmbeddableCartridge createObsoleteEmbeddableCartridge(boolean obsolete) {
 		return new EmbeddableCartridge(
-				obsolete == true ? "obsolete-0.1" : "non-obsolete-0.1"
-				, obsolete == true ? "Obsolete 0.1" : "Non-Obsolete 0.1"
-				, obsolete == true ? "Obsolete Cartridge 0.1" : "Non-Obsolete Cartridge 0.1"
+				obsolete ? "obsolete-0.1" : "non-obsolete-0.1"
+				, obsolete ? "Obsolete 0.1" : "Non-Obsolete 0.1"
+				, obsolete ? "Obsolete Cartridge 0.1" : "Non-Obsolete Cartridge 0.1"
 				, obsolete) {
 		};
 	}
 	
 	public static IStandaloneCartridge createObsoleteStandaloneCartridge(boolean obsolete) {
 		return new StandaloneCartridge(
-				obsolete == true ? "obsolete-0.1" : "non-obsolete-0.1"
-				, obsolete == true ? "Obsolete 0.1" : "Non-Obsolete 0.1"
-				, obsolete == true ? "Obsolete Cartridge 0.1" : "Non-Obsolete Cartridge 0.1"
+				obsolete ? "obsolete-0.1" : "non-obsolete-0.1"
+				, obsolete ? "Obsolete 0.1" : "Non-Obsolete 0.1"
+				, obsolete ? "Obsolete Cartridge 0.1" : "Non-Obsolete Cartridge 0.1"
 				, obsolete) {
 
 		};
