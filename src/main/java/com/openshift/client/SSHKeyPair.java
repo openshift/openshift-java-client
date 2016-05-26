@@ -23,7 +23,7 @@ import com.openshift.internal.client.utils.Assert;
 public class SSHKeyPair extends AbstractSSHKey {
 
 	/**
-	 * the length of the key that is created when using #create. ssh-keygen uses
+	 * The length of the key that is created when using #create. ssh-keygen uses
 	 * a default of 2048
 	 * 
 	 * @see #create(String, String, String)
