@@ -492,7 +492,7 @@ public class ApplicationSSHSession implements IApplicationSSHSession {
 		public List<String> getLines() throws IOException {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			List<String> lines = new ArrayList<String>();
-			String line = null;
+			String line;
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);
 			}

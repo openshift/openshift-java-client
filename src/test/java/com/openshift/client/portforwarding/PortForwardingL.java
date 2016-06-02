@@ -25,7 +25,7 @@ public class PortForwardingL{
     try{
       JSch jsch=new JSch();
 
-      String host=null;
+      String host;
       if(arg.length>0){
         host=arg[0];
       }

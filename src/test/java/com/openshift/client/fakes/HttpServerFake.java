@@ -174,10 +174,10 @@ public class HttpServerFake {
 		}
 
 		private String readRequestToString(InputStream inputStream) throws IOException {
-			BufferedReader bufferedReader = null;
+			BufferedReader bufferedReader;
 			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 			StringWriter writer = new StringWriter();
-			String line = null;
+			String line;
 			while ((line = bufferedReader.readLine()) != null) {
 				if (line.isEmpty()) {
 					break;
