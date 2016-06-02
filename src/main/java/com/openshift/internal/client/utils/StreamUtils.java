@@ -24,6 +24,8 @@ import java.io.Writer;
  */
 public class StreamUtils {
 
+	private StreamUtils() {}
+
 	public static final String UTF_8 = "UTF-8";
 
 	private static final byte[] buffer = new byte[1024];

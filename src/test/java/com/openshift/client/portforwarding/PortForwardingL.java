@@ -16,6 +16,9 @@ import java.awt.*;
 import javax.swing.*;
 
 public class PortForwardingL{
+
+  private PortForwardingL() {}
+    
   public static void main(String[] arg){
 
     int lport;

@@ -49,6 +49,8 @@ public class TestSSHKey {
 					"wktsrE+f2VdVt0McRLVAO6rdJRyMUX0rTbm7SABRVSX+zeQjlfqbbUtYFc7TIfd4RQc3GaISG" +
 					"1rS3C4svRSjdWaG36vDY2KxowdFvpKj8i8IYNPlLoRA/7EzzyneS6iyw" +
 					"== created by com.openshift.client";
+	
+	private TestSSHKey() {}
 
 	public static SSHKeyPair create() throws IOException, OpenShiftException {
 		File privateKeyFile = File.createTempFile(createRandomString(), null);

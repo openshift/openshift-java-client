@@ -20,6 +20,8 @@ import java.net.UnknownHostException;
  */
 public class HostUtils {
 
+	private HostUtils() {}
+
 	public static boolean canResolv(String urlString) throws MalformedURLException {
 		try {
 			URL url = new URL(urlString);

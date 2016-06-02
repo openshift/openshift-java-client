@@ -40,6 +40,8 @@ public class SSHKeyTestUtils {
 
 	public static final String SSH_RSA = "ssh-rsa";
 	public static final String SSH_DSA = "ssh-dss";
+	
+	private SSHKeyTestUtils() {}
 
 	/**
 	 * Returns the key with the given name out of the keys in the given list of

@@ -43,6 +43,8 @@ public class QuickstartTestUtils {
 	public static final String TEXTPRESS = "TextPress";
 	public static final String WILDFLY_8 = "WildFly 8";
 	public static final String WORDPRESS_3X = "WordPress 3.x";
+	
+	private QuickstartTestUtils() {}
 
 	public static String createQuickstartsJsonForCartridgeSpec(String... cartridgesSpecs) {
 		List<ModelNode> quickstartNodes = new ArrayList<ModelNode>();

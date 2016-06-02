@@ -31,6 +31,8 @@ import com.openshift.client.cartridge.query.LatestVersionOf;
  */
 public class ApplicationTestUtils {
 
+	private ApplicationTestUtils() {}
+
 	// 3 minutes
 	private static final long WAIT_FOR_APPLICATION = 3 * 60 * 1000;
 
