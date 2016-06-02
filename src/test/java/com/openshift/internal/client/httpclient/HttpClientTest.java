@@ -298,7 +298,9 @@ public class HttpClientTest extends TestTimer {
 			// operation
 			httpClient.get(server.getUrl(), IHttpClient.NO_TIMEOUT);
 		} finally {
-			server.stop();
+			if (server != null) {
+				server.stop();
+			}
 		}
 	}
 
@@ -323,7 +325,9 @@ public class HttpClientTest extends TestTimer {
 			// operation
 			httpClient.get(server.getUrl(), IHttpClient.NO_TIMEOUT);
 		} finally {
-			server.stop();
+			if (server != null) {
+				server.stop();
+			}
 		}
 	}
 
