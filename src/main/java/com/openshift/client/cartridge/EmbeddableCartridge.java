@@ -38,12 +38,7 @@ public class EmbeddableCartridge extends BaseCartridge implements IEmbeddableCar
 	public EmbeddableCartridge(final String name, final URL url) {
 		super(name, url);
 	}
-
-	@Override
-	public CartridgeType getType() {
-		return CartridgeType.EMBEDDED;
-	}
-
+	
 	/**
 	 * Constructor used when available cartridges are loaded from OpenShift
 	 * 
@@ -51,6 +46,11 @@ public class EmbeddableCartridge extends BaseCartridge implements IEmbeddableCar
 	 */
 	public EmbeddableCartridge(final String name, String displayName, String description, boolean obsolete) {
 		super(name, displayName, description, obsolete);
+	}
+
+	@Override
+	public CartridgeType getType() {
+		return CartridgeType.EMBEDDED;
 	}
 
 	@Override

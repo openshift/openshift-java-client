@@ -24,16 +24,16 @@ public enum ApplicationScale {
 
 	private final String value;
 	
+	private ApplicationScale(final String value) {
+		this.value = value;
+	}
+	
 	public static ApplicationScale safeValueOf(final String value) {
 		if(value == null 
 				|| !SCALING_TRUE.equals(value.toUpperCase())) {
 			return NO_SCALE;
 		}
 		return SCALE;
-	}
-	
-	private ApplicationScale(final String value) {
-		this.value = value;
 	}
 	
 	public String getValue() {
