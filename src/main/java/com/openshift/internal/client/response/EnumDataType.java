@@ -22,29 +22,29 @@ import java.util.regex.Pattern;
 public enum EnumDataType {
 		
 	/** Links / the root node that allows for navigation amongst resources.*/
-	links,
-	user,
+	LINKS,
+	USER,
 	/** the user's keys. */
-	keys,
+	KEYS,
 	/** one user's key.*/
-	key,
-	domains,
-	domain,
-	applications,
-	application,
-    authorization,
-    authorizations,
+	KEY,
+	DOMAINS,
+	DOMAIN,
+	APPLICATIONS,
+	APPLICATION,
+    AUTHORIZATION,
+    AUTHORIZATIONS,
 	/** The embedded cartridge type. */
-	embedded,
-	gear_groups,
+	EMBEDDED,
+	GEAR_GROUPS,
 	/** The standalone cartridges type. */
-	cartridges,
+	CARTRIDGES,
 	/** The standalone cartridge type. */
-	cartridge,
+	CARTRIDGE,
 	/** The environment-variables type*/
-	environment_variables,
+	ENVIRONMENT_VARIABLES,
 	/** The environment-variable type*/
-	environment_variable
+	ENVIRONMENT_VARIABLE
 	;
 	
 	private static final Pattern pattern = Pattern.compile("-");

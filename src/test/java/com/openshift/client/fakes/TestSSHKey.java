@@ -22,7 +22,7 @@ import com.openshift.client.utils.FileUtils;
  */
 public class TestSSHKey {
 
-	private static final String privateKey =
+	private static final String PRIVATE_KEY =
 			"-----BEGIN RSA PRIVATE KEY-----\n" +
 					"Proc-Type: 4,ENCRYPTED\n" +
 					"DEK-Info: DES-EDE3-CBC,30E8B3A668E44D77\n" +
@@ -42,7 +42,7 @@ public class TestSSHKey {
 					"ejQ1vuTNTKMrgyLpNi/4Sq8lm8OukRqQyE0EKYCwvkI=\n" +
 					"-----END RSA PRIVATE KEY-----";
 
-	private static final String publicKey =
+	private static final String PUBLIC_KEY =
 			"ssh-rsa "
 					+
 					"AAAAB3NzaC1yc2EAAAADAQABAAAAgQC6BGRDydfGsQHhnZgo43dEfLzSJBke/hE8MLBBG1+5Z" +
@@ -52,10 +52,10 @@ public class TestSSHKey {
 
 	public static SSHKeyPair create() throws IOException, OpenShiftException {
 		File privateKeyFile = File.createTempFile(createRandomString(), null);
-		FileUtils.writeTo(privateKey, privateKeyFile);
+		FileUtils.writeTo(PRIVATE_KEY, privateKeyFile);
 
 		File publicKeyFile = File.createTempFile(createRandomString(), null);
-		FileUtils.writeTo(publicKey, publicKeyFile);
+		FileUtils.writeTo(PUBLIC_KEY, publicKeyFile);
 		
 		return SSHKeyPair.load(privateKeyFile.getAbsolutePath(), publicKeyFile.getAbsolutePath());
 	}

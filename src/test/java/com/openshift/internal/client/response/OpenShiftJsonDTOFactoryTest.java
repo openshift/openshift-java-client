@@ -60,7 +60,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.user);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.USER);
 		UserResourceDTO userResourceDTO = response.getData();
 		assertThat(userResourceDTO.getRhLogin()).isEqualTo("foo@redhat.com");
 		assertThat(userResourceDTO.getMaxGears()).isEqualTo(10);
@@ -76,7 +76,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.keys);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.KEYS);
 		List<KeyResourceDTO> keys = response.getData();
 		assertThat(keys).isEmpty();
 	}
@@ -89,7 +89,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.keys);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.KEYS);
 		List<KeyResourceDTO> keys = response.getData();
 		assertThat(keys).hasSize(1);
 		final KeyResourceDTO key = keys.get(0);
@@ -107,7 +107,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.keys);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.KEYS);
 		List<KeyResourceDTO> keys = response.getData();
 		final KeyResourceDTO key = keys.get(0);
 		assertThat(key.getLinks()).hasSize(3);
@@ -124,7 +124,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.links);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.LINKS);
 		final Map<String, Link> links = response.getData();
 		assertThat(links).hasSize(12);
 		assertThat(links).satisfies(new ValidLinkCondition());
@@ -139,7 +139,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.domains);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.DOMAINS);
 		final List<DomainResourceDTO> domainDTOs = response.getData();
 		assertThat(domainDTOs).isNotEmpty();
 		assertThat(domainDTOs).hasSize(2);
@@ -163,7 +163,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.domains);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.DOMAINS);
 		final List<DomainResourceDTO> domains = response.getData();
 		assertThat(domains).isEmpty();
 	}
@@ -176,7 +176,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.domain);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.DOMAIN);
 		final DomainResourceDTO domain = response.getData();
 		assertNotNull(domain);
 		assertThat(domain.getId()).isEqualTo("foobarz");
@@ -203,7 +203,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.applications);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.APPLICATIONS);
 		final List<ApplicationResourceDTO> applications = response.getData();
 		assertThat(applications).hasSize(2);
 		ApplicationResourceDTO applicationDTO = applications.get(1);
@@ -253,7 +253,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		// operation
 		RestResponse response = factory.get(content);
 		// verifications
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.application);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.APPLICATION);
 		final ApplicationResourceDTO application = response.getData();
 		assertThat(application.getUuid()).hasSize(24);
 		assertThat(application.getCreationTime()).startsWith("2013-");
@@ -305,7 +305,7 @@ public class OpenShiftJsonDTOFactoryTest {
 				.hasExitCode(0)
 				.hasText("Connection URL: mysql://127.13.125.1:3306/\n");
 
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.cartridge);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.CARTRIDGE);
 		final CartridgeResourceDTO cartridge = response.getData();
 		assertThat(cartridge.getName()).isEqualTo(CartridgeTestUtils.MYSQL_51_NAME);
 		assertThat(cartridge.getDisplayName()).isEqualTo("MySQL Database 5.1");
@@ -353,7 +353,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		RestResponse response = factory.get(content);
 		// verifications
 		assertThat(response.getMessages().size()).isEqualTo(0);
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.cartridges);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.CARTRIDGES);
 		final Map<String, CartridgeResourceDTO> cartridges = response.getData();
 		assertThat(cartridges).hasSize(3); // mysql, mongo, jbosseap
 		assertThat(cartridges.values()).onProperty("name").containsOnly(
@@ -371,7 +371,7 @@ public class OpenShiftJsonDTOFactoryTest {
 		RestResponse response = factory.get(content);
 		// verifications
 		assertThat(response.getMessages().size()).isEqualTo(0);
-		assertThat(response.getDataType()).isEqualTo(EnumDataType.cartridges);
+		assertThat(response.getDataType()).isEqualTo(EnumDataType.CARTRIDGES);
 		Map<String, CartridgeResourceDTO> cartridges = response.getData();
 		assertThat(cartridges).hasSize(3);
 		assertThat(cartridges.values()).onProperty("name").containsOnly(
