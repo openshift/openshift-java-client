@@ -247,7 +247,7 @@ public class Link {
 
 	private String addParameters(String url, List<Parameter> urlParameters) {
 		if (urlParameters == null
-				|| urlParameters.size() == 0) {
+				|| urlParameters.isEmpty()) {
 			return url;
 		}
 		try {
@@ -278,7 +278,7 @@ public class Link {
 	 */
 	private String substituteUrlPathParameters(String href, List<Parameter> urlPathParameters) {
 		if (urlPathParameters == null
-				|| urlPathParameters.size() == 0) {
+				|| urlPathParameters.isEmpty()) {
 			return href;
 		}
 		return substituteVariables(href, urlPathParameters);

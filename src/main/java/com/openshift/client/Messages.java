@@ -57,8 +57,8 @@ public class Messages {
 	 */
 	public Message getFirstBy(IField field, ISeverity severity) {
 		List<Message> messages = getBy(field, severity);
-		if (messages == null
-				|| messages.size() == 0) {
+		if (messages == null 
+						|| messages.isEmpty()) {
 			return null;
 		}
 		
@@ -79,8 +79,8 @@ public class Messages {
 	 */
 	public List<Message> getBy(IField field, ISeverity severity) {
 		List<Message> messages = getBy(field);
-		if (messages == null
-				|| messages.size() == 0) {
+		if (messages == null 
+						|| messages.isEmpty()) {
 			return null;
 		}
 		List<Message> matchingMessages = new ArrayList<Message>();
@@ -106,7 +106,7 @@ public class Messages {
 	public Message getFirstBy(IField field) {
 		List<Message> messages = getBy(field);
 		if (messages == null 
-				|| messages.size() == 0) {
+						|| messages.isEmpty()) {
 			return null;
 		}
 		return messages.get(0);
@@ -131,7 +131,7 @@ public class Messages {
 	
 	public boolean hasMessages() {
 		for (List<Message> messages : messagesByField.values()) {
-			if (messages.size() > 0) {
+			if (!messages.isEmpty()) {
 				return true;
 			}
 		}

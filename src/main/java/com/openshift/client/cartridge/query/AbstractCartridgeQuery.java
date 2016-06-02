@@ -47,7 +47,7 @@ public abstract class AbstractCartridgeQuery implements ICartridgeQuery {
 	public <C extends ICartridge> C get(List<C> cartridges) {
 		List<C> matchingCartridges = getAll(cartridges);
 		 if (matchingCartridges == null
-				 || matchingCartridges.size() == 0) {
+				 || matchingCartridges.isEmpty()) {
 			 return null;
 		 }
 		 return matchingCartridges.iterator().next();

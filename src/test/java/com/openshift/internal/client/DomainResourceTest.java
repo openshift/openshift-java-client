@@ -195,7 +195,7 @@ public class DomainResourceTest extends TestTimer {
 		// operation
 		List<IGearProfile> availableGearSizes = domain.getAvailableGearProfiles();
 		// verifications
-		assertThat(availableGearSizes.size() > 0);
+		assertThat(!availableGearSizes.isEmpty());
 	}
 
 	@Test
