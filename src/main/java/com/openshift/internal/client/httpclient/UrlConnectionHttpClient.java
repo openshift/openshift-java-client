@@ -371,11 +371,9 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 
 	private int getTimeout(int timeout) {
-			if (timeout == NO_TIMEOUT) {
-				if (configTimeout != null) {
-					timeout = this.configTimeout;
-				}
-			}
+		if (timeout == NO_TIMEOUT && configTimeout != null) {
+		    timeout = this.configTimeout;
+		}
 		return timeout;
 	}
 
