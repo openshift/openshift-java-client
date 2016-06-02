@@ -47,7 +47,7 @@ import com.openshift.client.utils.TestConnectionBuilder;
  */
 public class ApplicationResourceIntegrationTest extends TestTimer {
 
-	private static final long WAIT_TIMEOUT = 3 * 60 * 1000;
+	private static final long WAIT_TIMEOUT = 3 * 60 * 1000L;
 
 	private IUser user;
 	private IDomain domain;

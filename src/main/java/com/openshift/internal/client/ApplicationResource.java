@@ -76,7 +76,7 @@ import com.openshift.internal.client.utils.StringUtils;
  */
 public class ApplicationResource extends AbstractOpenShiftResource implements IApplication {
 
-	private static final long APPLICATION_WAIT_RETRY_DELAY = 2 * 1024;
+	private static final long APPLICATION_WAIT_RETRY_DELAY = 2 * 1024L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationResource.class);
 
 	private static final String LINK_DELETE_APPLICATION = "DELETE";
