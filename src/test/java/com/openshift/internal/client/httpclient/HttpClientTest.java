@@ -609,9 +609,9 @@ public class HttpClientTest extends TestTimer {
 			public Long call() throws Exception {
 				try {
 					httpClient.get(serverFake.getUrl(), IHttpClient.NO_TIMEOUT);
-					return -1l;
+					return -1L;
 				} catch (SocketTimeoutException e) {
-					return -1l;
+					return -1L;
 				}
 			}
 		});
