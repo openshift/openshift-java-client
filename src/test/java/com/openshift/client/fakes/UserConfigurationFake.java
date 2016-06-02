@@ -53,7 +53,7 @@ public class UserConfigurationFake extends UserConfiguration {
 			try {
 				StreamUtils.close(writer);
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				// ignore
 			}
 		}		
 	}
