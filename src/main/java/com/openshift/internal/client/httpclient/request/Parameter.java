@@ -69,7 +69,7 @@ public class Parameter extends ParameterValue<ParameterValue<?>> {
 	public String toString() {
 		return "Parameter ["
 				+ "name=" + name
-				+ ", value=" + String.valueOf(getValue())
+				+ ", value=" + getValue()
 				+ "]";
 	}
 }

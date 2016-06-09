@@ -280,8 +280,8 @@ public class ApplicationSSHSession implements IApplicationSSHSession {
 		this.ports = new ArrayList<IApplicationPortForwarding>();
 		InputStream in = execCommand("rhc-list-ports", ChannelInputStreams.EXTENDED_DATA, session);
 		try {
-			return this.ports =
-					new RhcListPortsCommandResponse(application, in).getPortForwardings();
+			this.ports = new RhcListPortsCommandResponse(application, in).getPortForwardings();
+			return this.ports;
 		} catch (IOException e) {
 			throw new OpenShiftSSHOperationException("Could not execute \"rhc-list-ports\" via ssh in application {0}",
 					application.getName());

@@ -377,7 +377,8 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	
 		final ApplicationResourceDTO applicationDTO =
 				new UpdateRequest().execute(deploymentType);
-		return this.deploymentType = applicationDTO.getDeploymentType();
+		this.deploymentType = applicationDTO.getDeploymentType();
+		return this.deploymentType;
 	}
 		
 	@Override
@@ -577,7 +578,8 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 			gearGroups.add(new GearGroupResource(dto, this, getService()));
 		}
 
-		return this.gearGroups = gearGroups;
+		this.gearGroups = gearGroups;
+		return this.gearGroups;
 	}
 
 	public boolean waitForAccessible(long timeout) throws OpenShiftException {
