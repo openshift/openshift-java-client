@@ -83,7 +83,7 @@ public class HttpsServerFake extends HttpServerFake {
 			KeyManagerFactory keyManagerFactory = 
 					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			keyManagerFactory.init(keyStore, KEYSTORE_PASSWORD.toCharArray());
-			KeyManager keyManagers[] = keyManagerFactory.getKeyManagers();
+			KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
 			
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(keyManagers, null, null);
