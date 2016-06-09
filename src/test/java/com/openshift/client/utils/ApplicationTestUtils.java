@@ -32,7 +32,7 @@ import com.openshift.client.cartridge.query.LatestVersionOf;
 public class ApplicationTestUtils {
 
 	// 3 minutes
-	private static final long WAIT_FOR_APPLICATION = 3 * 60 * 1000;
+	private static final long WAIT_FOR_APPLICATION = 3 * 60 * 1000L;
 
 	public static String createRandomApplicationName() {
 		return "app" + String.valueOf(System.currentTimeMillis());

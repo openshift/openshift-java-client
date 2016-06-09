@@ -48,7 +48,7 @@ public class ApplicationAssert implements AssertExtension {
 	public static final Pattern APPLICATION_URL_PATTERN = Pattern.compile("https*://(.+)-([^\\.]+)\\.(.+)/(.*)");
 	public static final Pattern GIT_URL_PATTERN = Pattern.compile("ssh://(.+)@(.+)-([^\\.]+)\\.(.+)/~/git/(.+).git/");
 	
-	private static final long APPLICATION_WAIT_TIMEOUT = 2 * 60 * 1000;
+	private static final long APPLICATION_WAIT_TIMEOUT = 2 * 60 * 1000L;
 	
 	private IApplication application;
 

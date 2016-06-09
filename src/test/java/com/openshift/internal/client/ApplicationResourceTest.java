@@ -511,7 +511,7 @@ public class ApplicationResourceTest extends TestTimer {
 		assertThat(app).isNotNull().isInstanceOf(ApplicationResource.class);
 		ApplicationResource spy = Mockito.spy(((ApplicationResource) app));
 		Mockito.doReturn(false).when(spy).canResolv(Mockito.anyString());
-		long timeout = 2 * 1000;
+		long timeout = 2 * 1000L;
 		long startTime = System.currentTimeMillis();
 
 		// operation
@@ -526,7 +526,7 @@ public class ApplicationResourceTest extends TestTimer {
 	public void shouldEndBeforeTimeout() throws HttpClientException, Throwable {
 		// pre-conditions
 		long startTime = System.currentTimeMillis();
-		long timeout = 10 * 1000;
+		long timeout = 10 * 1000L;
 		final IApplication app = domain.getApplicationByName("springeap6");
 		assertThat(app).isNotNull().isInstanceOf(ApplicationResource.class);
 		ApplicationResource spy = Mockito.spy(((ApplicationResource) app));
