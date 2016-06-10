@@ -658,7 +658,7 @@ public class HttpClientTest extends TestTimer {
 	
 	private HttpServerFake startHttpServerFake(String statusLine) throws Exception {
 		int port = new Random().nextInt(9 * 1024) + 1024;
-		HttpServerFake serverFake = null;
+		HttpServerFake serverFake;
 		if (statusLine == null) {
 			serverFake = new HttpServerFake(port);
 		} else {
@@ -670,7 +670,7 @@ public class HttpClientTest extends TestTimer {
 
 	private HttpsServerFake startHttpsServerFake(String statusLine) throws Exception {
 		int port = new Random().nextInt(9 * 1024) + 1024;
-		HttpsServerFake serverFake = null;
+		HttpsServerFake serverFake;
 		if (statusLine == null) {
 			serverFake = new HttpsServerFake(port);
 		} else {

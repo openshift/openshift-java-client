@@ -64,7 +64,7 @@ public class StreamUtils {
 		}
 		BufferedReader bufferedReader = new BufferedReader(reader);
 		StringWriter writer = new StringWriter();
-		String line = null;
+		String line;
 		while ((line = bufferedReader.readLine()) != null) {
 			writer.write(line);
 			writer.write('\n');

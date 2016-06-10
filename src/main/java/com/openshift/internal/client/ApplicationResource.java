@@ -1038,7 +1038,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		public List<String> getLines(Channel channel) throws IOException {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream(channel)));
 			List<String> lines = new ArrayList<String>();
-			String line = null;
+			String line;
 			// Read File Line By Line
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);

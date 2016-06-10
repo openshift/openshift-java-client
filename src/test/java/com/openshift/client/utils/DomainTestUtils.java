@@ -46,7 +46,7 @@ public class DomainTestUtils {
 	}
 
 	public static IDomain getFirstDomainOrCreate(IUser user) throws OpenShiftException {
-		IDomain domain = null;
+		IDomain domain;
 		domain = getFirstDomain(user);
 
 		if (domain == null) {
