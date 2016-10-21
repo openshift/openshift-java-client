@@ -182,7 +182,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	 *            the git url
 	 * @param sshUrl
 	 *            the ssh url
-	 * @param cartridge
+	 * @param cartridgesByName
 	 *            the cartridge (type/framework)
 	 * @param aliases
 	 *            the aliases
@@ -563,7 +563,7 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 		
 		for (IGearGroup gearGroup : gearGroups) {
 			for (ICartridge groupCartridge : gearGroup.getCartridges()) {
-				if (cartridge.equals(cartridge)) {
+				if (groupCartridge.equals(cartridge)) {
 					return gearGroup;
 				}
 			}
@@ -755,14 +755,14 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 			throws OpenShiftException {
 
 		Map<String,String>variablesCandidateMap = new HashMap<String,String>();
-		for(String varCandidateName:environmentVariables.keySet()){
-			IEnvironmentVariable tempVar = environmentVariablesMap.get(varCandidateName);
+		for(Map.Entry<String,String> varCandidate:environmentVariables.entrySet()){
+			IEnvironmentVariable tempVar = environmentVariablesMap.get(varCandidate.getKey());
 			if(tempVar != null)
-			{  if(tempVar.getValue().equals(environmentVariables.get(varCandidateName)))
-				variablesCandidateMap.put(varCandidateName,environmentVariables.get(varCandidateName));
+			{  if(tempVar.getValue().equals(varCandidate.getValue()))
+				variablesCandidateMap.put(varCandidate.getKey(),varCandidate.getValue());
 			}
 			else
-				variablesCandidateMap.put(varCandidateName, environmentVariables.get(varCandidateName));
+				variablesCandidateMap.put(varCandidate.getKey(), varCandidate.getValue());
 		}
 		List<EnvironmentVariableResourceDTO> environmentVariableResourceDTOs = new AddEnvironmentVariablesRequest()
 				.execute(variablesCandidateMap);
@@ -799,14 +799,10 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	}
 
 	protected void updateEnvironmentVariables() throws OpenShiftException {
-		if (!canGetEnvironmentVariables())
-			return;
-		else
-		{
+		if (canGetEnvironmentVariables()) {
 			environmentVariablesMap.clear();
 			environmentVariablesMap = loadEnvironmentVariables();
 		}
-
 	}
 
 	/*
@@ -852,7 +848,6 @@ public class ApplicationResource extends AbstractOpenShiftResource implements IA
 	/**
 	 * List all forwardable ports for a given application.
 	 *
-	 * @param application
 	 * @return the forwardable ports in an unmodifiable collection
 	 * @throws JSchException
 	 * @throws OpenShiftSSHOperationException

@@ -292,11 +292,8 @@ public class ApplicationResourceIntegrationTest extends TestTimer {
 	 * https://issues.jboss.org/browse/JBIDE-14721
 	 */
 	private String createAlias() {
-		return new StringBuilder(String.valueOf(System.currentTimeMillis()))
 		// valid alias is "/\A[a-z0-9]+(-[a-z0-9]+)*(\.[a-z0-9]+(-[a-z0-9]+)*)+\z/"
-		.append('.')
-		.append('1')
-		.toString();
+		return String.valueOf(System.currentTimeMillis()) + '.' + '1';
 	}
 	
     @Test

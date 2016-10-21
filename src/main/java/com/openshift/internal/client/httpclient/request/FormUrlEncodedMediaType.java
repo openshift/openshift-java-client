@@ -70,10 +70,7 @@ public class FormUrlEncodedMediaType implements IMediaType {
 
 	private void writeTo(String name, ParameterValueMap parameterMap, OutputStream out) throws IOException {
 		for (Parameter parameter : parameterMap.getValue().values()) {
-			String childName = new StringBuilder()
-					.append(name)
-					.append('[').append(parameter.getName()).append(']')
-					.toString();
+			String childName = name + '[' + parameter.getName() + ']';
 			writeTo(childName, parameter.getValue(), out);
 		}
 	}

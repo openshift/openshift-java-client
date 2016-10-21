@@ -118,7 +118,7 @@ public class RestService implements IRestService {
         	RestResponse restResponse = getRestResponse(e);
         	String message = getMessage(restResponse, e);
 			throw new OpenShiftEndpointException(
-					url.toString(), e, restResponse, "Could not request {0}: {1}", url, message);
+					url, e, restResponse, "Could not request {0}: {1}", url, message);
         } catch (SocketTimeoutException e) {
             throw new OpenShiftTimeoutException(url, e,
                     "Could not request url {0}, connection timed out", url);

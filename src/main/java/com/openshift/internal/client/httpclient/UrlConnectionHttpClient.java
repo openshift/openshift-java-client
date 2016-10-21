@@ -283,13 +283,13 @@ public class UrlConnectionHttpClient implements IHttpClient {
 			}
 			else if(token != null){
                 		connection.setRequestProperty(PROPERTY_AUTHORIZATION,
-				new StringBuilder().append(AUTHORIZATION_BEARER).append(SPACE).append(token).toString());
+				AUTHORIZATION_BEARER + SPACE + token);
 			}
 		} else {
 			String credentials = Base64Coder.encode(
-					new StringBuilder().append(username).append(COLON).append(password).toString().getBytes());
+					(username + COLON + password).getBytes());
 			connection.setRequestProperty(PROPERTY_AUTHORIZATION,
-					new StringBuilder().append(AUTHORIZATION_BASIC).append(SPACE).append(credentials).toString());
+					AUTHORIZATION_BASIC + SPACE + credentials);
 		}
 	}
 
@@ -338,8 +338,6 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	 * 
 	 * @param sslContext
 	 *            the ssl context that shall be used
-	 * @param url
-	 *            the url we are connecting to
 	 * @param connection
 	 *            the connection that the cipher filter shall be applied to
 	 */
@@ -355,7 +353,17 @@ public class UrlConnectionHttpClient implements IHttpClient {
 	}
 
 	protected String[] getSupportedCiphers(SSLContext sslContext) {
-		return sslContext.getSupportedSSLParameters().getCipherSuites();
+		if (sslContext != null) {
+			return sslContext.getSupportedSSLParameters().getCipherSuites();
+		} else {
+			/* 
+			* Should we throw an exception here?
+			* Seems like we never hit this point before or we would have gotten an exception...
+			*/
+			LOGGER.warn("sslContext is null");
+			return null;
+		}
+		
 	}
 
 	private void setConnectTimeout(int timeout, URLConnection connection) {

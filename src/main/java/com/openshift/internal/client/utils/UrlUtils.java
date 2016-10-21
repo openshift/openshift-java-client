@@ -41,10 +41,7 @@ public class UrlUtils {
 			return url;
 		}
 
-		return new StringBuilder(HTTPS)
-				.append(SCHEMA_SEPARATOR)
-				.append(url)
-				.toString();
+		return HTTPS + SCHEMA_SEPARATOR + url;
 	}
 
 	public static boolean isUrl(String string) {
@@ -62,7 +59,7 @@ public class UrlUtils {
 			if (child.charAt(0) == '/') {
 				return parent + child;
 			} else {
-				return new StringBuilder(parent).append('/').append(child).toString();
+				return parent + '/' + child;
 			}
 		}
 	}

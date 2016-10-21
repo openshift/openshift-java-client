@@ -130,8 +130,6 @@ public class EnvironmentVariableResource extends AbstractOpenShiftResource imple
 	}
 
 	public String toString(){
-		return new String(
-				"Name:"+this.name+",Value:"+value
-				);
+		return "Name:"+this.name+",Value:"+value;
 	}
 }

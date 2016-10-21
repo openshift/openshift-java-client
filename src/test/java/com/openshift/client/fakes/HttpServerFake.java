@@ -162,7 +162,7 @@ public class HttpServerFake {
 		 * Returns the response given to this server at creation time or the
 		 * content that may be read from the socket is returned.
 		 * 
-		 * @param inputStream
+		 * @param socket
 		 * @return
 		 * @throws IOException
 		 */
@@ -174,8 +174,7 @@ public class HttpServerFake {
 		}
 
 		private String readRequestToString(InputStream inputStream) throws IOException {
-			BufferedReader bufferedReader = null;
-			bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 			StringWriter writer = new StringWriter();
 			String line = null;
 			while ((line = bufferedReader.readLine()) != null) {

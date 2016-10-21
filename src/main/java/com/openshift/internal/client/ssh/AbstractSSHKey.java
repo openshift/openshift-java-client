@@ -54,9 +54,7 @@ public abstract class AbstractSSHKey implements ISSHPublicKey {
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractSSHKey other = (AbstractSSHKey) obj;
-		if (keyType != other.keyType)
-			return false;
-		return true;
+		return keyType == other.keyType;
 	}
 	
 	@Override

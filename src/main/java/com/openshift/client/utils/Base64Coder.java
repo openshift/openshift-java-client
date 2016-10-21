@@ -37,7 +37,7 @@ public class Base64Coder {
 		if (unencoded == null) {
 			return null;
 		} else if (unencoded.length == 0) {
-			return new String();
+			return "";
 		}
 		return DatatypeConverter.printBase64Binary(unencoded);
 	}
@@ -59,7 +59,7 @@ public class Base64Coder {
 	public static String decode(byte[] encoded) {
 		if (encoded == null
 				|| encoded.length == 0) {
-			return new String();
+			return "";
 		}
 		return decode(new String(encoded));
 	}
