@@ -16,4 +16,9 @@ public class HttpMethodTest {
 		assertFalse(HttpMethod.hasValue("afdadsfads"));
 	}
 
+    @Test
+    public void hasValueForNullValueShouldReturnFalse() {
+        assertFalse(HttpMethod.hasValue(null));
+    }
+
 }
