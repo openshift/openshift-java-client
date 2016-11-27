@@ -91,35 +91,35 @@ public class OpenShiftJsonDTOFactory extends AbstractJsonDTOFactory {
 	@Override
 	protected Object createData(EnumDataType dataType, Messages messages, ModelNode dataNode) {
 		switch (dataType) {
-		case user:
+		case USER:
 			return createUser(dataNode);
-		case keys:
+		case KEYS:
 			return createKeys(dataNode);
-		case key:
+		case KEY:
 			return createKey(dataNode, messages);
-		case links:
+		case LINKS:
 			return createLinks(dataNode);
-		case domains:
+		case DOMAINS:
 			return createDomains(dataNode);
-		case domain:
+		case DOMAIN:
 			return createDomain(dataNode, messages);
-		case applications:
+		case APPLICATIONS:
 			return createApplications(dataNode);
-		case application:
+		case APPLICATION:
 			return createApplication(dataNode, messages);
-		case authorization:
+		case AUTHORIZATION:
 			return createAuthorization(dataNode, messages);
-        	case authorizations: 
+        	case AUTHORIZATIONS: 
             		return createAuthorizations(dataNode);
-		case gear_groups:
+		case GEAR_GROUPS:
 			return createGearGroups(dataNode);
-		case cartridges:
+		case CARTRIDGES:
 			return createCartridges(dataNode);
-		case cartridge:
+		case CARTRIDGE:
 			return createCartridge(dataNode, messages);
-		case environment_variables:
+		case ENVIRONMENT_VARIABLES:
 			return createEnvironmentVariables(dataNode);
-		case environment_variable:
+		case ENVIRONMENT_VARIABLE:
 			return createEnvironmentVariable(dataNode, messages);
 
 		default:
