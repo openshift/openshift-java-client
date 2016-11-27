@@ -20,6 +20,10 @@ import java.io.OutputStream;
 public class WaitingHttpServerFake extends HttpServerFake {
 
     private long delay;
+    
+    public WaitingHttpServerFake(long delay){
+        this.delay = delay;
+    }
 
     @Override
     protected void write(byte[] text, OutputStream outputStream) throws IOException {
@@ -31,7 +35,4 @@ public class WaitingHttpServerFake extends HttpServerFake {
         }
     }
 
-    public WaitingHttpServerFake(long delay){
-        this.delay = delay;
-    }
 }
