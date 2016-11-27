@@ -21,6 +21,8 @@ import java.io.StringReader;
 public class FileUtils {
 
 	private static final String JAVA_IO_TEMP = "java.io.tmpdir";
+	
+	private FileUtils() {}
 
 	public static void writeTo(String data, String path) throws IOException {
 		writeTo(data, new File(path));

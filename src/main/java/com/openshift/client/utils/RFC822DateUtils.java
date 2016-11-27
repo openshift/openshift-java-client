@@ -21,6 +21,8 @@ import javax.xml.datatype.DatatypeFactory;
  */
 public class RFC822DateUtils {
 
+	private RFC822DateUtils() {}
+
 	/**
 	 * Returns a date instance for a given timestamp string that complies to the
 	 * RFC 822 standard

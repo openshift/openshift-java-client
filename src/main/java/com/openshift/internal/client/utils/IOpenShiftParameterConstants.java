@@ -14,6 +14,8 @@ package com.openshift.internal.client.utils;
  * @author André Dietisheim
  */
 public class IOpenShiftParameterConstants {
+    
+    private IOpenShiftParameterConstants() {}
 
 	public static final String PARAMETER_ID = "id";
 	public static final String PARAMETER_INCLUDE = "include";

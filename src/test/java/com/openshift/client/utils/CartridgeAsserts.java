@@ -22,6 +22,8 @@ import com.openshift.client.cartridge.ICartridge;
  */
 public class CartridgeAsserts {
 
+	private CartridgeAsserts() {}
+
 	public static void assertThatContainsCartridge(String cartridgeName, Collection<ICartridge> cartridges) {
 		boolean found = false;
 		for (ICartridge cartridge : cartridges) {

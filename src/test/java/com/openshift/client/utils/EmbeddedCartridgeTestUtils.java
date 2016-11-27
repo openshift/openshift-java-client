@@ -22,6 +22,8 @@ import com.openshift.client.cartridge.query.LatestVersionOf;
  */
 public class EmbeddedCartridgeTestUtils {
 
+	private EmbeddedCartridgeTestUtils() {}
+
 	public static void silentlyDestroy(LatestEmbeddableCartridge selector, IApplication application) {
 		try {
 			if (selector == null

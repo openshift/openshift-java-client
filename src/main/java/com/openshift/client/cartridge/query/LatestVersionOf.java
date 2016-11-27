@@ -20,6 +20,8 @@ import com.openshift.client.cartridge.IStandaloneCartridge;
  */
 public class LatestVersionOf {
 
+	private LatestVersionOf() {}
+
 	public static  LatestEmbeddableCartridge mmsAgent() {
 		return new LatestEmbeddableCartridge(IEmbeddableCartridge.NAME_10GEN_MMS_AGENT);
 	}

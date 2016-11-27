@@ -21,6 +21,8 @@ import com.openshift.client.OpenShiftException;
  */
 public class DomainTestUtils {
 
+	private DomainTestUtils() {}
+
 	public static void destroyAllDomains(IUser user) {
 		if (user == null) {
 			return;

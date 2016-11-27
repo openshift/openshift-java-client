@@ -9,6 +9,9 @@ import java.util.List;
  * Created by corey on 2/17/14.
  */
 public class GearProfileTestUtils {
+
+	private GearProfileTestUtils() {}
+
 	public static IGearProfile getFirstAvailableGearProfile(IDomain domain) {
 		IGearProfile gear = null;
 		List<IGearProfile> gears = domain.getAvailableGearProfiles();

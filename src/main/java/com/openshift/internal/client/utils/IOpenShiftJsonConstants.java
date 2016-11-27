@@ -16,6 +16,8 @@ package com.openshift.internal.client.utils;
  */
 public class IOpenShiftJsonConstants {
 
+	private IOpenShiftJsonConstants() {}
+
 	public static final String PROPERTY_ACTION = "action";
 	public static final String PROPERTY_ADDITIONAL_GEAR_STORAGE = "additional_gear_storage";
 	public static final String PROPERTY_ALIAS = "alias";

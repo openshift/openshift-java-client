@@ -58,6 +58,8 @@ public class CartridgeTestUtils {
 	public static final String SWITCHYARD_06_NAME = "switchyard-0.6";
 	public static final String POSTGRESQL_84_NAME = "postgresql-8.4";
 	public static final String HAPROXY_14_NAME = "haproxy-1.4";
+	
+	private CartridgeTestUtils() {}
 
 
 	public static IStandaloneCartridge aerogear() throws MalformedURLException {

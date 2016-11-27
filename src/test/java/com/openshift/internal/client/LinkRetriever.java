@@ -27,6 +27,8 @@ import com.openshift.internal.client.response.Link;
 
 public class LinkRetriever {
 
+	private LinkRetriever() {}
+
 	/**
 	 * Retrieves the link identified by the given name from the given resource.
 	 * @throws OpenShiftException 

@@ -16,6 +16,8 @@ package com.openshift.internal.client.utils;
  */
 public class StringUtils {
 
+	private StringUtils() {}
+
 	public static String toLowerCase(String message) {
 		if (message == null) {
 			return null;

@@ -15,6 +15,8 @@ package com.openshift.client.utils;
  */
 public class StringUtils {
 
+	private StringUtils() {}
+
 	public static String createRandomString() {
 		return String.valueOf(System.currentTimeMillis());
 	}

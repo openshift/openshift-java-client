@@ -16,6 +16,8 @@ package com.openshift.internal.client.utils;
  * @author André Dietisheim
  */
 public class Assert {
+    
+    private Assert() {}
 
 	public static final class AssertionFailedException extends RuntimeException {
 
