@@ -116,7 +116,7 @@ public class UserResource extends AbstractOpenShiftResource implements IUser {
 
 	@Override
 	public boolean hasDomain() throws OpenShiftException {
-		return (api.getDomains().size() > 0);
+		return api.getDomains().size() > 0;
 	}
 
 	@Override

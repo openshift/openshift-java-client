@@ -98,7 +98,7 @@ public class AuthorizationIntegrationTest extends TestTimer {
 		assertEquals(authorization.getScopes(), IAuthorization.SCOPE_SESSION);
 		assertEquals(authorization.getNote(), "my note");
     		//check for time remaining on the token now
-    		assertTrue((authorization.getExpiresIn() <= 600));
+    		assertTrue(authorization.getExpiresIn() <= 600);
 		
 		authorization.destroy();
 	}

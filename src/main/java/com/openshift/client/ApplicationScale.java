@@ -26,7 +26,7 @@ public enum ApplicationScale {
 	
 	public static ApplicationScale safeValueOf(final String value) {
 		if(value == null 
-				|| !SCALING_TRUE.equals(value.toUpperCase())) {
+				|| !SCALING_TRUE.equalsIgnoreCase(value)) {
 			return NO_SCALE;
 		}
 		return SCALE;

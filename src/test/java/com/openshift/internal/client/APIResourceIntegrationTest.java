@@ -113,7 +113,7 @@ public class APIResourceIntegrationTest extends TestTimer {
 		String domainId = domain.getId();
 		assertThat(domainId).isNotEmpty();
 		IOpenShiftConnection connection = new TestConnectionBuilder().defaultCredentials().disableSSLCertificateChecks().create();
-		APIResource api = ((APIResource) connection);
+		APIResource api = (APIResource) connection;
 		
 		// operation
 		IDomain retrievedDomain = api.showDomain(domainId);

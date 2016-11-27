@@ -66,10 +66,10 @@ public class ApplicationSSHSessionTest extends TestTimer {
 						+ " java -> 127.7.233.1:9990\n"
 						+ " java -> 127.7.233.1:9999\n"
 						+ " mysql -> 5190d701500446506a0000e4-foobarz.rhcloud.com:56756";
-		ApplicationResource spy = Mockito.spy(((ApplicationResource) app));
+		ApplicationResource spy = Mockito.spy((ApplicationResource) app);
 		final IApplicationSSHSession session =
 				new ApplicationSSHSession(spy, new JSch().getSession("mockuser", "mockhost", 22));
-		ApplicationSSHSession spyedSession = Mockito.spy(((ApplicationSSHSession) session));
+		ApplicationSSHSession spyedSession = Mockito.spy((ApplicationSSHSession) session);
 		Mockito.doReturn(new ByteArrayInputStream(rhcListPortsOutput.getBytes()))
 				.when(spyedSession)
 				.execCommand(Mockito.anyString(), (ApplicationSSHSession.ChannelInputStreams) Mockito.any(),

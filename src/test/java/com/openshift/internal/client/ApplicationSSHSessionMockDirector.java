@@ -32,10 +32,10 @@ public class ApplicationSSHSessionMockDirector {
 
 	public ApplicationSSHSessionMockDirector(IApplication application) throws SocketTimeoutException,
 			HttpClientException, JSchException {
-		ApplicationResource spyedApplication = Mockito.spy(((ApplicationResource) application));
+		ApplicationResource spyedApplication = Mockito.spy((ApplicationResource) application);
 		this.applicationSession =
 				new ApplicationSSHSession(spyedApplication, new JSch().getSession("mockuser", "mockhost", 22));
-		this.spyedApplicationSession = Mockito.spy(((ApplicationSSHSession) applicationSession));
+		this.spyedApplicationSession = Mockito.spy((ApplicationSSHSession) applicationSession);
 		Mockito.doReturn(true)
 				.when(spyedApplicationSession)
 				.isConnected();
