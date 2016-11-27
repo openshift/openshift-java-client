@@ -135,13 +135,11 @@ public class BaseCartridge implements ICartridge {
 		ICartridge other = (ICartridge) obj;
 		// shortcut: downloadable cartridges get their name only when
 		// they're deployed thus should equal on url only
-		if (isDownloadable()) {
-			if (other.isDownloadable()) {
-				if (getUrl() == null) {
-					return other.getUrl() == null;
-				}
-				return getUrl().equals(other.getUrl());
+		if (isDownloadable() && other.isDownloadable()) {
+			if (getUrl() == null) {
+				return other.getUrl() == null;
 			}
+			return getUrl().equals(other.getUrl());
 		}
 		if (getName() == null) {
 			if (other.getName() != null) {

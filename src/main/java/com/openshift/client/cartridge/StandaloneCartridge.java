@@ -74,13 +74,11 @@ public class StandaloneCartridge extends BaseCartridge implements IStandaloneCar
 		IStandaloneCartridge otherCartridge = (IStandaloneCartridge) obj;
 		// shortcut: downloadable cartridges get their name only when
 		// they're deployed thus should equal on url only
-		if (isDownloadable()) {
-			if (otherCartridge.isDownloadable()) {
-				if (getUrl() == null) {
-					return otherCartridge.getUrl() == null;
-				}
-				return getUrl().equals(otherCartridge.getUrl());
+		if (isDownloadable() && otherCartridge.isDownloadable()) {
+			if (getUrl() == null) {
+				return otherCartridge.getUrl() == null;
 			}
+			return getUrl().equals(otherCartridge.getUrl());
 		}
 		if (getName() == null) {
 			if (otherCartridge.getName() != null) {

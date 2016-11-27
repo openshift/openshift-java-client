@@ -163,10 +163,8 @@ public class EmbeddedCartridgeResource extends AbstractOpenShiftResource impleme
 		if (name == null && other.getName() != null) {
 				return false;
 		}
-		if (name != null) {
-			if (!name.equals(other.getName())) {
-				return false;
-			}
+		if (name != null && !name.equals(other.getName())) {
+		    return false;
 		}
 		return true;
 	}
