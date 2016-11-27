@@ -217,7 +217,7 @@ public abstract class AbstractOpenShiftResource implements IOpenShiftResource {
 		protected Parameters addCartridges(Collection<ICartridge> cartridges) {
 			ParameterValueArray parameters = new ParameterValueArray();
 			if (cartridges != null
-					&& cartridges.size() > 0) {
+					&& !cartridges.isEmpty()) {
 				parameters.addAll(createCartridgeParameters(cartridges));
 			}
 
@@ -268,8 +268,8 @@ public abstract class AbstractOpenShiftResource implements IOpenShiftResource {
 
 		private List<ParameterValueMap> createCartridgeParameters(Collection<ICartridge> cartridges) {
 			List<ParameterValueMap> parameters = new ArrayList<ParameterValueMap>();
-			if (cartridges == null
-					|| cartridges.size() == 0) {
+			if (cartridges == null 
+							|| cartridges.isEmpty()) {
 				return parameters;
 			}
 			

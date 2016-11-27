@@ -239,7 +239,7 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 
 	@Override
 	public boolean hasApplicationByCartridge(IStandaloneCartridge cartridge) throws OpenShiftException {
-		return getApplicationsByCartridge(cartridge).size() > 0;
+		return !getApplicationsByCartridge(cartridge).isEmpty();
 	}
 
 	@Override
@@ -464,8 +464,8 @@ public class DomainResource extends AbstractOpenShiftResource implements IDomain
 				final IGearProfile gearProfile, final String initialGitUrl, final int timeout,
 				String region, Map<String, String> environmentVariables, Collection<ICartridge> cartridges)
 				throws OpenShiftException {
-			if (cartridges == null
-					|| cartridges.size() == 0) {
+			if (cartridges == null 
+								|| cartridges.isEmpty()) {
 				throw new OpenShiftException("Cartridges are mandatory but none were provided.");
 			}
 

@@ -202,7 +202,7 @@ public class APIResource extends AbstractOpenShiftResource implements IOpenShift
 
 	public IDomain getDefaultDomain() {
 		final List<IDomain> domains = getDomains();
-		if (domains.size() > 0) {
+		if (!domains.isEmpty()) {
 			return domains.get(0);
 		}
 		return null;

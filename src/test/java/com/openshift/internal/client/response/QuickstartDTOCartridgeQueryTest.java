@@ -296,7 +296,7 @@ public class QuickstartDTOCartridgeQueryTest {
 
 	private ICartridgeQuery getFirstCartridgeQuery(String cartridgesJson) {
 		List<ICartridgeQuery> queries = QuickstartTestUtils.getCartridgeQueriesForSingleQuickstart(cartridgesJson);
-		assertThat(queries.size() > 0);
+		assertThat(!queries.isEmpty());
 		return queries.get(0);
 	}
 }
